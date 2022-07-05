@@ -7,6 +7,8 @@ from .models import User
 # Create your views here.
 
 class joinView(View):
+    def get(self,request):
+        return JsonResponse({'message': 'get success'}, status=200)
     def post(self,request):
         data = json.loads(request.body)
         try:
