@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# yarn.lock 업로드제거
+front/yarn.lock
