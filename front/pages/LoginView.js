@@ -18,7 +18,7 @@ const LoginView = ({ navigation }) => {
     .catch((e) => console.log('로그인필요'));
 
   const submitLoginData = async () => {
-    // const response = await axios.get(`${baseUrl}/login`, {// 서버통신
+    // const response = await axios.post(`${baseUrl}/login`, {// 서버통신
     //   userId: JSON.stringify(userId),
     //   password: JSON.stringify(password),
     // });
