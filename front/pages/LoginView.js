@@ -36,11 +36,12 @@ const LoginView = ({ navigation }) => {
     //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
     return <AppLoading />;
   }
+  0;
 
   return (
     <View style={style.container}>
-      <Image source={require('front/assets/img/moon.png')} style={style.moon}></Image>
-      <Image source={require('front/assets/img/cloud.png')} style={style.cloud}></Image>
+      <Image source={require('../assets/img/moon.png')} style={style.moon}></Image>
+      <Image source={require('../assets/img/cloud.png')} style={style.cloud}></Image>
       <Text style={style.text}>안녕하세요?</Text>
       <Text style={style.text}>저는 당신의 이야기를 좋아하는 달입니다.</Text>
       <Text style={style.text}>오늘 당신의 하루는 어땠는지 궁금해요.</Text>
