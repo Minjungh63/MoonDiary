@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { basic_theme } from '../theme';
-const baseUrl = '127.0.0.1';
+const baseUrl = 'http://127.0.0.1:8000';
 
 const LoginView = ({ navigation }) => {
   const [userId, setUserId] = useState('');
@@ -18,14 +18,23 @@ const LoginView = ({ navigation }) => {
     .catch((e) => console.log('로그인필요'));
 
   const submitLoginData = async () => {
-    // const response = await axios.post(`${baseUrl}/login`, {// 서버통신
-    //   userId: JSON.stringify(userId),
-    //   password: JSON.stringify(password),
-    // });
-    // if (response.status == 200) {
-    //   await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
-    //   navigation.navigate('BottomTabHome');
-    // }
+    const response = await axios.post(
+      `${baseUrl}/user/login`,
+      {
+        // 서버통신
+        userId: JSON.stringify(userId),
+        password: JSON.stringify(password),
+      },
+      {
+        headers: {
+          'Content-Type': `application/json`,
+        },
+      }
+    );
+    if (response.status == 200) {
+      await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
+      navigation.navigate('BottomTabHome');
+    }
   };
   let [fontsLoaded] = useFonts({
     //폰트 가져오기
