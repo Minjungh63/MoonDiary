@@ -3,7 +3,7 @@ import { basic_theme } from '../theme';
 import { useFonts } from "expo-font";
 import AppLoading from 'expo-app-loading';
 
-export default function Init() {
+export default function InitView() {
   let [fontsLoaded] = useFonts ({   //폰트 가져오기
     'Gowun_Batang': require("../assets/fonts/GowunBatang-Regular.ttf")
   });

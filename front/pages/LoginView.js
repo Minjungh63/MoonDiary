@@ -1,12 +1,9 @@
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 const LoginView = ({ navigation }) => {
-  //   return <View>
-  //     <button onPress={()=>{
-  //         navigation.replace('bottomhome')
-  //     }}>
-  //     </button>
-  //   </View>;
+    return <View>
+      <Text>test</Text>
+    </View>;
 };
 
 export default LoginView;
