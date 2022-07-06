@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginView from '../../pages/loginView';
+import LoginView from '../../pages/LoginView';
 import BottomTabHome from '../home/BottomTabHome';
 
 export default function StackLogin() {
