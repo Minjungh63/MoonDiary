@@ -45,7 +45,6 @@ const LoginView = ({ navigation }) => {
     //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
     return <AppLoading />;
   }
-  0;
 
   return (
     <View style={style.container}>
