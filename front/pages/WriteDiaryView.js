@@ -102,7 +102,7 @@ const WriteDiaryView = ({ navigation }) => {
       </TouchableWithoutFeedback>
 
       <View style={style.contentContainer}>
-        <TextInput multiline={true} placeholder={'asdf'} style={style.contentInput}></TextInput>
+        <TextInput multiline={true} placeholder={'내용을 작성해주세요'} style={style.contentInput}></TextInput>
       </View>
 
       <View style={style.buttonContainer}>
