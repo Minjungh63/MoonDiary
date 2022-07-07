@@ -1,13 +1,12 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeView from '../../pages/HomeView';
-import WriteDiaryView from '../../pages/WriteDiaryView';
 
 export default function StackHome() {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator initialRouteName="WriteDiaryView" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeView" component={HomeView} />
-      <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
+      {/* 추후에 일기확인페이지 넣어야해서 냅뒀습니다 */}
     </Stack.Navigator>
   );
 }
