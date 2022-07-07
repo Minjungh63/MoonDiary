@@ -7,7 +7,7 @@ import StackStatistics from './StackStatistics';
 export default function BottomTabHome() {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator initialRouteName="StackHome">
+    <Tab.Navigator initialRouteName="StackHome" screenOptions={{ headerShown: false }}>
       <Tab.Screen name="StackHome" component={StackHome} />
       <Tab.Screen name="StackFavorites" component={StackFavorites} />
       <Tab.Screen name="StackStatistics" component={StackStatistics} />
