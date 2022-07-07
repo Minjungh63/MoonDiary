@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 
 const dayOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -21,10 +21,10 @@ const date = new Date();
 const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
 const kstGap = 9 * 60 * 60 * 1000;
 const today = new Date(utc + kstGap);
+//한국시간 기준으로 날짜계산하기 위함
 
 export default function Calendar() {
   const [selectedYear, setSelectedYear] = useState(today.getFullYear());
-  const [isLeap, setisLeap] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
   const [dayArr, setDayArr] = useState([]);
   const [loadFlag, setLoadFlag] = useState(false);
@@ -34,27 +34,26 @@ export default function Calendar() {
   var endDay = new Date(selectedYear, selectedMonth, 0);
   var nextDate = endDay.getDate();
   var nextDay = endDay.getDay();
-  const pressBack = () => {
+  const pressBack = async () => {
+    //render에 반영하기 위한 비동기 처리
     if (selectedMonth === 1) {
-      setSelectedYear((selectedYear) => selectedYear - 1);
-      setSelectedMonth(12);
+      await setSelectedYear((selectedYear) => selectedYear - 1);
+      await setSelectedMonth(12);
     } else {
-      setSelectedMonth((selectedMonth) => selectedMonth - 1);
+      await setSelectedMonth((selectedMonth) => selectedMonth - 1);
     }
-    setDay();
-    calDay();
   };
-  const pressAdvance = () => {
+  const pressAdvance = async () => {
+    //render에 반영하기 위한 비동기처리
     if (selectedMonth === 12) {
-      setSelectedYear((selectedYear) => selectedYear + 1);
-      setSelectedMonth(1);
+      await setSelectedYear((selectedYear) => selectedYear + 1);
+      await setSelectedMonth(1);
     } else {
-      setSelectedMonth((selectedMonth) => selectedMonth + 1);
+      await setSelectedMonth((selectedMonth) => selectedMonth + 1);
     }
-    setDay();
-    calDay();
   };
   const setDay = () => {
+    //현재 선택된 년, 월에 대한 달력 날짜 계산 세팅
     startDay = new Date(selectedYear, selectedMonth - 1, 0);
     prevDate = startDay.getDate();
     prevDay = startDay.getDay();
@@ -63,8 +62,13 @@ export default function Calendar() {
     nextDay = endDay.getDay();
   };
   const calDay = () => {
+    //달력 render를 위한 이전 달과 다음달 포함한 날짜 계산
     tempArr = [];
     for (var j = prevDate - prevDay; j <= prevDate; j++) {
+      if (prevDay === 6) {
+        //이전달의 7개 이상의 데이터 있을 시 push 하지 않음
+        break;
+      }
       tempArr.push('');
     }
     for (var j = 1; j <= nextDate; j++) {
@@ -79,7 +83,7 @@ export default function Calendar() {
   useEffect(() => {
     setDay();
     calDay();
-  }, []);
+  }, [selectedMonth]);
   const Items = ({ data }) => (
     <View>
       <Text style={styles.text}>{data}</Text>
