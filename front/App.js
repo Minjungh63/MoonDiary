@@ -14,7 +14,7 @@ export default function App() {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="WriteDiaryView" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
         {/* initialRouteName: 이 Stack의 초기 view설정 */}
         <Stack.Screen name="LoginView" component={LoginView} />
         <Stack.Screen name="JoinView" component={JoinView} />

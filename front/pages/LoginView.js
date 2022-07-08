@@ -14,11 +14,16 @@ const LoginView = ({ navigation }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
-  AsyncStorage.getItem('userId') //로그인확인
-    .then(() => navigation.navigate('BottomTabHome'))
-    .catch((e) => console.log('로그인필요'));
+  // AsyncStorage.getItem('userId') //로그인확인
+  //   .then(() => navigation.navigate('BottomTabHome'))
+  //   .catch((e) => console.log('로그인필요'));
 
   const submitLoginData = async () => {
+    if (!userId) {
+      alert('아이디를 입력해주세요');
+    } else if (!password) {
+      alert('비밀번호를 입력해주세요');
+    }
     const response = await axios.post(
       `${baseUrl}${loginUrl}`,
       {
@@ -55,7 +60,7 @@ const LoginView = ({ navigation }) => {
       <Text style={style.text}>저는 당신의 이야기를 좋아하는 달입니다.</Text>
       <Text style={style.text}>오늘 당신의 하루는 어땠는지 궁금해요.</Text>
       <View style={style.inputContainer}>
-        <Text style={style.text}>ID를 입력해주세요.</Text>
+        <Text style={style.text}>아이디를 입력해주세요.</Text>
         <View style={style.inputBox}>
           <TextInput placeholder="TeamI_IT23" onChangeText={setUserId}></TextInput>
         </View>
