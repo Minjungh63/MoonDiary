@@ -14,9 +14,9 @@ const LoginView = ({ navigation }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
-  // AsyncStorage.getItem('userId') //로그인확인
-  //   .then(() => navigation.navigate('BottomTabHome'))
-  //   .catch((e) => console.log('로그인필요'));
+  AsyncStorage.getItem('userId') //로그인확인
+    .then(() => navigation.navigate('BottomTabHome'))
+    .catch((e) => console.log('로그인필요'));
 
   const submitLoginData = async () => {
     if (!userId) {
