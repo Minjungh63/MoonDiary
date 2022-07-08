@@ -60,7 +60,7 @@ const WriteDiaryView = ({ navigation, date }) => {
 
   return (
     <View style={style.container}>
-      <TouchableOpacity style={style.homeBox}>
+      <TouchableOpacity onPress={navigation.navigate('HomeView')} style={style.homeBox}>
         <Image source={require('../assets/img/home.png')} style={style.home}></Image>
       </TouchableOpacity>
       <View style={style.dateBox}>
