@@ -1,8 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabHome from './navigation/home/BottomTabHome';
+import AnalysisLoadingView from './pages/AnalysisLoadingView';
 import JoinView from './pages/JoinView';
 import LoginView from './pages/LoginView';
+import WriteDiaryView from './pages/WriteDiaryView';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState, useCallback } from 'react';
 
@@ -34,11 +36,13 @@ export default function App() {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginView">
+      <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
         {/* initialRouteName: 이 Stack의 초기 view설정 */}
-        <Stack.Screen name="LoginView" component={LoginView} options={{ headerShown: false }} />
-        <Stack.Screen name="JoinView" component={JoinView} options={{ headerShown: false }} />
-        <Stack.Screen name="BottomTabHome" component={BottomTabHome} options={{ headerShown: false }} />
+        <Stack.Screen name="LoginView" component={LoginView} />
+        <Stack.Screen name="JoinView" component={JoinView} />
+        <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
+        <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
+        <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
       </Stack.Navigator>
     </NavigationContainer>
   );

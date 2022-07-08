@@ -14,13 +14,20 @@ const JoinView = ({ navigation }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const submitJoinData = async () => {
+    if (!name) {
+      alert('이름을 입력해주세요');
+    } else if (!userId) {
+      alert('아이디를 입력해주세요');
+    } else if (!password) {
+      alert('비밀번호를 입력해주세요');
+    }
     const response = await axios.post(
       `${baseUrl}${joinUrl}`,
       {
         // 서버통신
-        userId: JSON.stringify(userId),
-        name: JSON.stringify(name),
-        password: JSON.stringify(password),
+        userId: userId,
+        name: name,
+        password: password,
       },
       {
         headers: {
