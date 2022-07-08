@@ -39,7 +39,7 @@ class loginView(View):
         if User.objects.filter(userId = id).exists():
             user = User.objects.get(userId = id)
             if user.password == pw:
-                return JsonResponse({'message': '{user.name}님 로그인 되셨습니다.'}, status=200)
+                return JsonResponse(user.name, status=200)
             else :
                 return JsonResponse({'message':'잘못된 비밀번호입니다'},status = 401)
 
