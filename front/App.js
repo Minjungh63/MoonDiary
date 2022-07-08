@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabHome from './navigation/home/BottomTabHome';
+import AnalysisLoadingView from './pages/AnalysisLoadingView';
 import JoinView from './pages/JoinView';
 import LoginView from './pages/LoginView';
 import WriteDiaryView from './pages/WriteDiaryView';
@@ -19,6 +20,7 @@ export default function App() {
         <Stack.Screen name="JoinView" component={JoinView} />
         <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
         <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
+        <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
       </Stack.Navigator>
     </NavigationContainer>
   );

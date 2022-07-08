@@ -1,6 +1,6 @@
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, TextInput, Button, Keyboard } from 'react-native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
@@ -8,27 +8,36 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { basic_theme } from '../theme';
 const baseUrl = 'http://127.0.0.1:8000';
-const loginUrl = '/user/login';
+const diaryUrl = '/diary/write';
 
-const WriteDiaryView = ({ navigation }) => {
+const WriteDiaryView = ({ navigation, date }) => {
   const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+  const [weather, setWeather] = useState('sunny');
+  const [title, setTitle] = useState('');
+  const [contents, setContents] = useState('');
 
-  navigation.setOptions({
-    tabBarStyl: { display: 'none' },
-  });
+  AsyncStorage.getItem('userId') //로그인확인
+    .then((value) => setUserId(value))
+    .catch((e) => navigation.navigate('LoginView'));
 
-  AsyncStorage.getItem(userId) //로그인확인
-    .then(() => navigation.pagenate('BottomTabHome'))
-    .catch((e) => console.log('로그인필요'));
+  const submitDiaryData = async () => {
+    //입력 안했을 시 예외처리 코드 날씨는 default sunny이므로 필요X
+    if (!title) {
+      alert('제목을 입력해주세요');
+    } else if (!contents) {
+      alert('내용을 입력해주세요');
+    }
+    // alert(`${userId}, ${date}, ${weather}, ${title}, ${contents}`); //확인용
 
-  const submitLoginData = async () => {
     const response = await axios.post(
-      `${baseUrl}${loginUrl}`,
+      `${baseUrl}${diaryUrl}`,
       {
         // 서버통신
-        userId: JSON.stringify(userId),
-        password: JSON.stringify(password),
+        userId: userId,
+        date: date,
+        weather: weather,
+        title: title,
+        contents: contents,
       },
       {
         headers: {
@@ -36,16 +45,14 @@ const WriteDiaryView = ({ navigation }) => {
         },
       }
     );
-    if (response.status == 200) {
-      await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
-      navigation.navigate('BottomTabHome');
+    if (response.status == 201) {
+      navigation.navigate('AnalysisLoadingView');
     }
   };
   let [fontsLoaded] = useFonts({
     //폰트 가져오기
     Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
   });
-
   if (!fontsLoaded) {
     //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
     return <AppLoading />;
@@ -65,20 +72,36 @@ const WriteDiaryView = ({ navigation }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={style.weatherConatiner}>
           <Text style={style.boldText}>오늘의 날씨 </Text>
-          <TouchableOpacity style={style.weatherBox}>
-            <Image source={require('../assets/img/sunny.png')} style={style.weather}></Image>
+
+          <TouchableOpacity onPress={() => setWeather('sunny')} style={style.weatherBox}>
+            <Image
+              source={require('../assets/img/sunny.png')}
+              style={weather == 'sunny' ? style.weatherOn : style.weatherOff}
+            ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={style.weatherBox}>
-            <Image source={require('../assets/img/cloudy.png')} style={style.weather}></Image>
+          <TouchableOpacity onPress={() => setWeather('cloudy')} style={style.weatherBox}>
+            <Image
+              source={require('../assets/img/cloudy.png')}
+              style={weather == 'cloudy' ? style.weatherOn : style.weatherOff}
+            ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={style.weatherBox}>
-            <Image source={require('../assets/img/rainy.png')} style={style.weather}></Image>
+          <TouchableOpacity onPress={() => setWeather('rainy')} style={style.weatherBox}>
+            <Image
+              source={require('../assets/img/rainy.png')}
+              style={weather == 'rainy' ? style.weatherOn : style.weatherOff}
+            ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={style.weatherBox}>
-            <Image source={require('../assets/img/stormy.png')} style={style.weather}></Image>
+          <TouchableOpacity onPress={() => setWeather('stormy')} style={style.weatherBox}>
+            <Image
+              source={require('../assets/img/stormy.png')}
+              style={weather == 'stormy' ? style.weatherOn : style.weatherOff}
+            ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={style.weatherBox}>
-            <Image source={require('../assets/img/hot.png')} style={style.weather}></Image>
+          <TouchableOpacity onPress={() => setWeather('hot')} style={style.weatherBox}>
+            <Image
+              source={require('../assets/img/hot.png')}
+              style={weather == 'hot' ? style.weatherOn : style.weatherOff}
+            ></Image>
           </TouchableOpacity>
         </View>
 
@@ -96,20 +119,25 @@ const WriteDiaryView = ({ navigation }) => {
         <View style={style.titleContainer}>
           <Text style={style.boldText}>제목</Text>
           <View style={style.titleInputBox}>
-            <TextInput placeholder="제목을 입력해주세요" onChangeText={setPassword}></TextInput>
+            <TextInput placeholder="제목을 입력해주세요" onChangeText={setTitle}></TextInput>
           </View>
         </View>
       </TouchableWithoutFeedback>
 
       <View style={style.contentContainer}>
-        <TextInput multiline={true} placeholder={'내용을 작성해주세요'} style={style.contentInput}></TextInput>
+        <TextInput
+          multiline={true}
+          placeholder={'내용을 작성해주세요'}
+          onChangeText={setContents}
+          style={style.contentInput}
+        ></TextInput>
       </View>
 
       <View style={style.buttonContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={0.7} style={style.buttonBox}>
           <Text style={style.smallText}>{'작성 취소'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} style={style.subButtonBox}>
+        <TouchableOpacity onPress={submitDiaryData} activeOpacity={0.7} style={style.subButtonBox}>
           <Text style={style.smallText}>{'작성 완료'}</Text>
         </TouchableOpacity>
       </View>
@@ -210,9 +238,15 @@ const style = StyleSheet.create({
     height: 26,
     alignItems: 'center',
   },
-  weather: {
+
+  weatherOn: {
     width: 26,
     height: 26,
+  },
+  weatherOff: {
+    width: 26,
+    height: 26,
+    opacity: 0.5,
   },
   smallMoon: {
     width: 50,
