@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'config',
     'corsheaders',
     'users',
+    'diary',
     'AI',
 ]
 
