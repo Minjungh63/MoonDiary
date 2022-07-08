@@ -23,8 +23,8 @@ const LoginView = ({ navigation }) => {
       `${baseUrl}${loginUrl}`,
       {
         // 서버통신
-        userId: JSON.stringify(userId),
-        password: JSON.stringify(password),
+        userId: userId,
+        password: password,
       },
       {
         headers: {

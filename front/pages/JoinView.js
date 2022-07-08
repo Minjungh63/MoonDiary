@@ -18,9 +18,9 @@ const JoinView = ({ navigation }) => {
       `${baseUrl}${joinUrl}`,
       {
         // 서버통신
-        userId: JSON.stringify(userId),
-        name: JSON.stringify(name),
-        password: JSON.stringify(password),
+        userId: userId,
+        name: name,
+        password: password,
       },
       {
         headers: {
