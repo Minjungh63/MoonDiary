@@ -1,6 +1,6 @@
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
-import { Dimensions, Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme } from '../theme';
 import axios from 'axios';
@@ -38,8 +38,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
       );
       if (response.status == 200) {
         if (response.data.emotions.length == 1) {
-          // setEmotionIsOne(true);
-          // submitEmotionData(emotions[0]);
+          submitEmotionData(emotions[0]);
           return;
         }
         //감정이 여러개일때
