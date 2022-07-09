@@ -37,7 +37,7 @@ const JoinView = ({ navigation }) => {
     );
     if (response.status == 201) {
       await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
-      navigation.navigate('BottomTabHome');
+      navigation.replace('BottomTabHome');
     } else if (response.status == 409) {
       //이미 있는아이디일때
       alert('이미 가입된 아이디입니다.');
