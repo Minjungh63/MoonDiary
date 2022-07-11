@@ -15,7 +15,7 @@ const LoginView = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   AsyncStorage.getItem('userId') //로그인확인
-    .then(() => navigation.navigate('BottomTabHome'))
+    .then(() => navigation.replace('BottomTabHome'))
     .catch((e) => console.log('로그인필요'));
 
   const submitLoginData = async () => {
@@ -39,7 +39,7 @@ const LoginView = ({ navigation }) => {
     );
     if (response.status == 200) {
       await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
-      navigation.navigate('BottomTabHome');
+      navigation.replace('BottomTabHome');
     }
   };
   let [fontsLoaded] = useFonts({

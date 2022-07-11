@@ -7,6 +7,7 @@ import LoginView from './pages/LoginView';
 import WriteDiaryView from './pages/WriteDiaryView';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState, useCallback } from 'react';
+import AnalysisResultView from './pages/AnalysisResultView';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -43,6 +44,7 @@ export default function App() {
         <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
         <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
         <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
+        <Stack.Screen name="AnalysisResultView" component={AnalysisResultView} />
       </Stack.Navigator>
     </NavigationContainer>
   );

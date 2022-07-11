@@ -18,7 +18,7 @@ const WriteDiaryView = ({ navigation, date }) => {
 
   AsyncStorage.getItem('userId') //로그인확인
     .then((value) => setUserId(value))
-    .catch((e) => navigation.navigate('LoginView'));
+    .catch((e) => navigation.replace('LoginView'));
 
   const submitDiaryData = async () => {
     //입력 안했을 시 예외처리 코드 날씨는 default sunny이므로 필요X
@@ -46,7 +46,11 @@ const WriteDiaryView = ({ navigation, date }) => {
       }
     );
     if (response.status == 201) {
-      navigation.navigate('AnalysisLoadingView');
+      navigation.navigate('AnalysisLoadingView', {
+        diaryId: {
+          /**diaryId reponse 받은 diaryId */
+        },
+      });
     }
   };
   let [fontsLoaded] = useFonts({
@@ -60,7 +64,7 @@ const WriteDiaryView = ({ navigation, date }) => {
 
   return (
     <View style={style.container}>
-      <TouchableOpacity style={style.homeBox}>
+      <TouchableOpacity onPress={() => navigation.replace('BottomTabHome')} style={style.homeBox}>
         <Image source={require('../assets/img/home.png')} style={style.home}></Image>
       </TouchableOpacity>
       <View style={style.dateBox}>
@@ -75,31 +79,31 @@ const WriteDiaryView = ({ navigation, date }) => {
 
           <TouchableOpacity onPress={() => setWeather('sunny')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/sunny.png')}
+              source={require('../assets/img/weather/sunny.png')}
               style={weather == 'sunny' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('cloudy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/cloudy.png')}
+              source={require('../assets/img/weather/cloudy.png')}
               style={weather == 'cloudy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('rainy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/rainy.png')}
+              source={require('../assets/img/weather/rainy.png')}
               style={weather == 'rainy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('stormy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/stormy.png')}
+              source={require('../assets/img/weather/stormy.png')}
               style={weather == 'stormy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('hot')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/hot.png')}
+              source={require('../assets/img/weather/hot.png')}
               style={weather == 'hot' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
@@ -203,8 +207,8 @@ const style = StyleSheet.create({
     marginTop: 10,
   },
   date: {
-    fontSize: 30,
-    height: 35,
+    fontSize: 22,
+    height: 27,
   },
   dateBox: {
     borderBottomColor: '#fff',
