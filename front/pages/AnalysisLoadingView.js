@@ -12,10 +12,8 @@ const selectEmotionUrl = '/diary/write/mood';
 
 const AnalysisLoadingView = ({ navigation, diaryId }) => {
   const [userId, setUserId] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [emotions, setEmotions] = useState([
-    /*'angry', 'joy', 'love'*/
-  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [emotions, setEmotions] = useState(['angry', 'joy', 'love']);
   const [selectedEmotion, setSelectedEmotion] = useState();
 
   AsyncStorage.getItem('userId') //로그인확인

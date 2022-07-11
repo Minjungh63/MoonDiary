@@ -75,7 +75,7 @@ const WriteDiaryView = ({ navigation, date }) => {
       </View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={style.weatherConatiner}>
-          <Text style={style.boldText}>오늘의 날씨 </Text>
+          <Text style={style.text}>오늘의 날씨 </Text>
 
           <TouchableOpacity onPress={() => setWeather('sunny')} style={style.weatherBox}>
             <Image
@@ -116,12 +116,12 @@ const WriteDiaryView = ({ navigation, date }) => {
               {/**name */}
               {'홍길동님'}
             </Text>
-            <Text style={style.boldText}>{'오늘의 하루는 어땠는지 알려주세요.'}</Text>
+            <Text style={style.text}>{'오늘의 하루는 어땠는지 알려주세요.'}</Text>
           </View>
         </View>
 
         <View style={style.titleContainer}>
-          <Text style={style.boldText}>제목</Text>
+          <Text style={style.text}>제목</Text>
           <View style={style.titleInputBox}>
             <TextInput placeholder="제목을 입력해주세요" onChangeText={setTitle}></TextInput>
           </View>
@@ -154,13 +154,6 @@ const style = StyleSheet.create({
     flex: 1,
     backgroundColor: basic_theme.bgColor,
     alignItems: 'center',
-  },
-  boldText: {
-    fontWeight: 'bold',
-    fontSize: 17,
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    marginVertical: 2,
   },
   text: {
     fontSize: 17,
@@ -294,7 +287,9 @@ const style = StyleSheet.create({
   },
   contentInput: {
     flex: 1,
-    height: 1000,
+    height: Dimensions.get('screen').height / 2.0,
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start',
     padding: 8,
   },
 });
