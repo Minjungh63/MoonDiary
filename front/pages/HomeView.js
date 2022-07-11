@@ -2,14 +2,19 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useEffect, useState } from 'react';
 import { basic_theme } from '../theme';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 import Calendar from '../components/Calendar';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = 'http://152.67.193.252';
 const diaryUrl = '/diary';
 
 const HomeView = ({ navigation }) => {
+  useEffect(() => {
+    getDiaryData;
+  }, []);
   const { userName, setUserName } = useState('홍길동'); //사용자 로그인시 state 관리 필요할 코드
   let [fontsLoaded] = useFonts({
     //폰트 가져오기
@@ -20,24 +25,23 @@ const HomeView = ({ navigation }) => {
     //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
     return <AppLoading />;
   }
-  const getDiaryData = async () => {
-    const userId = AsyncStorage.getItem(userId);
-    const response = await axios
-      .post(`${baseUrl}${diaryUrl}`, {
-        userId: userId, //userId 전송
+  const getDiaryData = () => {
+    AsyncStorage.getItem(userId)
+      .then(async () => {
+        const response = await axios
+          .post(`${baseUrl}${diaryUrl}`, {
+            userId: userId, //userId 전송
+          })
+          .then((res) => {
+            console.log(res); //결과 받아서 Calendar 컴포넌트에 넘겨야함
+          })
+          .catch((error) => console.error(error));
       })
-      .then((res) => {
-        console.log(res); //결과 받아서 Calendar 컴포넌트에 넘겨야함
-      })
-      .catch((error) => console.error(error));
+      .catch((e) => console.log('데이터를 읽지 못함'));
   };
   const goWrite = () => {
-    navigation.replace('WriteDiaryView');
+    navigation.navigate('WriteDiaryView');
   };
-  useEffect(() => {
-    getDiaryData();
-    setUserName(AsyncStorage.getItem('userName'));
-  }, []);
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

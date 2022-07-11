@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { basic_theme } from '../theme';
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = 'http://152.67.193.252';
 const loginUrl = '/user/login';
 
 const LoginView = ({ navigation }) => {
