@@ -15,9 +15,9 @@ const LoginView = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   AsyncStorage.getItem('userId') //로그인확인
-    .then(() => navigation.replace('BottomTabHome'))
-    .catch((e) => console.log('로그인필요'));
-
+    .then((value) => {
+      value ? navigation.replace('BottomTabHome') : null;
+    });
   const submitLoginData = async () => {
     if (!userId) {
       alert('아이디를 입력해주세요');
