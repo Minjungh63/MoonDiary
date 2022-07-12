@@ -53,7 +53,7 @@ const FavoriteView = ({ navigation }) => {
           <TouchableOpacity style={styles.btn} onPress={closeFilter}>
             <Text>OK</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity style={styles.btn} onPress={closeFilter}>
             <Text>Cancle</Text>
           </TouchableOpacity>
         </View>
