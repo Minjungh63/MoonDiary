@@ -1,9 +1,8 @@
-from urllib import response
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views import View
 from django.http import HttpResponse, JsonResponse
-from .models import Diary, AI
+from .models import Diary, User
 # Create your views here.
 
 class mainView(View):
@@ -17,12 +16,11 @@ class mainView(View):
     
 class writeView(View):
     def post(self, request):
-        data = Diary()
-        data.contents = request.POST['contents']
-        data.weather = request.POST['weather']
-        data.userId = request.POST['userId']
-        data.title = request.POST['title']
-        data.save()
+        temp = json.loads(request.body)
+        print(temp)
+        #data.userId = temp['userId']
+        Diary.objects.create(userId=User.objects.get(userId="test"), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
+
         return HttpResponse(status=201)
     
 class checkView(View):
