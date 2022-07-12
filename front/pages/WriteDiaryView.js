@@ -7,7 +7,7 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { basic_theme } from '../theme';
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = 'http://152.67.193.252';
 const diaryUrl = '/diary/write';
 
 const WriteDiaryView = ({ navigation, date }) => {
@@ -61,6 +61,8 @@ const WriteDiaryView = ({ navigation, date }) => {
     //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
     return <AppLoading />;
   }
+
+  console.log(contents);
 
   return (
     <View style={style.container}>

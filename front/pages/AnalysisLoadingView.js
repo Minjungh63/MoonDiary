@@ -7,7 +7,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = 'http://152.67.193.252';
 const selectEmotionUrl = '/diary/write/mood';
 
 const AnalysisLoadingView = ({ navigation, diaryId }) => {

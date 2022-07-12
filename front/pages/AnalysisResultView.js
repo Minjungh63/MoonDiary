@@ -7,7 +7,7 @@ import axios from 'axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme } from '../theme';
 
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = 'http://152.67.193.252';
 const resultUrl = '/diary/write/result';
 
 const getEmotionPath = (emotion) => {
