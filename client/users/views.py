@@ -38,8 +38,8 @@ class loginView(View):
         if User.objects.filter(userId = id).exists():
             user = User.objects.get(userId = id)
             if user.password == pw:
-                HttpResponse(status=200)
+                return JsonResponse({'message':'success'},status = 200)
             else :
-                return JsonResponse({'message':'잘못된 비밀번호입니다'},status = 401)
+                return JsonResponse({'message':'pw error'},status = 401)
 
-        return JsonResponse({'message':'등록되지 않은 아이디입니다'},status=400)
+        return JsonResponse({'message':'id error'},status=400)
