@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import PropTypes from 'prop-types';
 import ProgressCircle from 'react-native-progress-circle';
 
-const StatisticsView = ({ attend_day, emotion_list }) => {
+const StackStatistics = ({ attend_day, emotion_list }) => {
   const YEAR = new Date().getFullYear();
   const MONTH = new Date().getMonth() + 1;
   const number_day = new Date(YEAR, MONTH, 0).getDate(); // 이번월의 일 수
@@ -14,7 +14,7 @@ const StatisticsView = ({ attend_day, emotion_list }) => {
 
   let [fontsLoaded] = useFonts({
     //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
+    Gowun_Batang: require('../../assets/fonts/GowunBatang-Regular.ttf'),
   });
 
   if (!fontsLoaded) {
@@ -180,15 +180,15 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
-import joyImg from '../assets/img/emotion/joy.png';
-import loveImg from '../assets/img/emotion/love.png';
-import angryImg from '../assets/img/emotion/angry.png';
-import sadImg from '../assets/img/emotion/sad.png';
-import surprisedImg from '../assets/img/emotion/surprised.png';
-import tiredImg from '../assets/img/emotion/tired.png';
-import neutralImg from '../assets/img/emotion/neutral.png';
-import fearImg from '../assets/img/emotion/fear.png';
-StatisticsView.defaultProps = {
+import joyImg from '../../assets/img/emotion/joy.png';
+import loveImg from '../../assets/img/emotion/love.png';
+import angryImg from '../../assets/img/emotion/angry.png';
+import sadImg from '../../assets/img/emotion/sad.png';
+import surprisedImg from '../../assets/img/emotion/surprised.png';
+import tiredImg from '../../assets/img/emotion/tired.png';
+import neutralImg from '../../assets/img/emotion/neutral.png';
+import fearImg from '../../assets/img/emotion/fear.png';
+StackStatistics.defaultProps = {
   attend_day: 17, // 이번월의 일기 작성 일 수. 값 가져오기
   emotion_list: [
     // 기분에 대한 정보. 값 가져오기
@@ -202,8 +202,8 @@ StatisticsView.defaultProps = {
     { id: '공포', day: 0, color: '#999999', image: fearImg },
   ],
 };
-StatisticsView.propTypes = {
+StackStatistics.propTypes = {
   attend_day: PropTypes.number,
   emotion_list: PropTypes.array,
 };
-export default StatisticsView;
+export default StackStatistics;
