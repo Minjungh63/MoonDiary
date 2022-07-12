@@ -17,7 +17,7 @@ class joinView(View):
         try:
             #이미 등록된 아이디
             if User.objects.filter(userId = id).exists():
-                return HttpResponse(status=409)
+                return JsonResponse({"message":"exist id"}, status=409)
             User.objects.create(
                 userId = id,
                 name = name,
@@ -25,7 +25,7 @@ class joinView(View):
                 imageYN = 1,
                 commentYN = 1
             )
-            HttpResponse(status=201)
+            JsonResponse({"message":"success"}, status=201)
         except KeyError:
             return JsonResponse({"message":"INVALID_KEYS"}, status=400)
 
