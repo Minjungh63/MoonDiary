@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views import View
@@ -11,9 +10,9 @@ class joinView(View):
     #     return JsonResponse({'message': "요청 전송"}, status=200)
     def post(self,request):
         data = json.loads(request.body)
-        id = data['userId'].replace('"','')
-        pw = data['password'].replace('"','')
-        name = data['name'].replace('"','')
+        id = data['userId']
+        pw = data['password']
+        name = data['name']
         
         try:
             #이미 등록된 아이디
