@@ -12,7 +12,7 @@ const selectEmotionUrl = '/diary/write/mood';
 
 const AnalysisLoadingView = ({ navigation, diaryId }) => {
   const [userId, setUserId] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [emotions, setEmotions] = useState(['angry', 'joy', 'love']);
   const [selectedEmotion, setSelectedEmotion] = useState();
 
@@ -61,6 +61,10 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
         return require(`../assets/img/emotion/surprised.png`);
       case 'tired':
         return require(`../assets/img/emotion/tired.png`);
+      case 'neutral':
+        return require(`../assets/img/emotion/neutral.png`);
+      // case 'fear':
+      //   return require(`../assets/img/emotion/fear.png`);
     }
   };
   const submitEmotionData = async (emotion) => {
@@ -108,13 +112,13 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
               <TouchableOpacity onPress={() => setSelectedEmotion(emotion)} style={style.emotionBox}>
                 <Image
                   source={getEmotionPath(emotion)}
-                  style={selectedEmotion == emotion ? style.selectedEmotion : style.emotion}
+                  style={selectedEmotion === emotion ? null : style.emotion}
                 ></Image>
               </TouchableOpacity>
             ))}
           </View>
         </View>
-        <TouchableOpacity onPress={() => submitEmotionData(selectedEmotion)} style={style.emotionButtonBox}>
+        <TouchableOpacity onPress={() => submitEmotionData(selectedEmotion)}>
           <Text style={style.text}>OK</Text>
         </TouchableOpacity>
       </Modal>

@@ -1,6 +1,9 @@
+import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
+import { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import axios from 'axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme } from '../theme';
 
@@ -22,10 +25,67 @@ const getEmotionPath = (emotion) => {
       return require(`../assets/img/emotion/surprised.png`);
     case 'tired':
       return require(`../assets/img/emotion/tired.png`);
+    case 'neutral':
+      return require(`../assets/img/emotion/neutral.png`);
+    // case 'fear':
+    //   return require(`../assets/img/emotion/fear.png`);
+  }
+};
+
+const getEmotionText = (emotion) => {
+  switch (emotion) {
+    case 'angry':
+      return '화나는';
+    case 'joy':
+      return '기쁜';
+    case 'love':
+      return '사랑스러운';
+    case 'sad':
+      return '슬픈';
+    case 'surprised':
+      return '놀란';
+    case 'tired':
+      return '지루한';
+    case 'neutral':
+      return '평온한';
+    case 'fear':
+      return '무서운';
   }
 };
 
 const AnalysisResultView = ({ navigation, diaryId }) => {
+  const [userId, setUserId] = useState('');
+  const [emotion, setEmotion] = useState('joy'); //테스트 하려고 joy 넣어둠
+  const [imagePath, setImagePath] = useState('');
+  const [comment, setComment] = useState('');
+  const [isLikeIt, setIsLikeIt] = useState('');
+
+  AsyncStorage.getItem('userId') //로그인확인
+    .then((value) => setUserId(value))
+    .catch((e) => navigation.replace('LoginView'));
+
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get(
+        `${baseUrl}${resultUrl}`,
+        {
+          userId: userId,
+          diaryId: diaryId,
+        },
+        {
+          headers: {
+            'Content-Type': `application/json`,
+          },
+        }
+      );
+      if (response.status == 200) {
+        setEmotion(response.data.emotion);
+        setImagePath(response.data.imagePath);
+        setComment(response.data.comment);
+      }
+    })();
+  }, []);
+
   let [fontsLoaded] = useFonts({
     //폰트 가져오기
     Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
@@ -43,14 +103,12 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
         <Image source={require('../assets/img/speech-bubble.png')} style={style.speechBubbleImage}></Image>
         <View style={style.speechBubbleBox}>
           <View style={style.textBox}>
-            <Text style={style.blackText}>{/**name */}님,</Text>
-            <Text style={style.blackText}>
-              {/**name */}오늘의 하루는 {/** 감정 */} 하루였군요!
-            </Text>
+            <Text style={style.blackText}>{'홍길동 ' /**name */}님,</Text>
+            <Text style={style.blackText}>오늘의 하루는 {/** 감정 {emotion}*/} 하루였군요!</Text>
           </View>
-          <Image source={require(`../assets/img/emotion/joy.png`)} style={style.emotion}></Image>
+          <Image source={getEmotionPath(emotion)} style={style.emotion}></Image>
           <View style={style.textBox}>
-            <Text style={style.blackText}>{'오늘 생일파티는 재밌으셨나요?'}</Text>
+            <Text style={style.blackText}>{/*{comment}*/ '오늘 생일파티는 재밌으셨나요?'}</Text>
           </View>
           <View style={style.textBox}>
             <Text style={style.blackText}>제가 {/*name*/}님의 하루를</Text>
@@ -61,16 +119,18 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
       <View style={style.moonContainer}>
         <Image source={require(`../assets/img/moon.png`)} style={style.moon}></Image>
       </View>
-      <View style={style.paintingDiaryContainer}></View>
+      <View style={style.paintingDiaryContainer}>
+        {/* <Image source={imagePath} style={style.paintingDiaryImage}></Image> */}
+      </View>
       <View style={style.resultContainer}>
         <View style={style.resultBox}>
           <Text style={style.text}>결과가 마음에 드시나요?</Text>
           <View style={style.buttonContainer}>
-            <TouchableOpacity activeOpacity={0.7} style={style.buttonBox}>
-              <Text style={style.smallText}>{'예'}</Text>
+            <TouchableOpacity onPress={() => setIsLikeIt('yes')} activeOpacity={0.7} style={style.buttonBox}>
+              <Text style={isLikeIt === 'yes' ? style.opacitySmallText : style.smallText}>{'예'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7} style={style.buttonBox}>
-              <Text style={style.smallText}>{'아니오'}</Text>
+            <TouchableOpacity onPress={() => setIsLikeIt('no')} activeOpacity={0.7} style={style.buttonBox}>
+              <Text style={isLikeIt === 'no' ? style.opacitySmallText : style.smallText}>{'아니오'}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -98,7 +158,13 @@ const style = StyleSheet.create({
     color: 'white',
     marginVertical: 2,
   },
-
+  opacitySmallText: {
+    fontSize: 14,
+    fontFamily: 'Gowun_Batang',
+    color: 'white',
+    marginVertical: 2,
+    opacity: 0.5,
+  },
   home: {
     width: 35,
     height: 35,
@@ -123,6 +189,11 @@ const style = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+    resizeMode: 'stretch',
+  },
+  paintingDiaryImage: {
+    width: '100%',
+    height: '100%',
     resizeMode: 'stretch',
   },
   blackText: {
@@ -150,7 +221,7 @@ const style = StyleSheet.create({
   },
   paintingDiaryContainer: {
     marginTop: 30,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff', // TODO 일기 받아오면 없애기
     width: Dimensions.get('window').width / 1.1,
     height: Dimensions.get('window').height / 3.8,
     borderRadius: 32,
