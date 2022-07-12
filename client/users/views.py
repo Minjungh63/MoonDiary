@@ -25,7 +25,7 @@ class joinView(View):
                 imageYN = 1,
                 commentYN = 1
             )
-            JsonResponse({"message":"success"}, status=201)
+            return JsonResponse({"message":"success"}, status=201)
         except KeyError:
             return JsonResponse({"message":"INVALID_KEYS"}, status=400)
 
