@@ -15,7 +15,7 @@ class EmotionTable extends Component {
                 <Text style={[styles.rowText, { flex: 0.1, textAlign: 'left' }]}>{index + 1}</Text>
                 <Image source={emotion.image} style={styles.image} />
                 <Text style={[styles.rowText, { flex: 0.5 }]}>{emotion.id}</Text>
-                <Text style={[styles.rowText, { flex: 0.2 }]}>{emotion.day}</Text>
+                <Text style={[styles.rowText, { flex: 0.3 }]}>{emotion.day}일</Text>
               </View>
             )
         )}
