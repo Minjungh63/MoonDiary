@@ -1,4 +1,3 @@
-from django.forms import ModelChoiceField
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views import View
@@ -6,6 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from users.models import User
 from AI.models import AI
 from diary.models import Diary
+from django.core import serializers
 
 # Create your views here.
 
@@ -15,8 +15,17 @@ class mainView(View):
         id = data['userId']
         
         data = AI.objects.select_related('diaryId').values_list('diaryId','emotion','diaryId__date').filter(diaryId__userId=id)
-        
-        return HttpResponse(data, status=200)
+        res = []
+        for i in range(len(data)):
+            temp = {
+                "diaryId": data[i][0],
+                "emotion": data[i][1],
+                "date": data[i][2]
+            }
+            res.append(temp)
+            
+        jsonObj = json.dumps(res, default=str)
+        return JsonResponse(jsonObj, status=200, safe=False)
     
 class writeView(View):
     def post(self, request):
@@ -40,34 +49,27 @@ class checkView(View):#일기 확인 페이지
         print(data)
         return JsonResponse(data,response=200)
         
-    def post(self, request):#
+    def post(self, request):#즐겨찾기 수정
         dId = request.POST['diaryId']
+        dlike = request.POST['liked']
         data = Diary.objects.get(diaryId=dId)
-        data.liked = 1
+        data.liked = dlike
         data.save()
         return HttpResponse(status=201)
     
-class chooseView(View):
+class chooseView(View):#다이어리 모델에도 emotion field 가 필요한가
     def get(self, request):
         dId = request.GET['diaryId']
         emotion = AI.objects.raw('SELECT emotion FROM AI WHERE diaryId = %s', [dId])
-        return JsonResponse(emotion, status=200)
+        sdata = {
+            "emotion": emotion
+        }
+        return JsonResponse(sdata, status=200)
     
     def post(self, request):
         dId = request.POST['diaryId']
-        data = Diary.objects.get(diaryId=dId)
-    
-    
-class QS:
-    diaryId=''
-    year=''
-    month=''
-    day=''
-    emotion=''
-    
-    def __init__(self, diaryId, year, month, day, emotion):
-        self.diaryId = diaryId
-        self.year = year
-        self.month = month
-        self.day = day
-        self.emotion = emotion
+        newemo = request.POST['emotion']
+        data = AI.objects.raw('SELECT emotion FROM AI WHERE diaryId = %s', [dId])
+        data.emotion = newemo
+        data.save()
+        return HttpResponse(status=201)
