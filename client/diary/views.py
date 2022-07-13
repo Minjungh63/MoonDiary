@@ -23,13 +23,14 @@ class writeView(View):
 
         return HttpResponse(status=201)
     
-class checkView(View):
+class checkView(View):#일기 확인 페이지
     def get(self, request):#일단 diary 테이블 데이터만 넘겨줌
         dId = request.GET['diaryId']
         data = Diary.objects.get(diaryId=dId)
+        print(data)
         return JsonResponse(data,response=200)
         
-    def post(self, request):
+    def post(self, request):#
         dId = request.GET['diaryId']
         data = Diary.objects.get(diaryId=dId)
         data.liked = 1

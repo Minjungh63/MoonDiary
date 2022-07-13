@@ -5,7 +5,7 @@ class AI(models.Model):
     class Meta:
         db_table = "AI"
         
-    diaryId = models.ForeignKey(Diary, related_name="diaryId_id", on_delete=models.CASCADE, primary_key=True)
+    diaryId = models.ForeignKey(Diary, related_name="diary", on_delete=models.CASCADE, db_column='diaryId', primary_key=True)
     image = models.TextField()
     comment = models.CharField(max_length=100)
     keyS = models.TextField()
