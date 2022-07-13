@@ -8,11 +8,8 @@ from .models import Diary, User
 class mainView(View):
     def get(self, request):
         id = request.GET['userId']
-        print(id)
-        sdata = AI.objects.select_related('diaryId').get(diaryId=id)
-
-        print(sdata)
-        return JsonResponse(sdata, status=200)
+        data = Diary.objects.raw('SELECT DIARY.diaryId, DIARY.date, AI.emotion FROM DIARY LEFT JOIN AI WHERE DIARY.diaryId = AI.diaryId AND userId = %s', [id])
+        return JsonResponse(data, status=200)
     
 class writeView(View):
     def post(self, request):
