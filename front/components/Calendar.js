@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 
@@ -23,11 +23,13 @@ const kstGap = 9 * 60 * 60 * 1000;
 const today = new Date(utc + kstGap);
 //한국시간 기준으로 날짜계산하기 위함
 
-export default function Calendar() {
+export default function Calendar({ diaryData }) {
+  //diaryData = [{}, { diaryId, date, emotion }, {}]
   const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
   const [dayArr, setDayArr] = useState([]);
   const [loadFlag, setLoadFlag] = useState(false);
+  const [filteringData, setFilter] = useState(diaryData);
   var startDay = new Date(selectedYear, selectedMonth - 1, 0);
   var prevDate = startDay.getDate();
   var prevDay = startDay.getDay();
@@ -80,18 +82,74 @@ export default function Calendar() {
     setDayArr(tempArr);
     setLoadFlag(true);
   };
+  const dataCheck = (day) => {
+    var nowMonth = selectedMonth.toString().length === 1 ? '0' + selectedMonth : selectedMonth;
+    var nowDay = day.toString().length === 1 ? '0' + day : day;
+    for (var i = 0; i < filteringData.length; i++) {
+      if (filteringData[i].date === selectedYear + '-' + nowMonth + '-' + nowDay) {
+        return { emotion: filteringData[i].emotion, diaryId: filteringData[i].diaryId };
+      }
+    }
+    return false;
+  };
+  const readDiary = (diaryId) => {
+    //다이어리 아이디 바탕으로 읽기화면으로 이동
+  };
   useEffect(() => {
     setDay();
     calDay();
+    setFilter(() =>
+      diaryData.filter((val) => {
+        if (val.date.slice(5, 7) === (selectedMonth.toString().length === 1 ? '0' + selectedMonth : selectedMonth)) {
+          return true;
+        }
+      })
+    );
   }, [selectedMonth]);
-  const Items = ({ data }) => (
-    <View>
-      <Text style={styles.text}>{data}</Text>
-      <View style={{ alignSelf: 'center' }}>
-        <Text></Text>
+  const Items = ({ data }) => {
+    var final_data = dataCheck(data);
+    var req = require('../assets/img/emotion/joy.png');
+    switch (final_data.emotion) {
+      case 'joy':
+        req = require('../assets/img/emotion/joy.png');
+        break;
+      case 'sad':
+        req = require('../assets/img/emotion/sad.png');
+        break;
+      case 'angry':
+        req = require('../assets/img/emotion/angry.png');
+        break;
+      case 'fear':
+        req = require('../assets/img/emotion/fear.png');
+        break;
+      case 'love':
+        req = require('../assets/img/emotion/love.png');
+        break;
+      case 'neutral':
+        req = require('../assets/img/emotion/angry.png');
+        break;
+      case 'surprised':
+        req = require('../assets/img/emotion/angry.png');
+        break;
+      case 'tired':
+        req = require('../assets/img/emotion/angry.png');
+        break;
+    }
+    return (
+      <View>
+        <Text style={styles.text}>{data}</Text>
+        <View style={{ alignSelf: 'center' }}>
+          {final_data ? (
+            <TouchableOpacity onPress={readDiary(final_data.diaryId)}>
+              <Image style={styles.img} source={req}></Image>
+            </TouchableOpacity>
+          ) : (
+            <Text style={styles.img}> </Text>
+          )}
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
   return (
     <View style={{ flex: 4, marginHorizontal: 15 }}>
       <View style={{ ...styles.rowViewTop, borderTopLeftRadius: 30, borderTopRightRadius: 30 }}>
@@ -172,5 +230,10 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  img: {
+    marginTop: 5,
+    width: 25,
+    height: 25,
   },
 });
