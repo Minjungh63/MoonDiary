@@ -7,11 +7,11 @@ class WritingRate extends Component {
     const { attend_day } = this.props;
     const YEAR = new Date().getFullYear();
     const MONTH = new Date().getMonth() + 1;
-    const number_day = new Date(YEAR, MONTH, 0).getDate(); // 이번월의 일 수 const progress = (attend_day
+    const number_day = new Date(YEAR, MONTH, 0).getDate(); // 이번월의 일 수
     const progress = (attend_day / number_day) * 100; // 다이어리 작성 비율
     return (
       <View style={{ paddingTop: 11 }}>
-        <ProgressCircle pertent={100} radius={140} borderWidth={0} bgColor="#D8DFF2">
+        <ProgressCircle percent={100} radius={140} borderWidth={20} color="#D8DFF2">
           <ProgressCircle
             percent={progress}
             radius={120}
@@ -31,7 +31,6 @@ class WritingRate extends Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   text: {
     fontSize: 20,
