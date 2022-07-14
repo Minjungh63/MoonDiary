@@ -57,7 +57,7 @@ class checkView(View):#일기 확인 페이지
         data.save()
         return HttpResponse(status=201)
     
-class chooseView(View):#다이어리 모델에도 emotion field 가 필요한가
+class chooseView(View):
     def get(self, request):
         dId = request.GET['diaryId']
         emotion = AI.objects.raw('SELECT emotion FROM AI WHERE diaryId = %s', [dId])
@@ -75,8 +75,8 @@ class chooseView(View):#다이어리 모델에도 emotion field 가 필요한가
         return HttpResponse(status=201)
     
 class likeView(View):#즐겨찾기 페이지
-    def get(self, request):
-        id = request.GET['userId']
+    def get(self, request, userId):
+        id = userId
         data = AI.objects.select_related('diaryId').values_list('diaryId','emotion','comment','diaryId__date','diaryId__weather','diaryId__title').filter(diaryId__userId=id, diaryId__liked=1)
         res = []
         for i in range(len(data)):
@@ -100,3 +100,14 @@ class likeView(View):#즐겨찾기 페이지
         data.liked = dlike
         data.save()
         return HttpResponse(status=201)
+    
+class resultView(View):
+    def get(self, request):
+        dId = request.GET['diaryId']
+        if AI.objects.only('image').get(diaryId=dId) == NULL:
+            return JsonResponse({"message: not yet"}, status=200)
+        
+        else:
+            data = AI.objects.get(diaryId=dId)
+            jsonObj = json.dumps(data)
+            return JsonResponse(jsonObj, status=200)
