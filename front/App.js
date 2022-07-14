@@ -8,14 +8,18 @@ import WriteDiaryView from './pages/WriteDiaryView';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState, useCallback } from 'react';
 import AnalysisResultView from './pages/AnalysisResultView';
+import * as Font from 'expo-font';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  let myFont = {
+    Gowun_Batang: require('./assets/fonts/GowunBatang-Regular.ttf'),
+  };
   useEffect(() => {
     async function prepare() {
       try {
         await SplashScreen.preventAutoHideAsync();
-        //폰트 불러오기코드 추가가능 (추후구현)
+        await Font.loadAsync(myFont);
         await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);
