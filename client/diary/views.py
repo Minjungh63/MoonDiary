@@ -73,3 +73,30 @@ class chooseView(View):#다이어리 모델에도 emotion field 가 필요한가
         data.emotion = newemo
         data.save()
         return HttpResponse(status=201)
+    
+class likeView(View):#즐겨찾기 페이지
+    def get(self, request):
+        id = request.GET['userId']
+        data = AI.objects.select_related('diaryId').values_list('diaryId','emotion','comment','diaryId__date','diaryId__weather','diaryId__title').filter(diaryId__userId=id, diaryId__liked=1)
+        res = []
+        for i in range(len(data)):
+            temp = {
+                "diaryId": data[i][0],
+                "emotion": data[i][1],
+                "comment": data[i][2],
+                "date": data[i][3],
+                "weather": data[i][4],
+                "title": data[i][5],
+            }
+            res.append(temp)
+            
+        jsonObj = json.dumps(res, default=str)
+        return JsonResponse(jsonObj, status=200, safe=False)
+    
+    def post(self, request):
+        dId = request.POST['diaryId']
+        dlike = request.POST['liked']
+        data = Diary.objects.get(diaryId=dId)
+        data.liked = dlike
+        data.save()
+        return HttpResponse(status=201)
