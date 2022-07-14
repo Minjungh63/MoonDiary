@@ -6,5 +6,5 @@ urlpatterns = [
     path('write', writeView.as_view()),
     path('<int:diaryId>', checkView.as_view()),
     path('write/mood', chooseView.as_view()),
-    path('diary/like', likeView.as_view())
+    path('like', likeView.as_view())
 ]
