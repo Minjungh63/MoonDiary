@@ -25,20 +25,17 @@ class mainView(View):
             res.append(temp)
             
         jsonObj = json.dumps(res, default=str)
-        return JsonResponse(jsonObj, status=200, safe=False)
+        sdata = json.loads(jsonObj)
+        return JsonResponse(sdata, status=200, safe=False)
     
 class writeView(View):
     def post(self, request):
         temp = json.loads(request.body)
-        print(temp)
-        #data.userId = temp['userId']
-        new = Diary.objects.create(userId=User.objects.get(userId="test"), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
-        
-        id = Diary.objects.get(contents=temp['contents'])
-        did = id.diaryId
-        print(did)
+        Diary.objects.create(userId=User.objects.get(userId="test"), contents=temp['contents'], weather=temp['weather'], title=temp['title'])       
+        did = Diary.objects.filter(userId="test").last()
+
         sdata = {
-            "diaryId": did
+            "diaryId": did.diaryId
         }
         return JsonResponse(sdata, status=201)
     
@@ -75,8 +72,8 @@ class chooseView(View):
         return HttpResponse(status=201)
     
 class likeView(View):#즐겨찾기 페이지
-    def get(self, request, userId):
-        id = userId
+    def get(self, request):
+        id = request.GET['userId']
         data = AI.objects.select_related('diaryId').values_list('diaryId','emotion','comment','diaryId__date','diaryId__weather','diaryId__title').filter(diaryId__userId=id, diaryId__liked=1)
         res = []
         for i in range(len(data)):
@@ -91,7 +88,8 @@ class likeView(View):#즐겨찾기 페이지
             res.append(temp)
             
         jsonObj = json.dumps(res, default=str)
-        return JsonResponse(jsonObj, status=200, safe=False)
+        sdata = json.loads(jsonObj)
+        return JsonResponse(sdata, status=200, safe=False)
     
     def post(self, request):
         dId = request.POST['diaryId']
