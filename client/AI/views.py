@@ -193,7 +193,6 @@ class aiView(View):
         return keysents
 
     def comment_moon(keysents):
-
         # KoGPT2에서 제공하는 토큰나이저 사용
         model = KoGPT2Comment()
         model.load_state_dict(torch.load("model_chp/comment_model.pth"))
