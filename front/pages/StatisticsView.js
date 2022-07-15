@@ -14,59 +14,59 @@ import neutralImg from '../assets/img/emotion/neutral.png';
 import fearImg from '../assets/img/emotion/fear.png';
 const StatisticsView = () => {
   const emotion_day = [
-    { id: 'joy', day: 3 },
-    { id: 'love', day: 1 },
-    { id: 'angry', day: 2 },
-    { id: 'tired', day: 1 },
-    { id: 'neutral', day: 10 },
+    { emotion: 'joy', day: 3 },
+    { emotion: 'love', day: 1 },
+    { emotion: 'angry', day: 2 },
+    { emotion: 'tired', day: 1 },
+    { emotion: 'neutral', day: 10 },
   ];
   const attend_day = emotion_day.map((emotion) => emotion.day).reduce((prev, curr) => prev + curr, 0);
   const emotion_list = [
     {
       id: '기쁨',
-      day: emotion_day.filter((emotion) => emotion.id == 'joy').map((emotion) => emotion.day),
+      day: emotion_day.filter((list) => list.emotion == 'joy').map((emotion) => emotion.day),
       color: '#FBEC6B',
       image: joyImg,
     },
     {
       id: '사랑',
-      day: emotion_day.filter((emotion) => emotion.id == 'love').map((emotion) => emotion.day),
+      day: emotion_day.filter((list) => list.emotion == 'love').map((emotion) => emotion.day),
       color: '#FFCDE0',
       image: loveImg,
     },
     {
       id: '화남',
-      day: emotion_day.filter((emotion) => emotion.id == 'angry').map((emotion) => emotion.day),
+      day: emotion_day.filter((list) => list.emotion == 'angry').map((emotion) => emotion.day),
       color: '#F07C89',
       image: angryImg,
     },
     {
       id: '슬픔',
-      day: emotion_day.filter((emotion) => emotion.id == 'sad').map((emotion) => emotion.day),
+      day: emotion_day.filter((list) => list.emotion == 'sad').map((emotion) => emotion.day),
       color: '#969ECF',
       image: sadImg,
     },
     {
       id: '놀람',
-      day: emotion_day.filter((emotion) => emotion.id == 'surprised').map((emotion) => emotion.day),
+      day: emotion_day.filter((list) => list.emotion == 'surprised').map((emotion) => emotion.day),
       color: '#AE98D6',
       image: surprisedImg,
     },
     {
       id: '지침',
-      day: emotion_day.filter((emotion) => emotion.id == 'tired').map((emotion) => emotion.day),
+      day: emotion_day.filter((list) => list.emotion == 'tired').map((emotion) => emotion.day),
       color: '#DADADA',
       image: tiredImg,
     },
     {
       id: '평온',
-      day: emotion_day.filter((emotion) => emotion.id == 'neutral').map((emotion) => emotion.day),
+      day: emotion_day.filter((list) => list.emotion == 'neutral').map((emotion) => emotion.day),
       color: '#98D5A2',
       image: neutralImg,
     },
     {
       id: '공포',
-      day: emotion_day.filter((emotion) => emotion.id == 'fear').map((emotion) => emotion.day),
+      day: emotion_day.filter((list) => list.emotion == 'fear').map((emotion) => emotion.day),
       color: '#999999',
       image: fearImg,
     },
