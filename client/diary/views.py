@@ -92,12 +92,13 @@ class likeView(View):#즐겨찾기 페이지
         return JsonResponse(sdata, status=200, safe=False)
     
     def post(self, request):
-        dId = request.POST['diaryId']
-        dlike = request.POST['liked']
-        data = Diary.objects.get(diaryId=dId)
-        data.liked = dlike
-        data.save()
-        return HttpResponse(status=201)
+        data = json.loads(request.body)        
+        dId = data['diaryId']
+        dlike = data['liked']
+        adata = Diary.objects.get(diaryId=dId)
+        adata.liked = dlike
+        adata.save()
+        return JsonResponse({"message": "update success"}, status=201)
     
 class resultView(View):
     def get(self, request):
