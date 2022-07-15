@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'users',
     'diary',
     'AI',
+    'statistic',
 ]
 
 MIDDLEWARE = [
