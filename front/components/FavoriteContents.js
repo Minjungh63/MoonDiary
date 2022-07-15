@@ -1,34 +1,93 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { basic_theme } from '../theme';
-import { useFonts } from 'expo-font';
 import { FontAwesome } from '@expo/vector-icons';
-import AppLoading from 'expo-app-loading';
+import axios from 'axios';
 
-export default function FavoriteContents() {
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
+const baseUrl = 'http://152.67.193.252';
+const cancleUrl = '/diary/like/';
 
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
+export default function FavoriteContents({ diaryId, date, title, weather, emotion, comment }) {
+  var req_e = require('../assets/img/emotion/joy.png');
+  var req_w = require('../assets/img/weather/sunny.png');
+  switch (emotion) {
+    case 'joy':
+      req_e = require('../assets/img/emotion/joy.png');
+      break;
+    case 'sad':
+      req_e = require('../assets/img/emotion/sad.png');
+      break;
+    case 'angry':
+      req_e = require('../assets/img/emotion/angry.png');
+      break;
+    case 'fear':
+      req_e = require('../assets/img/emotion/fear.png');
+      break;
+    case 'love':
+      req_e = require('../assets/img/emotion/love.png');
+      break;
+    case 'neutral':
+      req_e = require('../assets/img/emotion/angry.png');
+      break;
+    case 'surprised':
+      req_e = require('../assets/img/emotion/angry.png');
+      break;
+    case 'tired':
+      req_e = require('../assets/img/emotion/angry.png');
+      break;
   }
+  switch (weather) {
+    case 'sunny':
+      req_w = require('../assets/img/weather/sunny.png');
+      break;
+    case 'stormy':
+      req_w = require('../assets/img/weather/stormy.png');
+      break;
+    case 'rainy':
+      req_w = require('../assets/img/weather/rainy.png');
+      break;
+    case 'hot':
+      req_w = require('../assets/img/weather/hot.png');
+      break;
+    case 'cloudy':
+      req_w = require('../assets/img/weather/cloudy.png');
+      break;
+  }
+  //weather, emotion 이미지 선택
+  const cancle = async (id) => {
+    console.log('삭제');
+    await axios.post(`${baseUrl}${cancleUrl}`, {
+      diaryId: id,
+      liked: 0,
+    });
+  };
+  const cancleFav = (id) => {
+    Alert.alert('즐겨찾기 해제', '즐겨찾기 해제하시겠습니까?', [
+      {
+        text: '취소',
+        onPress: () => console.log('취소'),
+        style: 'cancel',
+      },
+      {
+        text: '삭제',
+        onPress: () => cancle(id),
+      },
+    ]);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.line}>
-        <Text style={styles.text}>2022년 07월 11일</Text>
-        <Image source={require('../assets/img/emotion/sad.png')} style={styles.image}></Image>
-        <Image source={require('../assets/img/weather/stormy.png')} styles={styles.image}></Image>
+        <Text style={styles.text}>{date.toString().replace('-', '년').replace('-', '월') + '일'}</Text>
+        <Image source={req_e} style={styles.image}></Image>
+        <Image source={req_w} styles={styles.image}></Image>
       </View>
       <View style={{ ...styles.line, justifyContent: 'space-between' }}>
-        <Text style={styles.text}>일기 제목 - 내 맘도 날씨 따라</Text>
-        <TouchableOpacity style={{ marginRight: 5 }}>
+        <Text style={styles.text}>일기 제목 - {title}</Text>
+        <TouchableOpacity onPress={() => cancleFav(diaryId)} style={{ marginRight: 5 }}>
           <FontAwesome name="star" size={24} color="yellow" />
         </TouchableOpacity>
       </View>
       <View style={styles.line}>
-        <Text style={styles.text}>AI 평가 - 내일은 밝은 날이 될꺼에요!</Text>
+        <Text style={styles.text}>AI 평가 - {comment}</Text>
       </View>
     </View>
   );

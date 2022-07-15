@@ -2,17 +2,53 @@ import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Image } from 'rea
 import { FontAwesome } from '@expo/vector-icons';
 import { basic_theme } from '../theme';
 import FavoriteContents from '../components/FavoriteContents';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from 'react-native-simple-modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
+const baseUrl = 'http://152.67.193.252';
+const favUrl = '/diary/like/';
 
 const FavoriteView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [favData, setFavData] = useState([]);
   const openFilter = () => {
     setModalVisible(true);
   };
   const closeFilter = () => {
     setModalVisible(false);
   };
+  const getFavorData = () => {
+    AsyncStorage.getItem('userId')
+      .then(async (value) => {
+        try {
+          var userId = value.replace('"', '').replace('"', '');
+          const response = await axios.get(
+            `${baseUrl}${favUrl}`,
+            // 서버통신
+            { params: { userId: userId } },
+            {
+              headers: {
+                'Content-Type': `application/json`,
+              },
+            }
+          );
+          if (response.status === 200) {
+            response.data.sort(function (a, b) {
+              return new Date(b.date) - new Date(a.date);
+            });
+            setFavData(() => response.data);
+          }
+        } catch (e) {
+          console.log('통신에러 : ' + e);
+        }
+      })
+      .catch((e) => console.log('userID 에러'));
+  };
+  useEffect(() => {
+    getFavorData();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.filterView}>
@@ -21,13 +57,19 @@ const FavoriteView = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <ScrollView style={{ flex: 1 }}>
-        <FavoriteContents />
-        <FavoriteContents />
-        <FavoriteContents />
-        <FavoriteContents />
-        <FavoriteContents />
-        <FavoriteContents />
-        <FavoriteContents />
+        {favData.map((obj, index) => {
+          return (
+            <FavoriteContents
+              key={index}
+              diaryId={obj.diaryId}
+              date={obj.date}
+              title={obj.title}
+              weather={obj.weather}
+              emotion={obj.emotion}
+              comment={obj.comment}
+            />
+          );
+        })}
       </ScrollView>
       <Modal open={modalVisible} modalStyle={styles.mymodal}>
         <Text>날짜정렬</Text>
