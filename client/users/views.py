@@ -6,8 +6,6 @@ from .models import User
 # Create your views here.
 
 class joinView(View):
-    # def get(self,request):
-    #     return JsonResponse({'message': "요청 전송"}, status=200)
     def post(self,request):
         data = json.loads(request.body)
         id = data['userId']
