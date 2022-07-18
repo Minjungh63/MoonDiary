@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views import View
-from .models import Diary
+from diary.models import Diary
 # Create your views here.
     
 class StatisticsView(View):
