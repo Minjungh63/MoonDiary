@@ -1,5 +1,5 @@
 import json
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
 from users.models import User
@@ -16,3 +16,12 @@ class SettingView(View):
         jsonObj = json.dumps(data, default=str)
         sdata = json.loads(jsonObj)
         return JsonResponse(sdata, status=200, safe=False)
+
+    def post(self, request):
+        temp = json.loads(request.body)
+        userId = temp['userId']
+        imageYN = temp['imageYN']
+        commentYN = temp['commentYN']
+        User.objects.filter(userId=userId).update(imageYN = imageYN, commentYN = commentYN)
+
+        return HttpResponse(status=201)
