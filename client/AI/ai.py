@@ -83,18 +83,7 @@ def get_emotion(doc):
         emotion.append(out['labels'][0])
         emotion.append(out['labels'][1])
 
-    if(len(emotion) > 1):
-        # 창을 띄워서 사용자가 감정을 선택하는 코드로 바꾸기
-        print(emotion)
-        emotion_idx = int(
-            input('여러 개의 감정이 느껴지네요! 오늘을 대표하는 감정 1개를 선택해주세요(0, 1, 2, ...의 index로 입력):'))
-    else:
-        emotion_idx = 0
-
-    emo = emotion[emotion_idx]
-    # print(EMOTION)
-
-    return emo
+    return emotion
 
 
 def comment_emo(emotion):
