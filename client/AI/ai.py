@@ -224,12 +224,32 @@ def comment_moon(keysents):
 #     앞으로 시간이 날 때마다 자주 산에 와야겠다.
 # """
 
-def run(doc):
+def run_emotion(doc):
     emotion = get_emotion(doc)
     comm_emo = comment_emo(emotion)
-    keyW = keyword_extract(doc)
+    # keyS = keySentence(doc)
+    # comm_moon = comment_moon(keyS)
+    # comm = comm_emo + comm_moon
+
+    return emotion, comm_emo
+
+
+def run_comment(doc):
+    # emotion = get_emotion(doc)
+    # comm_emo = comment_emo(emotion)
     keyS = keySentence(doc)
     comm_moon = comment_moon(keyS)
-    comm = comm_emo + comm_moon
+    # comm = comm_emo + comm_moon
 
-    return emotion, keyW, comm
+    return comm_moon
+
+
+# def run_picture(doc):
+#     emotion = get_emotion(doc)
+#     comm_emo = comment_emo(emotion)
+#     keyW = keyword_extract(doc)
+#     keyS = keySentence(doc)
+#     comm_moon = comment_moon(keyS)
+#     comm = comm_emo + comm_moon
+
+#     return emotion, keyW, comm
