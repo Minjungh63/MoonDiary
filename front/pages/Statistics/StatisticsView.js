@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { basic_theme } from '../theme';
-import WritingRate from '../components/WritingRate';
-import EmotionRate from '../components/EmotionRate';
-import EmotionTable from '../components/EmotionTable';
+import { basic_theme } from '../../theme';
+import WritingRate from '../../components/WritingRate';
+import EmotionRate from '../../components/EmotionRate';
+import EmotionTable from '../../components/EmotionTable';
 import joyImg from '../assets/img/emotion/joy.png';
 import loveImg from '../assets/img/emotion/love.png';
 import angryImg from '../assets/img/emotion/angry.png';

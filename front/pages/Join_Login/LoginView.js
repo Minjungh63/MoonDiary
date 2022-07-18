@@ -1,19 +1,15 @@
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
 import { useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TextInput, Button } from 'react-native';
+import { View, Text, Image, TextInput } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import style from './styles';
 
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { basic_theme } from '../theme';
-const baseUrl = 'http://152.67.193.252';
-const loginUrl = '/user/login';
+import { axios_post } from '../../api/api';
 
 const LoginView = ({ navigation }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-
+  AsyncStorage.clear();
   AsyncStorage.getItem('userId') //로그인확인
     .then((value) => {
       value ? navigation.replace('BottomTabHome') : null;
@@ -24,38 +20,17 @@ const LoginView = ({ navigation }) => {
     } else if (!password) {
       alert('비밀번호를 입력해주세요');
     }
-    const response = await axios.post(
-      `${baseUrl}${loginUrl}`,
-      {
-        // 서버통신
-        userId: userId,
-        password: password,
-      },
-      {
-        headers: {
-          'Content-Type': `application/json`,
-        },
-      }
-    );
+    const response = axios_post('login', { userId, password });
     if (response.status == 200) {
       await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
       navigation.replace('BottomTabHome');
     }
   };
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
-
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
-  }
 
   return (
     <View style={style.container}>
-      <Image source={require('../assets/img/moon.png')} style={style.moon}></Image>
-      <Image source={require('../assets/img/cloud.png')} style={style.cloud}></Image>
+      <Image source={require('../../assets/img/moon.png')} style={style.moon}></Image>
+      <Image source={require('../../assets/img/cloud.png')} style={style.cloud}></Image>
       <Text style={style.text}>안녕하세요?</Text>
       <Text style={style.text}>저는 당신의 이야기를 좋아하는 달입니다.</Text>
       <Text style={style.text}>오늘 당신의 하루는 어땠는지 궁금해요.</Text>
@@ -82,61 +57,5 @@ const LoginView = ({ navigation }) => {
     </View>
   );
 };
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: basic_theme.bgColor,
-    alignItems: 'center',
-  },
-  moon: {
-    width: 120,
-    height: 122,
-    marginBottom: 20,
-    marginTop: Dimensions.get('window').height / 8,
-  },
-  cloud: {
-    position: 'absolute',
-    bottom: 0,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height / 2.6,
-  },
-  text: {
-    fontSize: 17,
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    marginVertical: 2,
-  },
-  inputContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    marginTop: 15,
-  },
-  inputBox: {
-    maxWidth: 190,
-    minWidth: 90,
-    height: 40,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    borderColor: basic_theme.btnColor,
-    marginTop: 4,
-  },
-  buttonBox: {
-    height: 40,
-    width: 100,
-    borderWidth: 2,
-    backgroundColor: basic_theme.btnColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    borderColor: basic_theme.btnColor,
-    borderRadius: 100,
-    marginTop: 10,
-  },
-});
 
 export default LoginView;

@@ -1,14 +1,11 @@
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { basic_theme } from '../theme';
-import FavoriteContents from '../components/FavoriteContents';
+import { basic_theme } from '../../theme';
+import FavoriteContents from '../../components/FavoriteContents';
 import { useState, useEffect } from 'react';
 import Modal from 'react-native-simple-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-
-const baseUrl = 'http://152.67.193.252';
-const favUrl = '/diary/like/';
+import { axios_get } from '../../api/api';
 
 const FavoriteView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,17 +20,8 @@ const FavoriteView = ({ navigation }) => {
     AsyncStorage.getItem('userId')
       .then(async (value) => {
         try {
-          var userId = value.replace('"', '').replace('"', '');
-          const response = await axios.get(
-            `${baseUrl}${favUrl}`,
-            // 서버통신
-            { params: { userId: userId } },
-            {
-              headers: {
-                'Content-Type': `application/json`,
-              },
-            }
-          );
+          const userId = value.replace('"', '').replace('"', '');
+          const response = axios_get('favorite', { userId });
           if (response.status === 200) {
             response.data.sort(function (a, b) {
               return new Date(b.date) - new Date(a.date);

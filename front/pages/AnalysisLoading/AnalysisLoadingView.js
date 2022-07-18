@@ -1,14 +1,10 @@
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { basic_theme } from '../theme';
-import axios from 'axios';
+import { basic_theme } from '../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
-const baseUrl = 'http://152.67.193.252';
-const selectEmotionUrl = '/diary/write/mood';
+import { axios_get, axios_post } from '../../api/api';
 
 const AnalysisLoadingView = ({ navigation, diaryId }) => {
   const [userId, setUserId] = useState('');
@@ -22,18 +18,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get(
-        //감정분석결과 요청
-        `${baseUrl}${selectEmotionUrl}`,
-        {
-          userId: userId,
-        },
-        {
-          headers: {
-            'Content-Type': `application/json`,
-          },
-        }
-      );
+      const response = axios_get('selectEmotion', { userId });
       if (response.status == 200) {
         if (response.data.emotions.length == 1) {
           submitEmotionData(emotions[0]);
@@ -69,20 +54,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
   };
   const submitEmotionData = async (emotion) => {
     setSelectedEmotion(emotion);
-    const response = await axios.post(
-      `${baseUrl}${selectEmotionUrl}`,
-      {
-        // 서버통신
-        userId: userId,
-        diaryId: diaryId,
-        emotion: emotion,
-      },
-      {
-        headers: {
-          'Content-Type': `application/json`,
-        },
-      }
-    );
+    const response = axios_post('selectEmotion', { userId, diaryId, emotion });
     if (response.status == 201) {
       navigation.replace('AnalysisResultView', {
         diaryId: {
@@ -91,15 +63,6 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
       });
     }
   };
-
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
-  }
 
   return (
     <View style={style.container}>

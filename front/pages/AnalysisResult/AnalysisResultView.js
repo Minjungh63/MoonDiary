@@ -1,14 +1,9 @@
 import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
-import axios from 'axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { basic_theme } from '../theme';
-
-const baseUrl = 'http://152.67.193.252';
-const resultUrl = '/diary/write/result';
+import { basic_theme } from '../../theme';
+import { axios_get } from '../../api/api';
 
 const getEmotionPath = (emotion) => {
   //require에는 `${data}가 안되기때문에 선언
@@ -66,18 +61,7 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get(
-        `${baseUrl}${resultUrl}`,
-        {
-          userId: userId,
-          diaryId: diaryId,
-        },
-        {
-          headers: {
-            'Content-Type': `application/json`,
-          },
-        }
-      );
+      const response = axios_get('result', { userId, diaryId });
       if (response.status == 200) {
         setEmotion(response.data.emotion);
         setImagePath(response.data.imagePath);
@@ -86,14 +70,6 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
     })();
   }, []);
 
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
-  }
   return (
     <View style={style.container}>
       <TouchableOpacity onPress={() => navigation.replace('BottomTabHome')} style={style.homeBox}>
