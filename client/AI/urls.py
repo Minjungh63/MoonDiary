@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import loginView, joinView
-  
+from . import views
+
 urlpatterns = [
-    path('login', loginView.as_view()),
-    path('join', joinView.as_view()),
+    # ex /polls/
+    path('', views.ai, name='ai'),
 ]
