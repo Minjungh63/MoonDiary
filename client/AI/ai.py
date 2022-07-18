@@ -1,8 +1,4 @@
 from typing_extensions import Self
-# from django.shortcuts import render
-# from django.views import View
-# # from .models import AI
-# from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 
 import numpy as np
 import itertools
@@ -221,15 +217,14 @@ def comment_moon(keysents):
 
 ########### 수정 필요한 코드 ##########
 
-doc = """
-    인공지능 중간고사를 친 다음날, 할게 없어서 북한산에 등산을 하러 갔다.
-    등산은 정말 오랜만이었는데, 가는 길은 험난했지만 백운대에 도착하니 너무 뿌듯하고 개운했다.
-    방안에 틀어박히기 보다 나와서 운동을 했더니 기분이 너무 좋았다.
-    앞으로 시간이 날 때마다 자주 산에 와야겠다.
-"""
+# doc = """
+#     인공지능 중간고사를 친 다음날, 할게 없어서 북한산에 등산을 하러 갔다.
+#     등산은 정말 오랜만이었는데, 가는 길은 험난했지만 백운대에 도착하니 너무 뿌듯하고 개운했다.
+#     방안에 틀어박히기 보다 나와서 운동을 했더니 기분이 너무 좋았다.
+#     앞으로 시간이 날 때마다 자주 산에 와야겠다.
+# """
 
-
-def ai(doc):
+def run(doc):
     emotion = get_emotion(doc)
     comm_emo = comment_emo(emotion)
     keyW = keyword_extract(doc)
