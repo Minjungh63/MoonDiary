@@ -4,7 +4,7 @@ import BottomTabHome from './navigation/home/BottomTabHome';
 import AnalysisLoadingView from './pages/AnalysisLoading/AnalysisLoadingView';
 import JoinView from './pages/Join_Login/JoinView';
 import LoginView from './pages/Join_Login/LoginView';
-import WriteDiaryView from './pages/WriteDiaryView';
+import WriteDiaryView from './pages/WriteDiary/WriteDiaryView';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState, useCallback } from 'react';
 import AnalysisResultView from './pages/AnalysisResult/AnalysisResultView';
