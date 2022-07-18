@@ -40,35 +40,35 @@ class writeView(View):
         return JsonResponse(sdata, status=201)
     
 class checkView(View):#일기 확인 페이지
-    def get(self, request):#일단 diary 테이블 데이터만 넘겨줌
-        dId = request.GET['diaryId']
-        data = Diary.objects.get(diaryId=dId)
-        print(data)
-        return JsonResponse(data,response=200)
-        
-    def post(self, request):#즐겨찾기 수정
-        dId = request.POST['diaryId']
-        dlike = request.POST['liked']
-        data = Diary.objects.get(diaryId=dId)
-        data.liked = dlike
-        data.save()
-        return HttpResponse(status=201)
-    
-class chooseView(View):
-    def get(self, request):
-        dId = request.GET['diaryId']
-        emotion = AI.objects.raw('SELECT emotion FROM AI WHERE diaryId = %s', [dId])
+    def get(self, diaryId):#일단 diary 테이블 데이터만 넘겨줌
+        data = Diary.objects.get(diaryId=diaryId)
         sdata = {
-            "emotion": emotion
+            "diaryId": data.diaryId,
+            "date": data.date,
+            "weather": data.weather,
+            "title": data.title,
+            "contents": data.contents,
+            "liked": data.liked
+        }
+        return JsonResponse(sdata, status=200)
+    def put(self, request):
+        return JsonResponse()
+    
+class moodView(View):
+    def get(self, request, diaryId):
+        emotion = AI.objects.get(diaryId=diaryId)
+        sdata = {
+            "emotions": emotion.emotion
         }
         return JsonResponse(sdata, status=200)
     
     def post(self, request):
-        dId = request.POST['diaryId']
-        newemo = request.POST['emotion']
-        data = AI.objects.raw('SELECT emotion FROM AI WHERE diaryId = %s', [dId])
-        data.emotion = newemo
-        data.save()
+        data = json.loads(request.body)
+        dId = data['diaryId']
+        semo = data['emotion']
+        newemo = AI.objects.get(diaryId=dId)
+        newemo.emotion = semo
+        newemo.save()
         return HttpResponse(status=201)
     
 class likeView(View):#즐겨찾기 페이지
