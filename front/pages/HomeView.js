@@ -22,13 +22,13 @@ const HomeView = ({ navigation }) => {
             userId: userId,
           });
           if (response.status === 200) {
-            var data = JSON.parse(response.data);
+            var data = response.data;
             setDiaryData(() => data);
             // data는 Object를 원소로 가지는 Array
           }
           setLoading(true);
         } catch (e) {
-          console.log('통신에러 : ' + e);
+          console.log('메인통신에러 : ' + e);
         }
       })
       .catch((e) => console.log('userID 에러'));
