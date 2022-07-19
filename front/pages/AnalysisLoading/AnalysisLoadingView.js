@@ -1,14 +1,11 @@
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { basic_theme } from '../theme';
-import axios from 'axios';
+import { basic_theme } from '../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
-const baseUrl = 'http://152.67.193.252';
-const selectEmotionUrl = '/diary/write/mood';
+import { axios_get, axios_post } from '../../api/api';
+import { getEmtionRequire } from '../../service/SelectImage';
 
 const AnalysisLoadingView = ({ navigation, diaryId }) => {
   const [userId, setUserId] = useState('');
@@ -22,18 +19,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get(
-        //감정분석결과 요청
-        `${baseUrl}${selectEmotionUrl}`,
-        {
-          userId: userId,
-        },
-        {
-          headers: {
-            'Content-Type': `application/json`,
-          },
-        }
-      );
+      const response = await axios_get('selectEmotion', { userId });
       if (response.status == 200) {
         if (response.data.emotions.length == 1) {
           submitEmotionData(emotions[0]);
@@ -46,43 +32,9 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
     })();
   }, []);
 
-  const getEmotionPath = (emotion) => {
-    //require에는 `${data}가 안되기때문에 선언
-    switch (emotion) {
-      case 'angry':
-        return require(`../assets/img/emotion/angry.png`);
-      case 'joy':
-        return require(`../assets/img/emotion/joy.png`);
-      case 'love':
-        return require(`../assets/img/emotion/love.png`);
-      case 'sad':
-        return require(`../assets/img/emotion/sad.png`);
-      case 'surprised':
-        return require(`../assets/img/emotion/surprised.png`);
-      case 'tired':
-        return require(`../assets/img/emotion/tired.png`);
-      case 'neutral':
-        return require(`../assets/img/emotion/neutral.png`);
-      // case 'fear':
-      //   return require(`../assets/img/emotion/fear.png`);
-    }
-  };
   const submitEmotionData = async (emotion) => {
     setSelectedEmotion(emotion);
-    const response = await axios.post(
-      `${baseUrl}${selectEmotionUrl}`,
-      {
-        // 서버통신
-        userId: userId,
-        diaryId: diaryId,
-        emotion: emotion,
-      },
-      {
-        headers: {
-          'Content-Type': `application/json`,
-        },
-      }
-    );
+    const response = await axios_post('selectEmotion', { userId, diaryId, emotion });
     if (response.status == 201) {
       navigation.replace('AnalysisResultView', {
         diaryId: {
@@ -91,15 +43,6 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
       });
     }
   };
-
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
-  }
 
   return (
     <View style={style.container}>
@@ -111,7 +54,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
             {emotions.map((emotion) => (
               <TouchableOpacity onPress={() => setSelectedEmotion(emotion)} style={style.emotionBox}>
                 <Image
-                  source={getEmotionPath(emotion)}
+                  source={getEmtionRequire(emotion)}
                   style={selectedEmotion === emotion ? null : style.emotion}
                 ></Image>
               </TouchableOpacity>
@@ -139,7 +82,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
         <Text style={style.boldText}>{'오늘 하루도 수고 많았어요'} </Text>
       </View>
       <View style={style.loadingContainer}>
-        <Image source={require('../assets/img/loading.gif')} style={style.loading}></Image>
+        <Image source={require('../../assets/img/loading.gif')} style={style.loading}></Image>
       </View>
       {isLoading ? (
         <View style={style.loadingCommentContainer}>

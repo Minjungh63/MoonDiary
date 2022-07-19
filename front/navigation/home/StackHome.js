@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeView from '../../pages/HomeView';
+import HomeView from '../../pages/Home/HomeView';
 
 export default function StackHome() {
   const Stack = createStackNavigator();

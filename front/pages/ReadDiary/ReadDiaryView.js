@@ -1,20 +1,10 @@
 import { View, StyleSheet, Text, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
-import { basic_theme } from '../theme';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import { basic_theme } from '../../theme';
 
 const ReadDiary = () => {
   const deviceW = Dimensions.get('window').width;
   const deviceH = Dimensions.get('window').height;
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
 
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
-  }
   return (
     <View style={styles.container}>
       <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center' }}>

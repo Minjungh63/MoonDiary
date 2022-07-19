@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
+import { getEmtionRequire } from '../service/SelectImage';
 
 const dayOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const month = [
@@ -37,6 +38,7 @@ export default function Calendar({ diaryData }) {
   var nextDate = endDay.getDate();
   var nextDay = endDay.getDay();
   const pressBack = async () => {
+    //이전 월로 이동
     //render에 반영하기 위한 비동기 처리
     if (selectedMonth === 1) {
       await setSelectedYear((selectedYear) => selectedYear - 1);
@@ -46,6 +48,7 @@ export default function Calendar({ diaryData }) {
     }
   };
   const pressAdvance = async () => {
+    //다음 월로 이동
     //render에 반영하기 위한 비동기처리
     if (selectedMonth === 12) {
       await setSelectedYear((selectedYear) => selectedYear + 1);
@@ -83,6 +86,7 @@ export default function Calendar({ diaryData }) {
     setLoadFlag(true);
   };
   const dataCheck = (day) => {
+    //받아 온 전체 데이터 중 현재월에 맞는 데이터를 걸러냄
     var nowMonth = selectedMonth.toString().length === 1 ? '0' + selectedMonth : selectedMonth;
     var nowDay = day.toString().length === 1 ? '0' + day : day;
     for (var i = 0; i < filteringData.length; i++) {
@@ -107,41 +111,15 @@ export default function Calendar({ diaryData }) {
     );
   }, [selectedMonth]);
   const Items = ({ data }) => {
+    //현재 월에 맞는 '일', 일기 정보있는 '일'에 Emotion image 넣기
     var final_data = dataCheck(data);
-    var req = require('../assets/img/emotion/joy.png');
-    switch (final_data.emotion) {
-      case 'joy':
-        req = require('../assets/img/emotion/joy.png');
-        break;
-      case 'sad':
-        req = require('../assets/img/emotion/sad.png');
-        break;
-      case 'angry':
-        req = require('../assets/img/emotion/angry.png');
-        break;
-      case 'fear':
-        req = require('../assets/img/emotion/fear.png');
-        break;
-      case 'love':
-        req = require('../assets/img/emotion/love.png');
-        break;
-      case 'neutral':
-        req = require('../assets/img/emotion/angry.png');
-        break;
-      case 'surprised':
-        req = require('../assets/img/emotion/angry.png');
-        break;
-      case 'tired':
-        req = require('../assets/img/emotion/angry.png');
-        break;
-    }
     return (
       <View>
         <Text style={styles.text}>{data}</Text>
         <View style={{ alignSelf: 'center' }}>
           {final_data ? (
             <TouchableOpacity onPress={readDiary(final_data.diaryId)}>
-              <Image style={styles.img} source={req}></Image>
+              <Image style={styles.img} source={getEmtionRequire(final_data.emotion)}></Image>
             </TouchableOpacity>
           ) : (
             <Text style={styles.img}> </Text>

@@ -1,36 +1,10 @@
 import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
-import axios from 'axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { basic_theme } from '../theme';
-
-const baseUrl = 'http://152.67.193.252';
-const resultUrl = '/diary/write/result';
-
-const getEmotionPath = (emotion) => {
-  //require에는 `${data}가 안되기때문에 선언
-  switch (emotion) {
-    case 'angry':
-      return require(`../assets/img/emotion/angry.png`);
-    case 'joy':
-      return require(`../assets/img/emotion/joy.png`);
-    case 'love':
-      return require(`../assets/img/emotion/love.png`);
-    case 'sad':
-      return require(`../assets/img/emotion/sad.png`);
-    case 'surprised':
-      return require(`../assets/img/emotion/surprised.png`);
-    case 'tired':
-      return require(`../assets/img/emotion/tired.png`);
-    case 'neutral':
-      return require(`../assets/img/emotion/neutral.png`);
-    // case 'fear':
-    //   return require(`../assets/img/emotion/fear.png`);
-  }
-};
+import { basic_theme } from '../../theme';
+import { axios_get } from '../../api/api';
+import { getEmtionRequire } from '../../service/SelectImage';
 
 const getEmotionText = (emotion) => {
   switch (emotion) {
@@ -66,18 +40,7 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get(
-        `${baseUrl}${resultUrl}`,
-        {
-          userId: userId,
-          diaryId: diaryId,
-        },
-        {
-          headers: {
-            'Content-Type': `application/json`,
-          },
-        }
-      );
+      const response = await axios_get('result', { userId, diaryId });
       if (response.status == 200) {
         setEmotion(response.data.emotion);
         setImagePath(response.data.imagePath);
@@ -86,27 +49,19 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
     })();
   }, []);
 
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
-  }
   return (
     <View style={style.container}>
       <TouchableOpacity onPress={() => navigation.replace('BottomTabHome')} style={style.homeBox}>
-        <Image source={require('../assets/img/home.png')} style={style.home}></Image>
+        <Image source={require('../../assets/img/home.png')} style={style.home}></Image>
       </TouchableOpacity>
       <View style={style.speechBubbleContainer}>
-        <Image source={require('../assets/img/speech-bubble.png')} style={style.speechBubbleImage}></Image>
+        <Image source={require('../../assets/img/speech-bubble.png')} style={style.speechBubbleImage}></Image>
         <View style={style.speechBubbleBox}>
           <View style={style.textBox}>
             <Text style={style.blackText}>{'홍길동 ' /**name */}님,</Text>
             <Text style={style.blackText}>오늘의 하루는 {/** 감정 {emotion}*/} 하루였군요!</Text>
           </View>
-          <Image source={getEmotionPath(emotion)} style={style.emotion}></Image>
+          <Image source={getEmtionRequire(emotion)} style={style.emotion}></Image>
           <View style={style.textBox}>
             <Text style={style.blackText}>{/*{comment}*/ '오늘 생일파티는 재밌으셨나요?'}</Text>
           </View>
@@ -117,7 +72,7 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
         </View>
       </View>
       <View style={style.moonContainer}>
-        <Image source={require(`../assets/img/moon.png`)} style={style.moon}></Image>
+        <Image source={require(`../../assets/img/moon.png`)} style={style.moon}></Image>
       </View>
       <View style={style.paintingDiaryContainer}>
         {/* <Image source={imagePath} style={style.paintingDiaryImage}></Image> */}

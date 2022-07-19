@@ -4,7 +4,7 @@ import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown';
 import Modal from 'react-native-simple-modal';
-import { basic_theme } from '../theme';
+import { basic_theme } from '../../theme';
 
 const SettingsView = () => {
   const fonts = ['고운바탕', '나눔고딕', '나눔명조', 'Sans-Serif'];

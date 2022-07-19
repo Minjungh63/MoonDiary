@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import StackHome from './StackHome';
-import StatisticsView from '../../pages/StatisticsView';
+import StatisticsView from '../../pages/Statistics/StatisticsView';
 import StackFavorites from '../favorite/StackFavorites';
-import SettingsView from '../../pages/SettingsView';
+import SettingsView from '../../pages/Setting/SettingsView';
 
 export default function BottomTabHome() {
   const Tab = createBottomTabNavigator();

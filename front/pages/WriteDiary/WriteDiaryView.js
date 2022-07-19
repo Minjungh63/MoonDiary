@@ -1,14 +1,11 @@
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, TextInput, Button, Keyboard } from 'react-native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { basic_theme } from '../theme';
-const baseUrl = 'http://152.67.193.252';
-const diaryUrl = '/diary/write';
+import { basic_theme } from '../../theme';
+import { axios_post } from '../../api/api';
+import { getWeatherRequire } from '../../service/SelectImage';
 
 const WriteDiaryView = ({ navigation, date }) => {
   const [userId, setUserId] = useState('');
@@ -28,23 +25,7 @@ const WriteDiaryView = ({ navigation, date }) => {
       alert('내용을 입력해주세요');
     }
     // alert(`${userId}, ${date}, ${weather}, ${title}, ${contents}`); //확인용
-
-    const response = await axios.post(
-      `${baseUrl}${diaryUrl}`,
-      {
-        // 서버통신
-        userId: userId,
-        date: date,
-        weather: weather,
-        title: title,
-        contents: contents,
-      },
-      {
-        headers: {
-          'Content-Type': `application/json`,
-        },
-      }
-    );
+    const response = await axios_post('write', { userId, date, weather, title, contents });
     if (response.status == 201) {
       navigation.navigate('AnalysisLoadingView', {
         diaryId: {
@@ -53,21 +34,13 @@ const WriteDiaryView = ({ navigation, date }) => {
       });
     }
   };
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
-  }
 
   console.log(contents);
 
   return (
     <View style={style.container}>
       <TouchableOpacity onPress={() => navigation.replace('BottomTabHome')} style={style.homeBox}>
-        <Image source={require('../assets/img/home.png')} style={style.home}></Image>
+        <Image source={require('../../assets/img/home.png')} style={style.home}></Image>
       </TouchableOpacity>
       <View style={style.dateBox}>
         <Text style={dateStyle}>
@@ -81,38 +54,44 @@ const WriteDiaryView = ({ navigation, date }) => {
 
           <TouchableOpacity onPress={() => setWeather('sunny')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/sunny.png')}
+              source={getWeatherRequire('sunny')}
               style={weather == 'sunny' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('cloudy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/cloudy.png')}
+              source={getWeatherRequire('cloudy')}
               style={weather == 'cloudy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('rainy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/rainy.png')}
+              source={getWeatherRequire('rainy')}
               style={weather == 'rainy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('stormy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/stormy.png')}
+              source={getWeatherRequire('stormy')}
               style={weather == 'stormy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setWeather('hot')} style={style.weatherBox}>
+          <TouchableOpacity onPress={() => setWeather('little_cloudy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/hot.png')}
-              style={weather == 'hot' ? style.weatherOn : style.weatherOff}
+              source={getWeatherRequire('little_cloudy')}
+              style={weather == 'little_cloudy' ? style.weatherOn : style.weatherOff}
+            ></Image>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setWeather('snowy')} style={style.weatherBox}>
+            <Image
+              source={getWeatherRequire('snowy')}
+              style={weather == 'snowy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
         </View>
 
         <View style={style.questionContainer}>
-          <Image source={require('../assets/img/moon.png')} style={style.smallMoon}></Image>
+          <Image source={require('../../assets/img/moon.png')} style={style.smallMoon}></Image>
           <View style={style.questionBox}>
             <Text style={style.text}>
               {/**name */}

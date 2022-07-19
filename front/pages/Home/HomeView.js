@@ -1,13 +1,11 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useEffect, useState } from 'react';
-import { basic_theme } from '../theme';
+import { basic_theme } from '../../theme';
 import { FontAwesome5 } from '@expo/vector-icons';
-import Calendar from '../components/Calendar';
-import axios from 'axios';
+import Calendar from '../../components/Calendar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const baseUrl = 'http://152.67.193.252';
-const diaryUrl = '/diary/';
+import { axios_post } from '../../api/api';
+import AppLoading from 'expo-app-loading';
 
 const HomeView = ({ navigation }) => {
   const [userName, setUserName] = useState('홍길동'); //사용자 로그인시 state 관리 필요할 코드
@@ -17,10 +15,8 @@ const HomeView = ({ navigation }) => {
     AsyncStorage.getItem('userId')
       .then(async (value) => {
         try {
-          var userId = value.replace('"', '').replace('"', '');
-          const response = await axios.post(`${baseUrl}${diaryUrl}`, {
-            userId: userId,
-          });
+          const userId = value.replace('"', '').replace('"', '');
+          const response = await axios_post('diary', { userId });
           if (response.status === 200) {
             var data = response.data;
             setDiaryData(() => data);
@@ -53,7 +49,9 @@ const HomeView = ({ navigation }) => {
         </Pressable>
       </View>
     </View>
-  ) : null;
+  ) : (
+    <AppLoading />
+  );
 };
 
 const styles = StyleSheet.create({

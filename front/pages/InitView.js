@@ -1,17 +1,7 @@
 import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 import { basic_theme } from '../theme';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
 
 export default function InitView() {
-  let [fontsLoaded] = useFonts({
-    //폰트 가져오기
-    Gowun_Batang: require('../assets/fonts/GowunBatang-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    //폰트 가져오는 동안 AppLoading (local이라 짧은시간)
-    return <AppLoading />;
-  }
   const { width, height } = Dimensions.get('window'); //반응형을 위한 화면 크기 구하기
   return (
     <View style={styles.container}>
