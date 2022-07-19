@@ -18,9 +18,11 @@ const weather_list = {
 };
 
 export const getEmtionRequire = (emotion) => {
+  //emotion string인자로 받음.
   return emotion_list[emotion];
 };
 
 export const getWeatherRequire = (weather) => {
+  //weather string인자로 받음.
   return weather_list[weather];
 };
