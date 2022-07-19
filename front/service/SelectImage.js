@@ -11,10 +11,11 @@ const emotion_list = {
 
 const weather_list = {
   cloudy: require('../assets/img/weather/cloudy.png'),
-  hot: require('../assets/img/weather/hot.png'),
+  little_cloudy: require('../assets/img/weather/little_cloudy.png'),
   rainy: require('../asset/img/weather/rainy.png'),
   stormy: require('../assets/img/weather/stormy.png'),
   sunny: require('../assets/img/weather/sunny.png'),
+  snowy: require('../assets/img/weather/snowy.png'),
 };
 
 export const getEmtionRequire = (emotion) => {

@@ -5,6 +5,7 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { basic_theme } from '../../theme';
 import { axios_post } from '../../api/api';
+import { getWeatherRequire } from '../../service/SelectImage';
 
 const WriteDiaryView = ({ navigation, date }) => {
   const [userId, setUserId] = useState('');
@@ -53,32 +54,38 @@ const WriteDiaryView = ({ navigation, date }) => {
 
           <TouchableOpacity onPress={() => setWeather('sunny')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/sunny.png')}
+              source={getWeatherRequire('sunny')}
               style={weather == 'sunny' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('cloudy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/cloudy.png')}
+              source={getWeatherRequire('cloudy')}
               style={weather == 'cloudy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('rainy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/rainy.png')}
+              source={getWeatherRequire('rainy')}
               style={weather == 'rainy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setWeather('stormy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/stormy.png')}
+              source={getWeatherRequire('stormy')}
               style={weather == 'stormy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setWeather('hot')} style={style.weatherBox}>
+          <TouchableOpacity onPress={() => setWeather('little_cloudy')} style={style.weatherBox}>
             <Image
-              source={require('../assets/img/weather/hot.png')}
-              style={weather == 'hot' ? style.weatherOn : style.weatherOff}
+              source={getWeatherRequire('little_cloudy')}
+              style={weather == 'little_cloudy' ? style.weatherOn : style.weatherOff}
+            ></Image>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setWeather('snowy')} style={style.weatherBox}>
+            <Image
+              source={getWeatherRequire('snowy')}
+              style={weather == 'snowy' ? style.weatherOn : style.weatherOff}
             ></Image>
           </TouchableOpacity>
         </View>
