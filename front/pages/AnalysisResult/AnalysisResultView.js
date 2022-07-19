@@ -4,28 +4,7 @@ import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme } from '../../theme';
 import { axios_get } from '../../api/api';
-
-const getEmotionPath = (emotion) => {
-  //require에는 `${data}가 안되기때문에 선언
-  switch (emotion) {
-    case 'angry':
-      return require(`../assets/img/emotion/angry.png`);
-    case 'joy':
-      return require(`../assets/img/emotion/joy.png`);
-    case 'love':
-      return require(`../assets/img/emotion/love.png`);
-    case 'sad':
-      return require(`../assets/img/emotion/sad.png`);
-    case 'surprised':
-      return require(`../assets/img/emotion/surprised.png`);
-    case 'tired':
-      return require(`../assets/img/emotion/tired.png`);
-    case 'neutral':
-      return require(`../assets/img/emotion/neutral.png`);
-    // case 'fear':
-    //   return require(`../assets/img/emotion/fear.png`);
-  }
-};
+import { getEmtionRequire } from '../../service/SelectImage';
 
 const getEmotionText = (emotion) => {
   switch (emotion) {
@@ -82,7 +61,7 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
             <Text style={style.blackText}>{'홍길동 ' /**name */}님,</Text>
             <Text style={style.blackText}>오늘의 하루는 {/** 감정 {emotion}*/} 하루였군요!</Text>
           </View>
-          <Image source={getEmotionPath(emotion)} style={style.emotion}></Image>
+          <Image source={getEmtionRequire(emotion)} style={style.emotion}></Image>
           <View style={style.textBox}>
             <Text style={style.blackText}>{/*{comment}*/ '오늘 생일파티는 재밌으셨나요?'}</Text>
           </View>

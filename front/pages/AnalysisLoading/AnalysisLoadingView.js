@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { axios_get, axios_post } from '../../api/api';
+import { getEmtionRequire } from '../../service/SelectImage';
 
 const AnalysisLoadingView = ({ navigation, diaryId }) => {
   const [userId, setUserId] = useState('');
@@ -31,27 +32,6 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
     })();
   }, []);
 
-  const getEmotionPath = (emotion) => {
-    //require에는 `${data}가 안되기때문에 선언
-    switch (emotion) {
-      case 'angry':
-        return require(`../assets/img/emotion/angry.png`);
-      case 'joy':
-        return require(`../assets/img/emotion/joy.png`);
-      case 'love':
-        return require(`../assets/img/emotion/love.png`);
-      case 'sad':
-        return require(`../assets/img/emotion/sad.png`);
-      case 'surprised':
-        return require(`../assets/img/emotion/surprised.png`);
-      case 'tired':
-        return require(`../assets/img/emotion/tired.png`);
-      case 'neutral':
-        return require(`../assets/img/emotion/neutral.png`);
-      // case 'fear':
-      //   return require(`../assets/img/emotion/fear.png`);
-    }
-  };
   const submitEmotionData = async (emotion) => {
     setSelectedEmotion(emotion);
     const response = axios_post('selectEmotion', { userId, diaryId, emotion });
@@ -74,7 +54,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
             {emotions.map((emotion) => (
               <TouchableOpacity onPress={() => setSelectedEmotion(emotion)} style={style.emotionBox}>
                 <Image
-                  source={getEmotionPath(emotion)}
+                  source={getEmtionRequire(emotion)}
                   style={selectedEmotion === emotion ? null : style.emotion}
                 ></Image>
               </TouchableOpacity>
