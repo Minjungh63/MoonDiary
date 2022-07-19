@@ -18,7 +18,7 @@ const JoinView = ({ navigation }) => {
     } else if (!password) {
       alert('비밀번호를 입력해주세요');
     }
-    const response = axios_post('join', { userId, name, password });
+    const response = await axios_post('join', { userId, name, password });
     if (response.status == 201) {
       await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
       navigation.replace('BottomTabHome');

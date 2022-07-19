@@ -4,14 +4,14 @@ import { basic_theme } from '../../theme';
 import WritingRate from '../../components/WritingRate';
 import EmotionRate from '../../components/EmotionRate';
 import EmotionTable from '../../components/EmotionTable';
-import joyImg from '../assets/img/emotion/joy.png';
-import loveImg from '../assets/img/emotion/love.png';
-import angryImg from '../assets/img/emotion/angry.png';
-import sadImg from '../assets/img/emotion/sad.png';
-import surprisedImg from '../assets/img/emotion/surprised.png';
-import tiredImg from '../assets/img/emotion/tired.png';
-import neutralImg from '../assets/img/emotion/neutral.png';
-import fearImg from '../assets/img/emotion/fear.png';
+import joyImg from '../../assets/img/emotion/joy.png';
+import loveImg from '../../assets/img/emotion/love.png';
+import angryImg from '../../assets/img/emotion/angry.png';
+import sadImg from '../../assets/img/emotion/sad.png';
+import surprisedImg from '../../assets/img/emotion/surprised.png';
+import tiredImg from '../../assets/img/emotion/tired.png';
+import neutralImg from '../../assets/img/emotion/neutral.png';
+import fearImg from '../../assets/img/emotion/fear.png';
 const StatisticsView = () => {
   const emotion_day = [
     { emotion: 'joy', day: 3 },

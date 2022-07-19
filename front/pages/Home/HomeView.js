@@ -16,7 +16,7 @@ const HomeView = ({ navigation }) => {
       .then(async (value) => {
         try {
           const userId = value.replace('"', '').replace('"', '');
-          const response = axios_post('diary', { userId });
+          const response = await axios_post('diary', { userId });
           if (response.status === 200) {
             var data = response.data;
             setDiaryData(() => data);

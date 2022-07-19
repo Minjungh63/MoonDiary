@@ -19,7 +19,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
 
   useEffect(() => {
     (async () => {
-      const response = axios_get('selectEmotion', { userId });
+      const response = await axios_get('selectEmotion', { userId });
       if (response.status == 200) {
         if (response.data.emotions.length == 1) {
           submitEmotionData(emotions[0]);
@@ -34,7 +34,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
 
   const submitEmotionData = async (emotion) => {
     setSelectedEmotion(emotion);
-    const response = axios_post('selectEmotion', { userId, diaryId, emotion });
+    const response = await axios_post('selectEmotion', { userId, diaryId, emotion });
     if (response.status == 201) {
       navigation.replace('AnalysisResultView', {
         diaryId: {
@@ -82,7 +82,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
         <Text style={style.boldText}>{'오늘 하루도 수고 많았어요'} </Text>
       </View>
       <View style={style.loadingContainer}>
-        <Image source={require('../assets/img/loading.gif')} style={style.loading}></Image>
+        <Image source={require('../../assets/img/loading.gif')} style={style.loading}></Image>
       </View>
       {isLoading ? (
         <View style={style.loadingCommentContainer}>

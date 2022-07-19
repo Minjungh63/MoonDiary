@@ -25,7 +25,7 @@ const WriteDiaryView = ({ navigation, date }) => {
       alert('내용을 입력해주세요');
     }
     // alert(`${userId}, ${date}, ${weather}, ${title}, ${contents}`); //확인용
-    const response = axios_post('write', { userId, date, weather, title, contents });
+    const response = await axios_post('write', { userId, date, weather, title, contents });
     if (response.status == 201) {
       navigation.navigate('AnalysisLoadingView', {
         diaryId: {
@@ -40,7 +40,7 @@ const WriteDiaryView = ({ navigation, date }) => {
   return (
     <View style={style.container}>
       <TouchableOpacity onPress={() => navigation.replace('BottomTabHome')} style={style.homeBox}>
-        <Image source={require('../assets/img/home.png')} style={style.home}></Image>
+        <Image source={require('../../assets/img/home.png')} style={style.home}></Image>
       </TouchableOpacity>
       <View style={style.dateBox}>
         <Text style={dateStyle}>
@@ -91,7 +91,7 @@ const WriteDiaryView = ({ navigation, date }) => {
         </View>
 
         <View style={style.questionContainer}>
-          <Image source={require('../assets/img/moon.png')} style={style.smallMoon}></Image>
+          <Image source={require('../../assets/img/moon.png')} style={style.smallMoon}></Image>
           <View style={style.questionBox}>
             <Text style={style.text}>
               {/**name */}

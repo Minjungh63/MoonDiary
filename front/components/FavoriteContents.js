@@ -7,7 +7,7 @@ import { axios_post } from '../api/api';
 export default function FavoriteContents({ diaryId, date, title, weather, emotion, comment }) {
   const cancle = async (id) => {
     console.log('삭제');
-    axios_post('favorite', { diaryId: id, liked: 0 });
+    await axios_post('favorite', { diaryId: id, liked: 0 });
   };
   const cancleFav = (id) => {
     Alert.alert('즐겨찾기 해제', '즐겨찾기 해제하시겠습니까?', [

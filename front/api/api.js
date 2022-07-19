@@ -1,24 +1,25 @@
 import axios from 'axios';
 
-const baseUrl = 'http://168.188.123.158';
+const baseUrl = 'http://152.67.193.252';
 const subUrl = {
   login: '/user/login',
   join: '/user/join',
   selectEmotion: '/diary/write/mood',
   result: '/diary/write/result',
   favorite: '/diary/like',
-  diary: '/diary',
+  diary: '/diary/',
   write: '/diary/write',
 };
 
 //url은 string 타입 sendData는 json 형식으로 받음
 export const axios_post = async (url, sendData) => {
   try {
-    return (response = await axios.post(`${baseUrl}${subUrl[url]}`, sendData, {
+    const response = await axios.post(`${baseUrl}${subUrl[url]}`, sendData, {
       headers: {
         'Content-Type': 'application/json',
       },
-    }));
+    });
+    return response;
   } catch (err) {
     console.log('post통신에러: ' + err);
   }

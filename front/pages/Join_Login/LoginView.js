@@ -9,7 +9,6 @@ import { axios_post } from '../../api/api';
 const LoginView = ({ navigation }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-  AsyncStorage.clear();
   AsyncStorage.getItem('userId') //로그인확인
     .then((value) => {
       value ? navigation.replace('BottomTabHome') : null;
@@ -20,7 +19,7 @@ const LoginView = ({ navigation }) => {
     } else if (!password) {
       alert('비밀번호를 입력해주세요');
     }
-    const response = axios_post('login', { userId, password });
+    const response = await axios_post('login', { userId, password });
     if (response.status == 200) {
       await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
       navigation.replace('BottomTabHome');

@@ -40,7 +40,7 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
 
   useEffect(() => {
     (async () => {
-      const response = axios_get('result', { userId, diaryId });
+      const response = await axios_get('result', { userId, diaryId });
       if (response.status == 200) {
         setEmotion(response.data.emotion);
         setImagePath(response.data.imagePath);
@@ -52,10 +52,10 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
   return (
     <View style={style.container}>
       <TouchableOpacity onPress={() => navigation.replace('BottomTabHome')} style={style.homeBox}>
-        <Image source={require('../assets/img/home.png')} style={style.home}></Image>
+        <Image source={require('../../assets/img/home.png')} style={style.home}></Image>
       </TouchableOpacity>
       <View style={style.speechBubbleContainer}>
-        <Image source={require('../assets/img/speech-bubble.png')} style={style.speechBubbleImage}></Image>
+        <Image source={require('../../assets/img/speech-bubble.png')} style={style.speechBubbleImage}></Image>
         <View style={style.speechBubbleBox}>
           <View style={style.textBox}>
             <Text style={style.blackText}>{'홍길동 ' /**name */}님,</Text>
@@ -72,7 +72,7 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
         </View>
       </View>
       <View style={style.moonContainer}>
-        <Image source={require(`../assets/img/moon.png`)} style={style.moon}></Image>
+        <Image source={require(`../../assets/img/moon.png`)} style={style.moon}></Image>
       </View>
       <View style={style.paintingDiaryContainer}>
         {/* <Image source={imagePath} style={style.paintingDiaryImage}></Image> */}

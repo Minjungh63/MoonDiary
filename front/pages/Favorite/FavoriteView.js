@@ -18,7 +18,7 @@ const FavoriteView = ({ navigation }) => {
       .then(async (value) => {
         try {
           const userId = value.replace('"', '').replace('"', '');
-          const response = axios_get('favorite', { userId });
+          const response = await axios_get('favorite', { userId });
           if (response.status === 200) {
             response.data.sort(function (a, b) {
               return new Date(b.date) - new Date(a.date);

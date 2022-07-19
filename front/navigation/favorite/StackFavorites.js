@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import FavoriteView from '../../pages/FavoriteView';
+import FavoriteView from '../../pages/Favorite/FavoriteView';
 
 export default function StackFavorites() {
   const Stack = createStackNavigator();
