@@ -12,6 +12,7 @@ class StatisticsView(View):
         userId = request.GET['userId']
         month = Diary.objects.filter(date__contains=datetime.now().strftime("%Y-%m")).filter(userId=userId)
         emotion = AI.objects.filter(diaryId__in=month.values_list('diaryId')).values('emotion').annotate(day=Count('emotion'))
+
         res = []
         for i in range(len(emotion)):
             temp = {
