@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Pressable } from 'react-native';
+import { View, StyleSheet, Text, Pressable, Dimensions } from 'react-native';
 import Modal from 'react-native-simple-modal';
 import { basic_theme } from '../theme';
 
@@ -30,9 +30,11 @@ export const ModalWindow = ({ open, okPress, cancelPress, title, text1, text2, c
 const styles = StyleSheet.create({
   modal: {
     backgroundColor: basic_theme.blue,
-    flex: 0.35,
+    flex: 0.3,
     alignItems: 'stretch',
     justifyContent: 'center',
+    alignSelf: 'center',
+    width: Dimensions.get('window').width * 0.85,
   },
   textContainer: {
     flex: 0.6,
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     flex: 0.4,
   },
   modalTitle: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'normal',
     fontFamily: 'Gowun_Batang',
     color: 'white',
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'normal',
     fontFamily: 'Gowun_Batang',
     color: 'white',
@@ -67,6 +69,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     backgroundColor: basic_theme.bgColor,
-    width: 100,
+    width: 90,
   },
 });
