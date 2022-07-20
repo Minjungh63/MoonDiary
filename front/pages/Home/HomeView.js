@@ -8,7 +8,7 @@ import { axios_post } from '../../api/api';
 import AppLoading from 'expo-app-loading';
 
 const HomeView = ({ navigation }) => {
-  const [userName, setUserName] = useState('홍길동'); //사용자 로그인시 state 관리 필요할 코드
+  const [userName, setUserName] = useState(); //사용자 로그인시 state 관리 필요할 코드
   const [isLoading, setLoading] = useState(false);
   const [diaryData, setDiaryData] = useState([]);
   const getDiaryData = () => {
@@ -31,7 +31,9 @@ const HomeView = ({ navigation }) => {
   };
   useEffect(() => {
     getDiaryData();
-    AsyncStorage.getItem('name').then((value) => setUserName(value));
+    AsyncStorage.getItem('name').then((value) => {
+      value && setUserName(value + '님');
+    });
   }, []);
   const goWrite = () => {
     navigation.navigate('WriteDiaryView');
@@ -39,13 +41,13 @@ const HomeView = ({ navigation }) => {
   return isLoading ? (
     <View style={styles.container}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ ...styles.text, marginTop: 40 }}>안녕하세요 {userName}님?</Text>
-        <Text style={styles.text}>오늘하루는 어떠셨나요?</Text>
+        <Text style={{ ...styles.text, marginTop: 40 }}>안녕하세요, {userName}</Text>
+        <Text style={styles.text}>오늘 하루는 어떠셨나요?</Text>
       </View>
       <Calendar diaryData={diaryData} />
       <View style={{ flex: 1, backgroundColor: basic_theme.bgColor, justifyContent: 'flex-end', flexDirection: 'row' }}>
         <Pressable style={styles.button} onPress={goWrite}>
-          <FontAwesome5 name="pen" size={24} color="black" />
+          <FontAwesome5 name="pen" size={24} color="white" />
         </Pressable>
       </View>
     </View>
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 20,
-    backgroundColor: basic_theme.btnColor,
+    backgroundColor: basic_theme.btnColor2,
     alignItems: 'center',
     justifyContent: 'center',
     width: 70,

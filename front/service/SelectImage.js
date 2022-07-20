@@ -18,7 +18,7 @@ const weather_list = {
   snowy: require('../assets/img/weather/snowy.png'),
 };
 
-export const getEmtionRequire = (emotion) => {
+export const getEmotionRequire = (emotion) => {
   //emotion string인자로 받음.
   return emotion_list[emotion];
 };
