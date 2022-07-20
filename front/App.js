@@ -10,9 +10,19 @@ import { useEffect, useState, useCallback } from 'react';
 import AnalysisResultView from './pages/AnalysisResult/AnalysisResultView';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import UserContext from './service/UserContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('Anonymous');
+  const user = {
+    userId,
+    userName,
+    setUserId,
+    setUserName,
+  };
   let myFont = {
     Gowun_Batang: require('./assets/fonts/GowunBatang-Regular.ttf'),
   };
@@ -21,6 +31,10 @@ export default function App() {
       try {
         await SplashScreen.preventAutoHideAsync();
         await Font.loadAsync(myFont);
+        AsyncStorage.getItem('userId').then((value) => {
+          //자동로그인을 위함
+          setUserId(value);
+        });
         await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);
@@ -41,16 +55,18 @@ export default function App() {
   }
   const Stack = createStackNavigator();
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
-        {/* initialRouteName: 이 Stack의 초기 view설정 */}
-        <Stack.Screen name="LoginView" component={LoginView} />
-        <Stack.Screen name="JoinView" component={JoinView} />
-        <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
-        <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
-        <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
-        <Stack.Screen name="AnalysisResultView" component={AnalysisResultView} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <UserContext.Provider value={user}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
+          {/* initialRouteName: 이 Stack의 초기 view설정 */}
+          <Stack.Screen name="LoginView" component={LoginView} />
+          <Stack.Screen name="JoinView" component={JoinView} />
+          <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
+          <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
+          <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
+          <Stack.Screen name="AnalysisResultView" component={AnalysisResultView} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserContext.Provider>
   );
 }

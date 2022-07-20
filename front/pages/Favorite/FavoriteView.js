@@ -56,7 +56,7 @@ const FavoriteView = ({ navigation }) => {
           );
         })}
       </ScrollView>
-      {modalVisible ? <FilterModal setModalVisible={setModalVisible} /> : null}
+      <FilterModal open={modalVisible} setModalVisible={setModalVisible} />
     </View>
   );
 };

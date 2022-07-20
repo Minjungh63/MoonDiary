@@ -1,14 +1,14 @@
-import { Modal } from 'react-native-simple-modal';
+import Modal from 'react-native-simple-modal';
 import { Text, Image, View, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import { getEmotionRequire, getWeatherRequire } from '../../service/SelectImage';
 
-const FilterModal = ({ setModalVisible }) => {
+const FilterModal = ({ open, setModalVisible }) => {
   const closeFilter = () => {
     setModalVisible(false);
   };
   return (
-    <Modal modalStyle={styles.mymodal}>
+    <Modal open={open} modalStyle={styles.mymodal}>
       <Text>날짜정렬</Text>
       <Text>____년 ___월 오름차순</Text>
       <Text>기분 필터</Text>
