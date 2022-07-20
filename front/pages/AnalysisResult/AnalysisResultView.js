@@ -6,44 +6,31 @@ import { basic_theme } from '../../theme';
 import { axios_get } from '../../api/api';
 import { getEmtionRequire } from '../../service/SelectImage';
 
-const getEmotionText = (emotion) => {
-  switch (emotion) {
-    case 'angry':
-      return '화나는';
-    case 'joy':
-      return '기쁜';
-    case 'love':
-      return '사랑스러운';
-    case 'sad':
-      return '슬픈';
-    case 'surprised':
-      return '놀란';
-    case 'tired':
-      return '지루한';
-    case 'neutral':
-      return '평온한';
-    case 'fear':
-      return '무서운';
-  }
+const getEmotionText = {
+  joy: '오늘은 행복한 하루였군요!',
+  love: '당신의 하루에서 사랑이 느껴지네요.',
+  surprise: '오늘은 놀라운 일이 있었군요.',
+  anger: '오늘은 화가 많이 났던 하루였군요.',
+  sadness: '오늘은 조금 슬픈 하루였군요.',
+  fear: '오늘은 조금 무서웠던 일이 있었군요.',
+  neutral: '당신의 하루에서 평온함이 느껴지네요.',
+  tired: '오늘은 조금 지치는 하루였군요.',
 };
 
-const AnalysisResultView = ({ navigation, diaryId }) => {
-  const [userId, setUserId] = useState('');
+const AnalysisResultView = ({ navigation, route }) => {
   const [emotion, setEmotion] = useState('joy'); //테스트 하려고 joy 넣어둠
   const [imagePath, setImagePath] = useState('');
   const [comment, setComment] = useState('');
   const [isLikeIt, setIsLikeIt] = useState('');
 
-  AsyncStorage.getItem('userId') //로그인확인
-    .then((value) => setUserId(value))
-    .catch((e) => navigation.replace('LoginView'));
-
   useEffect(() => {
     (async () => {
+      const userId = route.params.userId;
+      const diaryId = route.params.diaryId;
       const response = await axios_get('result', { userId, diaryId });
       if (response.status == 200) {
         setEmotion(response.data.emotion);
-        setImagePath(response.data.imagePath);
+        setImagePath(response.data.image);
         setComment(response.data.comment);
       }
     })();
@@ -59,11 +46,11 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
         <View style={style.speechBubbleBox}>
           <View style={style.textBox}>
             <Text style={style.blackText}>{'홍길동 ' /**name */}님,</Text>
-            <Text style={style.blackText}>오늘의 하루는 {/** 감정 {emotion}*/} 하루였군요!</Text>
+            <Text style={style.blackText}>{getEmotionText[emotion]}</Text>
           </View>
           <Image source={getEmtionRequire(emotion)} style={style.emotion}></Image>
           <View style={style.textBox}>
-            <Text style={style.blackText}>{/*{comment}*/ '오늘 생일파티는 재밌으셨나요?'}</Text>
+            <Text style={style.blackText}>{comment}</Text>
           </View>
           <View style={style.textBox}>
             <Text style={style.blackText}>제가 {/*name*/}님의 하루를</Text>
@@ -75,7 +62,7 @@ const AnalysisResultView = ({ navigation, diaryId }) => {
         <Image source={require(`../../assets/img/moon.png`)} style={style.moon}></Image>
       </View>
       <View style={style.paintingDiaryContainer}>
-        {/* <Image source={imagePath} style={style.paintingDiaryImage}></Image> */}
+        <Image source={imagePath} style={style.paintingDiaryImage}></Image>
       </View>
       <View style={style.resultContainer}>
         <View style={style.resultBox}>

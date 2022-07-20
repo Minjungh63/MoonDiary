@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-import Modal from 'react-native-simple-modal';
+import { ModalWindow } from '../../components/ModalWindow';
 import { basic_theme } from '../../theme';
 
 const SettingsView = () => {
@@ -13,9 +12,8 @@ const SettingsView = () => {
     .then((value) => {
       value && setUserName(value + '님,');
     });
-  const confirmText = '확인';
-  const deleteText = '삭제';
-  const cancelText = '취소';
+  const confirmText = '네';
+  const cancelText = '아니오';
   const [userName, setUserName] = useState();
   const fonts = ['고운바탕', '나눔고딕', '나눔명조', 'Sans-Serif'];
   const [font, setFont] = useState(fonts[0]);
@@ -62,8 +60,8 @@ const SettingsView = () => {
             <Pressable onPress={drawingtoggleSwitch}>
               <MaterialCommunityIcons
                 name={isDrawingEnabled ? 'toggle-switch' : 'toggle-switch-off'}
-                size={45}
-                color={isDrawingEnabled ? '#303B62' : '#DEE8FF'}
+                size={50}
+                color={isDrawingEnabled ? basic_theme.subColor : basic_theme.fgColor}
               />
             </Pressable>
           </View>
@@ -73,8 +71,8 @@ const SettingsView = () => {
             <Pressable onPress={commenttoggleSwitch}>
               <MaterialCommunityIcons
                 name={isCommentEnabled ? 'toggle-switch' : 'toggle-switch-off'}
-                size={45}
-                color={isCommentEnabled ? '#303B62' : '#DEE8FF'}
+                size={50}
+                color={isCommentEnabled ? basic_theme.subColor : basic_theme.fgColor}
               />
             </Pressable>
           </View>
@@ -141,27 +139,6 @@ const SettingsView = () => {
       </View>
     );
   };
-
-  const ModalWindow = ({ open, okPress, cancelPress, text1, text2 }) => {
-    return (
-      <Modal open={open} modalStyle={styles.modal}>
-        {text1 && <Text style={styles.modalText}>{text1}</Text>}
-        <Text style={styles.lastModalText}>{text2}</Text>
-        <View style={styles.modalButtons}>
-          <Pressable onPress={okPress}>
-            <View style={styles.modalButton}>
-              <Text style={styles.modalText}>{text1 ? deleteText : confirmText}</Text>
-            </View>
-          </Pressable>
-          <Pressable onPress={cancelPress}>
-            <View style={styles.modalButton}>
-              <Text style={styles.modalText}>{cancelText}</Text>
-            </View>
-          </Pressable>
-        </View>
-      </Modal>
-    );
-  };
   return (
     <View style={styles.Setting}>
       <View style={styles.SettingTitle}>
@@ -177,12 +154,16 @@ const SettingsView = () => {
         cancelPress={() => setdeleteDiaryModalVisible(false)}
         text1="작성하신 모든 일기가 삭제됩니다."
         text2="모든 일기를 삭제하시겠습니까?"
+        confirmText={confirmText}
+        cancelText={cancelText}
       />
       <ModalWindow
         open={logoutModalVisible}
         okPress={logout}
         cancelPress={() => setlogoutModalVisible(false)}
         text2="로그아웃 하시겠습니까?"
+        confirmText={confirmText}
+        cancelText={cancelText}
       />
       <ModalWindow
         open={deleteAccountModalVisible}
@@ -190,6 +171,8 @@ const SettingsView = () => {
         cancelPress={() => setdeleteAccountModalVisible(false)}
         text1="회원님에 대한 모든 정보가 삭제됩니다."
         text2="계정을 삭제하시겠습니까?"
+        confirmText={confirmText}
+        cancelText={cancelText}
       />
     </View>
   );
@@ -303,44 +286,6 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'flex-start',
     paddingLeft: '3%',
-  },
-  modal: {
-    backgroundColor: basic_theme.btnColor,
-    flex: 0.3,
-    alignItems: 'stretch',
-    justifyContent: 'flex-end',
-  },
-  modalButtons: {
-    paddingHorizontal: 20,
-    flex: 0.5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flex: 0.4,
-    paddingHorizontal: '30%',
-  },
-  modalText: {
-    fontSize: 20,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    textAlign: 'center',
-  },
-  lastModalText: {
-    fontSize: 20,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    textAlign: 'center',
-    flex: 0.3,
-  },
-  modalButton: {
-    borderRadius: 20,
-    flex: 0.6,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    backgroundColor: basic_theme.bgColor,
-    width: '250%',
   },
 });
 export default SettingsView;

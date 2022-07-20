@@ -3,13 +3,11 @@ import { useContext, useEffect, useState } from 'react';
 import { basic_theme } from '../../theme';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Calendar from '../../components/Calendar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axios_post } from '../../api/api';
 import AppLoading from 'expo-app-loading';
 import UserContext from '../../service/UserContext';
 
 const HomeView = ({ navigation }) => {
-  const [userName, setUserName] = useState(); //사용자 로그인시 state 관리 필요할 코드
   const [isLoading, setLoading] = useState(false);
   const [diaryData, setDiaryData] = useState([]);
   const userContext = useContext(UserContext);
@@ -29,9 +27,6 @@ const HomeView = ({ navigation }) => {
   };
   useEffect(() => {
     getDiaryData();
-    AsyncStorage.getItem('name').then((value) => {
-      value && setUserName(value + '님');
-    });
   }, []);
   const goWrite = () => {
     navigation.navigate('WriteDiaryView');
@@ -39,7 +34,7 @@ const HomeView = ({ navigation }) => {
   return isLoading ? (
     <View style={styles.container}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ ...styles.text, marginTop: 40 }}>안녕하세요, {userName}</Text>
+        <Text style={{ ...styles.text, marginTop: 40 }}>안녕하세요, {userContext.userName}님</Text>
         <Text style={styles.text}>오늘 하루는 어떠셨나요?</Text>
       </View>
       <Calendar diaryData={diaryData} />
@@ -67,7 +62,7 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 20,
-    backgroundColor: basic_theme.btnColor2,
+    backgroundColor: basic_theme.darkBlue,
     alignItems: 'center',
     justifyContent: 'center',
     width: 70,

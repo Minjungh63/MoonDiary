@@ -1,25 +1,19 @@
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme } from '../../theme';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { axios_get, axios_post } from '../../api/api';
 import { getEmotionRequire } from '../../service/SelectImage';
-
-const AnalysisLoadingView = ({ navigation, diaryId }) => {
-  const [userId, setUserId] = useState('');
+const AnalysisLoadingView = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [emotions, setEmotions] = useState(['angry', 'joy', 'love']);
   const [selectedEmotion, setSelectedEmotion] = useState();
 
-  AsyncStorage.getItem('userId') //로그인확인
-    .then((value) => setUserId(value))
-    .catch((e) => navigation.replace('LoginView'));
-
   useEffect(() => {
     (async () => {
-      const response = await axios_get('selectEmotion', { userId });
+      const diaryId = route.params.diaryId;
+      const response = await axios_get('selectEmotion', { diaryId });
       if (response.status == 200) {
         if (response.data.emotions.length == 1) {
           submitEmotionData(emotions[0]);
@@ -34,12 +28,15 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
 
   const submitEmotionData = async (emotion) => {
     setSelectedEmotion(emotion);
-    const response = await axios_post('selectEmotion', { userId, diaryId, emotion });
+    const response = await axios_post('selectEmotion', {
+      userId: route.params.userId,
+      diaryId: route.params.diaryId,
+      emotion: emotion,
+    });
     if (response.status == 201) {
       navigation.replace('AnalysisResultView', {
-        diaryId: {
-          /**diaryId reponse 받은 diaryId */
-        },
+        diaryId: route.paramsdiaryId,
+        userId: route.params.userId,
       });
     }
   };
@@ -70,16 +67,12 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
       </TouchableOpacity>
       <View style={style.dateBox}>
         <Text style={dateStyle}>
-          {'June 22'}
-          {/*date*/}
+          {route.params.month} {route.params.day}
         </Text>
       </View>
       <View style={style.commentContainer}>
-        <Text style={style.boldText}>
-          {/**username */}
-          {'홍길동님,'}
-        </Text>
-        <Text style={style.boldText}>{'오늘 하루도 수고 많았어요'} </Text>
+        <Text style={style.text}>{route.params.name}님,</Text>
+        <Text style={style.text}>{'오늘 하루도 수고 많았어요'} </Text>
       </View>
       <View style={style.loadingContainer}>
         <Image source={require('../../assets/img/loading.gif')} style={style.loading}></Image>
@@ -95,8 +88,12 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
       )}
 
       <View style={style.buttonContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={0.7} style={style.buttonBox}>
-          <Text style={style.smallText}>{'수정하기'}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('BottomTabHome')}
+          activeOpacity={0.7}
+          style={style.buttonBox}
+        >
+          <Text style={style.smallText}>{'홈에서 결과 기다리기'}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -112,15 +109,8 @@ const style = StyleSheet.create({
     backgroundColor: basic_theme.bgColor,
     alignItems: 'center',
   },
-  boldText: {
-    fontWeight: 'bold',
-    fontSize: 17,
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    marginVertical: 2,
-  },
   text: {
-    fontSize: 17,
+    fontSize: 20,
     fontFamily: 'Gowun_Batang',
     color: 'white',
     marginVertical: 2,
@@ -138,19 +128,13 @@ const style = StyleSheet.create({
   },
 
   buttonBox: {
-    marginHorizontal: 12,
-    height: 40,
-    width: 100,
-    borderWidth: 2,
-    backgroundColor: basic_theme.btnColor,
+    backgroundColor: basic_theme.blue,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
-    borderColor: basic_theme.btnColor,
     borderRadius: 100,
-    marginTop: 10,
+    height: 50,
+    width: 150,
   },
-
   date: {
     fontSize: 22,
     height: 27,

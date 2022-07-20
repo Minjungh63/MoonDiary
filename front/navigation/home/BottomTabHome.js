@@ -3,8 +3,7 @@ import StackHome from './StackHome';
 import StatisticsView from '../../pages/Statistics/StatisticsView';
 import StackFavorites from '../favorite/StackFavorites';
 import SettingsView from '../../pages/Setting/SettingsView';
-import { Ionicons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
+import { Ionicons, Entypo } from '@expo/vector-icons';
 import { basic_theme } from '../../theme';
 
 export default function BottomTabHome() {
@@ -12,7 +11,7 @@ export default function BottomTabHome() {
   return (
     <Tab.Navigator
       initialRouteName="StackHome"
-      screenOptions={{ headerShown: false, tabBarStyle: { backgroundColor: basic_theme.btnColor2, height: 60 } }}
+      screenOptions={{ headerShown: false, tabBarStyle: { backgroundColor: basic_theme.darkBlue, height: 60 } }}
       tabBarOptions={{ showLabel: false }}
     >
       <Tab.Screen
