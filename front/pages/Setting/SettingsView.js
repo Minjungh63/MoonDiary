@@ -141,7 +141,7 @@ const SettingsView = () => {
       </View>
     );
   };
-  /*모든 일기 삭제 modal*/
+
   const ModalWindow = ({ open, okPress, cancelPress, text1, text2 }) => {
     return (
       <Modal open={open} modalStyle={styles.modal}>
@@ -335,12 +335,12 @@ const styles = StyleSheet.create({
     flex: 0.3,
   },
   modalButton: {
-    borderRadius: 10,
+    borderRadius: 20,
     flex: 0.6,
     alignSelf: 'center',
     justifyContent: 'center',
     backgroundColor: basic_theme.bgColor,
-    width: '300%',
+    width: '250%',
   },
 });
 export default SettingsView;
