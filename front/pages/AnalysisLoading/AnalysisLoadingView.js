@@ -62,9 +62,6 @@ const AnalysisLoadingView = ({ navigation, route }) => {
           <Text style={style.text}>OK</Text>
         </TouchableOpacity>
       </Modal>
-      <TouchableOpacity onPress={() => navigation.replace('BottomTabHome')} style={style.homeBox}>
-        <Image source={'../assets/img/home.png'} style={style.home}></Image>
-      </TouchableOpacity>
       <View style={style.dateBox}>
         <Text style={dateStyle}>
           {route.params.month} {route.params.day}
@@ -75,7 +72,7 @@ const AnalysisLoadingView = ({ navigation, route }) => {
         <Text style={style.text}>{'오늘 하루도 수고 많았어요'} </Text>
       </View>
       <View style={style.loadingContainer}>
-        <Image source={require('../../assets/img/loading.gif')} style={style.loading}></Image>
+        <Image source={require('../../assets/img/Loading.gif')} style={style.loadingImage} />
       </View>
       {isLoading ? (
         <View style={style.loadingCommentContainer}>
@@ -109,6 +106,35 @@ const style = StyleSheet.create({
     backgroundColor: basic_theme.bgColor,
     alignItems: 'center',
   },
+  dateBox: {
+    borderBottomColor: '#fff',
+    borderBottomWidth: 1,
+    flex: 0.2,
+    justifyContent: 'flex-end',
+    marginBottom: 10,
+  },
+  commentContainer: {
+    flex: 0.1,
+    alignItems: 'center',
+  },
+  loadingContainer: {
+    flex: 0.35,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingCommentContainer: {
+    flex: 0.1,
+    justifyContent: 'center',
+  },
+
+  buttonContainer: {
+    flex: 0.25,
+    justifyContent: 'center',
+  },
+  loadingImage: {
+    width: Dimensions.get('window').width * 0.55,
+    flex: 0.8,
+  },
   text: {
     fontSize: 20,
     fontFamily: 'Gowun_Batang',
@@ -121,12 +147,6 @@ const style = StyleSheet.create({
     color: 'white',
     marginVertical: 2,
   },
-
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 120,
-  },
-
   buttonBox: {
     backgroundColor: basic_theme.blue,
     alignItems: 'center',
@@ -137,43 +157,6 @@ const style = StyleSheet.create({
   },
   date: {
     fontSize: 22,
-    height: 27,
-  },
-  dateBox: {
-    borderBottomColor: '#fff',
-    borderBottomWidth: 1,
-    // shadowColor: '#000', //그림자 설정
-    // shadowOpacity: 0.5,
-    // shadowOffset: {
-    //   height: 4,
-    // },
-  },
-  home: {
-    width: 35,
-    height: 35,
-  },
-  homeBox: {
-    marginTop: Dimensions.get('window').height / 18,
-    width: Dimensions.get('window').width / 1.2,
-    alignItems: 'flex-end',
-    height: 35,
-  },
-  commentContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  loadingContainer: {
-    marginTop: 70,
-    height: Dimensions.get('window').width / 1.7,
-    width: Dimensions.get('window').width / 1.7,
-  },
-
-  loadingCommentContainer: {
-    marginTop: 40,
-  },
-  loading: {
-    height: Dimensions.get('window').width / 1.7,
-    width: Dimensions.get('window').width / 1.7,
   },
   modalContainer: {
     position: 'absolute',
