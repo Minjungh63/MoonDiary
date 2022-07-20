@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: basic_theme.bgColor,
+    padding: 10,
   },
   filterView: {
     justifyContent: 'flex-end',
