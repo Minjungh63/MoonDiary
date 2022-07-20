@@ -9,7 +9,10 @@ from django.core import serializers
 from AI import ai
 
 # Create your views here.
-
+async def AI(doc,did,emo):
+    comm = await ai.run_comment(doc)
+    #image = await ai.run_picture(doc)
+    await AI.objects.create(diaryId=did, comment = comm, emotion = emo)
 
 class mainView(View):
     def post(self, request):
@@ -33,17 +36,20 @@ class mainView(View):
 
 
 class writeView(View):
-    def post(self, request):
+    async def post(self, request):
         temp = json.loads(request.body)
+        uId = temp.userId
         Diary.objects.create(userId=User.objects.get(
-            userId="test"), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
-        did = Diary.objects.filter(userId="test").last()
+            userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])        
+        did = Diary.objects.filter(userId=uId).last()
         doc = temp['contents']
-        emotion = ai.run_emotion(doc)
+        emo, commemo = ai.run_emotion(doc)
         sdata = {
-            "diaryId": did.diaryId
+            "diaryId": did.diaryId,
+            "emotion": emo
         }
-
+        
+        AI(doc,did,emo)
         return JsonResponse(sdata, status=201)
 
 
