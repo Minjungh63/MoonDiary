@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { basic_theme } from '../theme';
 import { FontAwesome } from '@expo/vector-icons';
-import { getEmtionRequire, getWeatherRequire } from '../service/SelectImage';
+import { getEmotionRequire, getWeatherRequire } from '../service/SelectImage';
 import { axios_post } from '../api/api';
 
 export default function FavoriteContents({ diaryId, date, title, weather, emotion, comment }) {
@@ -25,9 +25,9 @@ export default function FavoriteContents({ diaryId, date, title, weather, emotio
   return (
     <View style={styles.container}>
       <View style={styles.line}>
-        <Text style={styles.text}>{date.toString().replace('-', '년').replace('-', '월') + '일'}</Text>
-        <Image source={getEmtionRequire(emotion)} style={styles.image}></Image>
-        <Image source={getWeatherRequire(weather)} styles={styles.image}></Image>
+        <Text style={styles.text}>{date.toString().replace('-', '년 ').replace('-', '월 ') + '일 '}</Text>
+        <Image source={getEmotionRequire(emotion)} style={styles.image}></Image>
+        <Image source={getWeatherRequire(weather)} style={styles.image}></Image>
       </View>
       <View style={{ ...styles.line, justifyContent: 'space-between' }}>
         <Text style={styles.text}>일기 제목 - {title}</Text>

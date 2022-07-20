@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { axios_get, axios_post } from '../../api/api';
-import { getEmtionRequire } from '../../service/SelectImage';
+import { getEmotionRequire } from '../../service/SelectImage';
 
 const AnalysisLoadingView = ({ navigation, diaryId }) => {
   const [userId, setUserId] = useState('');
@@ -54,7 +54,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
             {emotions.map((emotion) => (
               <TouchableOpacity onPress={() => setSelectedEmotion(emotion)} style={style.emotionBox}>
                 <Image
-                  source={getEmtionRequire(emotion)}
+                  source={getEmotionRequire(emotion)}
                   style={selectedEmotion === emotion ? null : style.emotion}
                 ></Image>
               </TouchableOpacity>

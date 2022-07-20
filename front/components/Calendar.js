@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { getEmtionRequire } from '../service/SelectImage';
+import { getEmotionRequire } from '../service/SelectImage';
 
 const dayOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const month = [
@@ -119,7 +119,7 @@ export default function Calendar({ diaryData }) {
         <View style={{ alignSelf: 'center' }}>
           {final_data ? (
             <TouchableOpacity onPress={readDiary(final_data.diaryId)}>
-              <Image style={styles.img} source={getEmtionRequire(final_data.emotion)}></Image>
+              <Image style={styles.img} source={getEmotionRequire(final_data.emotion)}></Image>
             </TouchableOpacity>
           ) : (
             <Text style={styles.img}> </Text>

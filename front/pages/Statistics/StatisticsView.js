@@ -1,93 +1,96 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { basic_theme } from '../../theme';
+import { getEmotionRequire } from '../../service/SelectImage';
 import WritingRate from '../../components/WritingRate';
 import EmotionRate from '../../components/EmotionRate';
 import EmotionTable from '../../components/EmotionTable';
-import joyImg from '../../assets/img/emotion/joy.png';
-import loveImg from '../../assets/img/emotion/love.png';
-import angryImg from '../../assets/img/emotion/angry.png';
-import sadImg from '../../assets/img/emotion/sad.png';
-import surprisedImg from '../../assets/img/emotion/surprised.png';
-import tiredImg from '../../assets/img/emotion/tired.png';
-import neutralImg from '../../assets/img/emotion/neutral.png';
-import fearImg from '../../assets/img/emotion/fear.png';
+import { axios_get } from '../../api/api';
+
 const StatisticsView = () => {
-  const emotion_day = [
-    { emotion: 'joy', day: 3 },
-    { emotion: 'love', day: 1 },
-    { emotion: 'angry', day: 2 },
-    { emotion: 'tired', day: 1 },
-    { emotion: 'neutral', day: 10 },
-  ];
-  const attend_day = emotion_day.map((emotion) => emotion.day).reduce((prev, curr) => prev + curr, 0);
+  const [emotion_day, setEmotion_day] = useState([]);
+  const [userId, setUserId] = useState();
+  const attend_day = emotion_day.map((emotion) => emotion.day).reduce((prev, curr) => prev + curr, 0); // 작성 일 수
+  const getDay = (id) => {
+    return emotion_day.filter((list) => list.emotion === id).map((emotion) => emotion.day);
+  }; // emotion이 나온 일 수
+  AsyncStorage.getItem('userId') //로그인확인
+    .then((value) => setUserId(value))
+    .catch((e) => navigation.replace('LoginView'));
+  useEffect(() => {
+    (async () => {
+      const response = await axios_get('statistics', { userId });
+      if (response.status == 200) {
+        setEmotion_day(response);
+      }
+    })();
+  }, []);
   const emotion_list = [
     {
-      id: '기쁨',
-      day: emotion_day.filter((list) => list.emotion == 'joy').map((emotion) => emotion.day),
+      text: '기쁨',
+      day: getDay('joy'),
       color: '#FBEC6B',
-      image: joyImg,
+      image: getEmotionRequire('joy'),
     },
     {
-      id: '사랑',
-      day: emotion_day.filter((list) => list.emotion == 'love').map((emotion) => emotion.day),
+      text: '사랑',
+      day: getDay('love'),
       color: '#FFCDE0',
-      image: loveImg,
+      image: getEmotionRequire('love'),
     },
     {
-      id: '화남',
-      day: emotion_day.filter((list) => list.emotion == 'angry').map((emotion) => emotion.day),
+      text: '화남',
+      day: getDay('angry'),
       color: '#F07C89',
-      image: angryImg,
+      image: getEmotionRequire('angry'),
     },
     {
-      id: '슬픔',
-      day: emotion_day.filter((list) => list.emotion == 'sad').map((emotion) => emotion.day),
+      text: '슬픔',
+      day: getDay('sad'),
       color: '#969ECF',
-      image: sadImg,
+      image: getEmotionRequire('sad'),
     },
     {
-      id: '놀람',
-      day: emotion_day.filter((list) => list.emotion == 'surprised').map((emotion) => emotion.day),
+      text: '놀람',
+      day: getDay('surprised'),
       color: '#AE98D6',
-      image: surprisedImg,
+      image: getEmotionRequire('surprised'),
     },
     {
-      id: '지침',
-      day: emotion_day.filter((list) => list.emotion == 'tired').map((emotion) => emotion.day),
+      text: '지침',
+      day: getDay('tired'),
       color: '#DADADA',
-      image: tiredImg,
+      image: getEmotionRequire('tired'),
     },
     {
-      id: '평온',
-      day: emotion_day.filter((list) => list.emotion == 'neutral').map((emotion) => emotion.day),
+      text: '평온',
+      day: getDay('neutral'),
       color: '#98D5A2',
-      image: neutralImg,
+      image: getEmotionRequire('neutral'),
     },
     {
-      id: '공포',
-      day: emotion_day.filter((list) => list.emotion == 'fear').map((emotion) => emotion.day),
+      text: '공포',
+      day: getDay('fear'),
       color: '#999999',
-      image: fearImg,
+      image: getEmotionRequire('fear'),
     },
   ];
-  emotion_list.sort((a, b) => b.day - a.day);
+  emotion_list.sort((a, b) => b.day - a.day); // emotion이 나온 일수를 기준으로 내림차순 정렬
 
   return (
     <View style={styles.container}>
-      <View style={[styles.subContainer, { flex: 0.55 }]}>
+      <View style={styles.WritingRate}>
         <Text style={styles.text}>다이어리 작성 비율</Text>
         <WritingRate attend_day={attend_day} />
       </View>
-      <View style={[styles.subContainer, { flex: 0.15 }]}>
+      <View style={styles.EmotionRate}>
         <Text style={styles.text}>기분 비율</Text>
         <EmotionRate attend_day={attend_day} emotion_list={emotion_list} />
       </View>
-      <View style={[styles.subContainer, { flex: 0.3 }]}>
+      <View style={styles.EmotionTable}>
         <Text style={styles.text}>기분 순위</Text>
-        <Text style={[styles.text, { fontSize: 13, paddingBottom: 15 }]}>
-          이번 달에 자주 경험한 기분 순위를 볼 수 있어요.
-        </Text>
+        <Text style={styles.subtext}>이번 달에 자주 경험한 기분 순위를 볼 수 있어요.</Text>
         <EmotionTable attend_day={attend_day} emotion_list={emotion_list} />
       </View>
     </View>
@@ -99,13 +102,33 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
   },
-  subContainer: {
+  WritingRate: {
     marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 0.55,
+  },
+  EmotionRate: {
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 0.15,
+  },
+  EmotionTable: {
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 0.3,
   },
   text: {
     fontSize: 20,
+    fontWeight: 'normal',
+    fontFamily: 'Gowun_Batang',
+    color: 'white',
+  },
+  subtext: {
+    fontSize: 13,
+    paddingBottom: 15,
     fontWeight: 'normal',
     fontFamily: 'Gowun_Batang',
     color: 'white',
