@@ -1,19 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, TextInput } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from './styles';
-
+import UserContext from '../../service/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axios_post } from '../../api/api';
 
 const LoginView = ({ navigation }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-  AsyncStorage.getItem('userId') //로그인확인
-    .then((value) => {
-      value ? navigation.replace('BottomTabHome') : null;
-    });
+  const userContext = useContext(UserContext);
   const submitLoginData = async () => {
+    //유저 로그인 시도
     if (!userId) {
       alert('아이디를 입력해주세요');
     } else if (!password) {
@@ -21,10 +19,20 @@ const LoginView = ({ navigation }) => {
     }
     const response = await axios_post('login', { userId, password });
     if (response.status == 200) {
-      await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
+      //로그인 성공시
+      AsyncStorage.setItem('userId', JSON.stringify(userId));
+      // AsyncStorage는 자동로그인을 위함.
+      // userContext.setUserName(userName); 사용자 이름 받아오기
+      userContext.setUserId(JSON.stringify(userId));
       navigation.replace('BottomTabHome');
     }
   };
+
+  useEffect(() => {
+    if (userContext.userId !== '') {
+      navigation.replace('BottomTabHome');
+    }
+  }, []);
 
   return (
     <View style={style.container}>
