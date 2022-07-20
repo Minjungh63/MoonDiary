@@ -1,18 +1,19 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TextInput, Button, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TextInput, Keyboard } from 'react-native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { basic_theme } from '../../theme';
 import { axios_post } from '../../api/api';
 import { getWeatherRequire } from '../../service/SelectImage';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const WriteDiaryView = ({ navigation, date }) => {
   const [userId, setUserId] = useState('');
   const [weather, setWeather] = useState('sunny');
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
-
+  const weather_list = ['sunny', 'cloudy', 'rainy', 'stormy', 'little_cloudy', 'snowy'];
   AsyncStorage.getItem('userId') //로그인확인
     .then((value) => setUserId(value))
     .catch((e) => navigation.replace('LoginView'));
@@ -40,7 +41,7 @@ const WriteDiaryView = ({ navigation, date }) => {
   return (
     <View style={style.container}>
       <TouchableOpacity onPress={() => navigation.replace('BottomTabHome')} style={style.homeBox}>
-        <Image source={require('../../assets/img/home.png')} style={style.home}></Image>
+        <MaterialIcons name="home" size={30} color="white" />
       </TouchableOpacity>
       <View style={style.dateBox}>
         <Text style={dateStyle}>
@@ -51,43 +52,14 @@ const WriteDiaryView = ({ navigation, date }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={style.weatherConatiner}>
           <Text style={style.text}>오늘의 날씨 </Text>
-
-          <TouchableOpacity onPress={() => setWeather('sunny')} style={style.weatherBox}>
-            <Image
-              source={getWeatherRequire('sunny')}
-              style={weather == 'sunny' ? style.weatherOn : style.weatherOff}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setWeather('cloudy')} style={style.weatherBox}>
-            <Image
-              source={getWeatherRequire('cloudy')}
-              style={weather == 'cloudy' ? style.weatherOn : style.weatherOff}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setWeather('rainy')} style={style.weatherBox}>
-            <Image
-              source={getWeatherRequire('rainy')}
-              style={weather == 'rainy' ? style.weatherOn : style.weatherOff}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setWeather('stormy')} style={style.weatherBox}>
-            <Image
-              source={getWeatherRequire('stormy')}
-              style={weather == 'stormy' ? style.weatherOn : style.weatherOff}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setWeather('little_cloudy')} style={style.weatherBox}>
-            <Image
-              source={getWeatherRequire('little_cloudy')}
-              style={weather == 'little_cloudy' ? style.weatherOn : style.weatherOff}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setWeather('snowy')} style={style.weatherBox}>
-            <Image
-              source={getWeatherRequire('snowy')}
-              style={weather == 'snowy' ? style.weatherOn : style.weatherOff}
-            ></Image>
-          </TouchableOpacity>
+          {weather_list.map((weather_text) => {
+            <TouchableOpacity onPress={() => setWeather(weather_text)} style={style.weatherBox}>
+              <Image
+                source={getWeatherRequire(weather_text)}
+                style={weather == weather_text ? style.weatherOn : style.weatherOff}
+              ></Image>
+            </TouchableOpacity>;
+          })}
         </View>
 
         <View style={style.questionContainer}>

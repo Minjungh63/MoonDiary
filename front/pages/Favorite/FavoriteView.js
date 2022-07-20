@@ -1,4 +1,4 @@
-import { View, ScrollView, TouchableOpacity, Text, Image } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import FavoriteContents from '../../components/FavoriteContents';
 import { useState, useEffect } from 'react';

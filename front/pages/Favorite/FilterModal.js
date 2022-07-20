@@ -1,7 +1,7 @@
 import { Modal } from 'react-native-simple-modal';
-import { Text, Image, View } from 'react-native';
+import { Text, Image, View, TouchableOpacity } from 'react-native';
 import styles from './styles';
-import { getEmtionRequire, getWeatherRequire } from '../../service/SelectImage';
+import { getEmotionRequire, getWeatherRequire } from '../../service/SelectImage';
 
 const FilterModal = ({ setModalVisible }) => {
   const closeFilter = () => {
@@ -13,14 +13,14 @@ const FilterModal = ({ setModalVisible }) => {
       <Text>____년 ___월 오름차순</Text>
       <Text>기분 필터</Text>
       <View style={styles.imgContainer}>
-        <Image style={styles.img} source={getEmtionRequire('angry')}></Image>
-        <Image style={styles.img} source={getEmtionRequire('fear')}></Image>
-        <Image style={styles.img} source={getEmtionRequire('joy')}></Image>
-        <Image style={styles.img} source={getEmtionRequire('love')}></Image>
-        <Image style={styles.img} source={getEmtionRequire('neutral')}></Image>
-        <Image style={styles.img} source={getEmtionRequire('sad')}></Image>
-        <Image style={styles.img} source={getEmtionRequire('surprised')}></Image>
-        <Image style={styles.img} source={getEmtionRequire('tired')}></Image>
+        <Image style={styles.img} source={getEmotionRequire('angry')}></Image>
+        <Image style={styles.img} source={getEmotionRequire('fear')}></Image>
+        <Image style={styles.img} source={getEmotionRequire('joy')}></Image>
+        <Image style={styles.img} source={getEmotionRequire('love')}></Image>
+        <Image style={styles.img} source={getEmotionRequire('neutral')}></Image>
+        <Image style={styles.img} source={getEmotionRequire('sad')}></Image>
+        <Image style={styles.img} source={getEmotionRequire('surprised')}></Image>
+        <Image style={styles.img} source={getEmotionRequire('tired')}></Image>
       </View>
       <Text>날씨 필터</Text>
       <View style={styles.imgContainer}>

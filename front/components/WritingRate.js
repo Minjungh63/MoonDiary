@@ -5,12 +5,13 @@ import ProgressCircle from 'react-native-progress-circle';
 class WritingRate extends Component {
   render() {
     const { attend_day } = this.props;
-    const YEAR = new Date().getFullYear();
-    const MONTH = new Date().getMonth() + 1;
-    const number_day = new Date(YEAR, MONTH, 0).getDate(); // 이번월의 일 수
+    const YEAR = new Date().getFullYear(); // 현재 연도
+    const MONTH = new Date().getMonth() + 1; // 현재 월
+    const number_day = new Date(YEAR, MONTH, 0).getDate(); // 현재 월의 일 수 (ex 7월->31)
     const progress = (attend_day / number_day) * 100; // 다이어리 작성 비율
     return (
-      <View style={{ paddingTop: 11 }}>
+      /*다이어리 작성비율 pie chart*/
+      <View style={styles.WritingRate}>
         <ProgressCircle percent={100} radius={140} borderWidth={20} color="#D8DFF2">
           <ProgressCircle
             percent={progress}
@@ -21,7 +22,7 @@ class WritingRate extends Component {
             bgColor="#A6AEDE"
           >
             <ProgressCircle percent={100} radius={55} borderWidth={15} color="#D8DFF2" bgColor="#A6AEDE">
-              <Text style={[styles.text, { fontSize: 28 }]}>
+              <Text style={styles.text}>
                 {attend_day}/{number_day}
               </Text>
             </ProgressCircle>
@@ -32,8 +33,11 @@ class WritingRate extends Component {
   }
 }
 const styles = StyleSheet.create({
+  WritingRate: {
+    paddingTop: 11,
+  },
   text: {
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: 'normal',
     fontFamily: 'Gowun_Batang',
     color: 'white',
