@@ -1,4 +1,3 @@
-import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -28,15 +27,11 @@ const getEmotionText = (emotion) => {
 };
 
 const AnalysisResultView = ({ navigation, diaryId }) => {
-  const [userId, setUserId] = useState('');
+  const userId = useContext(UserContext).userId;
   const [emotion, setEmotion] = useState('joy'); //테스트 하려고 joy 넣어둠
   const [imagePath, setImagePath] = useState('');
   const [comment, setComment] = useState('');
   const [isLikeIt, setIsLikeIt] = useState('');
-
-  AsyncStorage.getItem('userId') //로그인확인
-    .then((value) => setUserId(value))
-    .catch((e) => navigation.replace('LoginView'));
 
   useEffect(() => {
     (async () => {

@@ -11,30 +11,36 @@ import AnalysisResultView from './pages/AnalysisResult/AnalysisResultView';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import UserContext from './service/UserContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('Anonymous');
+  const [userFont, setUserFont] = useState('Gowun_Batang'); //폰트선택
+  const [imageYN, setImageYN] = useState(true); //AI 그림일기 받는지 여부
+  const [commentYN, setCommentYN] = useState(true); //AI 코멘트 받는지 여부
   const user = {
     userId,
     userName,
+    userFont,
+    imageYN,
+    commentYN,
     setUserId,
     setUserName,
+    setUserFont,
+    setImageYN,
+    setCommentYN,
   };
   let myFont = {
     Gowun_Batang: require('./assets/fonts/GowunBatang-Regular.ttf'),
+    Nanum_Gothic: 'https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Nanum+Gothic&display=swap',
+    Nanum_Myeongjo: 'https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Nanum+Myeongjo&display=swap',
   };
   useEffect(() => {
     async function prepare() {
       try {
         await SplashScreen.preventAutoHideAsync();
         await Font.loadAsync(myFont);
-        AsyncStorage.getItem('userId').then((value) => {
-          //자동로그인을 위함
-          setUserId(value);
-        });
         await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);

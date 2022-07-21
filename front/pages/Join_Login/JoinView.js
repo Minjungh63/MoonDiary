@@ -21,6 +21,7 @@ const JoinView = ({ navigation }) => {
     const response = await axios_post('join', { userId, name, password });
     if (response.status == 201) {
       await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
+      //로그인와 마찬가지로 Context 세팅필요
       navigation.replace('BottomTabHome');
     } else if (response.status == 409) {
       //이미 있는아이디일때

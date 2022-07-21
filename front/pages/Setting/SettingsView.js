@@ -1,22 +1,18 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Modal from 'react-native-simple-modal';
 import { basic_theme } from '../../theme';
+import UserContext from '../../service/UserContext';
 
 const SettingsView = () => {
-  AsyncStorage.getItem('name') //로그인확인
-    .then((value) => {
-      value && setUserName(value + '님,');
-    });
+  const userContext = useContext(UserContext);
   const confirmText = '확인';
   const deleteText = '삭제';
   const cancelText = '취소';
-  const [userName, setUserName] = useState();
   const fonts = ['고운바탕', '나눔고딕', '나눔명조', 'Sans-Serif'];
   const [font, setFont] = useState(fonts[0]);
   const [isDrawingEnabled, setIsDrawingEnabled] = useState(true);
@@ -165,7 +161,7 @@ const SettingsView = () => {
   return (
     <View style={styles.Setting}>
       <View style={styles.SettingTitle}>
-        <Text style={styles.title}>{userName} 설정</Text>
+        <Text style={styles.title}>{userContext.userName} 설정</Text>
       </View>
       <AISetting />
       <DiarySetting />
