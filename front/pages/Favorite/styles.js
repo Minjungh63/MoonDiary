@@ -5,7 +5,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: basic_theme.bgColor,
-    padding: 10,
   },
   filterView: {
     justifyContent: 'flex-end',
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
     marginEnd: 20,
   },
   mymodal: {
-    backgroundColor: basic_theme.btnColor,
+    backgroundColor: basic_theme.blue,
   },
   imgContainer: {
     flexDirection: 'row',

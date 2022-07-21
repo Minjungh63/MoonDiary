@@ -20,7 +20,7 @@ const StatisticsView = () => {
     (async () => {
       const response = await axios_get('statistics', { userId });
       if (response.status == 200) {
-        setEmotion_day(response);
+        setEmotion_day(response.data.statisticsList);
       }
     })();
   }, []);
@@ -39,21 +39,21 @@ const StatisticsView = () => {
     },
     {
       text: '화남',
-      day: getDay('angry'),
+      day: getDay('anger'),
       color: '#F07C89',
-      image: getEmotionRequire('angry'),
+      image: getEmotionRequire('anger'),
     },
     {
       text: '슬픔',
-      day: getDay('sad'),
+      day: getDay('sadness'),
       color: '#969ECF',
-      image: getEmotionRequire('sad'),
+      image: getEmotionRequire('sadness'),
     },
     {
       text: '놀람',
-      day: getDay('surprised'),
+      day: getDay('surprise'),
       color: '#AE98D6',
-      image: getEmotionRequire('surprised'),
+      image: getEmotionRequire('surprise'),
     },
     {
       text: '지침',
