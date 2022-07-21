@@ -14,9 +14,9 @@ class mainView(View):
     def post(self, request):
         data = json.loads(request.body)
         id = data['userId']
-
         data = AI.objects.select_related('diaryId').values_list(
             'diaryId', 'emotion', 'diaryId__date').filter(diaryId__userId=id)
+        print(data)
         res = []
         for i in range(len(data)):
             temp = {
@@ -30,6 +30,21 @@ class mainView(View):
         sdata = json.loads(jsonObj)
         return JsonResponse(sdata, status=200, safe=False)
 
+    def get(self, request):  # 일단 diary 테이블 데이터만 넘겨줌
+        dId = request.GET['diaryId']
+        data = Diary.objects.get(diaryId=dId)
+        sdata = {
+            "diaryId": data.diaryId,
+            "date": data.date,
+            "weather": data.weather,
+            "title": data.title,
+            "contents": data.contents,
+            "liked": data.liked
+        }
+        return JsonResponse(sdata, status=200)
+
+    def put(self, request):
+        return JsonResponse()
 
 class writeView(View):
     def post(self, request):
@@ -47,27 +62,10 @@ class writeView(View):
         
         return JsonResponse(sdata, status=201)
 
-
-class checkView(View):  # 일기 확인 페이지
-    def get(self, request, diaryId):  # 일단 diary 테이블 데이터만 넘겨줌
-        data = Diary.objects.get(diaryId=diaryId)
-        sdata = {
-            "diaryId": data.diaryId,
-            "date": data.date,
-            "weather": data.weather,
-            "title": data.title,
-            "contents": data.contents,
-            "liked": data.liked
-        }
-        return JsonResponse(sdata, status=200)
-
-    def put(self, request):
-        return JsonResponse()
-
-
 class moodView(View):
-    def get(self, request, diaryId):
-        emotion = AI.objects.get(diaryId=diaryId)
+    def get(self, request):
+        dId = request.GET['diaryId']
+        emotion = AI.objects.get(diaryId=dId)
         sdata = {
             "emotions": emotion.emotion
         }
