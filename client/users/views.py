@@ -40,7 +40,8 @@ class loginView(View):
                     "userId": id,
                     "name": user.name,
                     "imageYN": user.imageYN,
-                    "commentYN": user.commentYN
+                    "commentYN": user.commentYN,
+                    "font": user.font
                 }
                 return JsonResponse(sdata,status = 200)
             else :
