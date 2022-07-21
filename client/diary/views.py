@@ -9,11 +9,6 @@ from django.core import serializers
 from AI import ai
 
 # Create your views here.
-async def AI(doc,did,emo):
-    comm = await ai.run_comment(doc)
-    #image = await ai.run_picture(doc)
-    await AI.objects.create(diaryId=did, comment = comm, emotion = emo)
-
 class mainView(View):
     def post(self, request):
         data = json.loads(request.body)
