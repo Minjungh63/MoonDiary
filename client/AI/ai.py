@@ -209,29 +209,22 @@ def comment_moon(keysents):
 def run_emotion(doc):
     emotion = get_emotion(doc)
     comm_emo = comment_emo(emotion)
-    # keyS = keySentence(doc)
-    # comm_moon = comment_moon(keyS)
-    # comm = comm_emo + comm_moon
-
     return emotion, comm_emo
 
 
 def run_comment(doc):
-    # emotion = get_emotion(doc)
-    # comm_emo = comment_emo(emotion)
     keyS = keySentence(doc)
     comm_moon = comment_moon(keyS)
-    # comm = comm_emo + comm_moon
-
     return comm_moon
 
 
-# def run_picture(doc):
-#     emotion = get_emotion(doc)
-#     comm_emo = comment_emo(emotion)
-#     keyW = keyword_extract(doc)
-#     keyS = keySentence(doc)
-#     comm_moon = comment_moon(keyS)
-#     comm = comm_emo + comm_moon
-
-#     return emotion, keyW, comm
+def run_pixray(doc):
+    #keyW = keyword_extract(doc)
+    #keyW = keyW.replace(' ','_')
+    keyW = 'mountain_climbing'
+    os.chdir("drawing_diary/pixray")
+    sys.path.append("drawing_diary/pixray")
+    subprocess.run(
+        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=keyW", "--outdir=../output"])
+    PATH = 'drawing_diary/output/output.png'
+    return keyW, PATH
