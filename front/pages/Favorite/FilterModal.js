@@ -4,7 +4,7 @@ import styles from './styles';
 import { getEmotionRequire, getWeatherRequire } from '../../service/SelectImage';
 
 const FilterModal = ({ open, setModalVisible }) => {
-  const emotion_img = ['angry', 'fear', 'joy', 'love', 'neutral', 'sad', 'surprised', 'tired'];
+  const emotion_img = ['anger', 'fear', 'joy', 'love', 'neutral', 'sadness', 'surprise', 'tired'];
   const weather_img = ['sunny', 'cloudy', 'little_cloudy', 'rainy', 'stormy', 'snowy'];
   const closeFilter = () => {
     setModalVisible(false);

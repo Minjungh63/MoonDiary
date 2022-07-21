@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { View, Text, Image, TextInput } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import style from './styles';
 import { axios_post } from '../../api/api';
+import UserContext from '../../service/UserContext';
 
 const JoinView = ({ navigation }) => {
   const [name, setName] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const userContext = useContext(UserContext);
   const submitJoinData = async () => {
     if (!name) {
       alert('이름을 입력해주세요');
@@ -21,6 +22,8 @@ const JoinView = ({ navigation }) => {
     const response = await axios_post('join', { userId, name, password });
     if (response.status == 201) {
       await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
+      userContext.setName(name);
+      userContext.setUserId(userId);
       //로그인와 마찬가지로 Context 세팅필요
       navigation.replace('BottomTabHome');
     } else if (response.status == 409) {
@@ -44,13 +47,13 @@ const JoinView = ({ navigation }) => {
       <View style={style.inputContainer}>
         <Text style={style.text}>ID를 설정해주세요.</Text>
         <View style={style.inputBox}>
-          <TextInput placeholder="TeamI_IT23" onChangeText={setUserId}></TextInput>
+          <TextInput placeholder="ID" onChangeText={setUserId}></TextInput>
         </View>
       </View>
       <View style={style.inputContainer}>
         <Text style={style.text}>비밀번호를 설정해주세요.</Text>
         <View style={style.inputBox}>
-          <TextInput placeholder="SiliconValleyInternship2022" onChangeText={setPassword}></TextInput>
+          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={setPassword}></TextInput>
         </View>
       </View>
       <View style={style.buttonContainer}>

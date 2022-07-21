@@ -7,7 +7,7 @@ import { axios_get, axios_post } from '../../api/api';
 import { getEmotionRequire } from '../../service/SelectImage';
 import UserContext from '../../service/UserContext';
 
-const AnalysisLoadingView = ({ navigation, diaryId }) => {
+const AnalysisLoadingView = ({ navigation, route }) => {
   const userId = useContext(UserContext).userId;
   const [isLoading, setIsLoading] = useState(true);
   const [emotions, setEmotions] = useState(['angry', 'joy', 'love']);
@@ -75,7 +75,7 @@ const AnalysisLoadingView = ({ navigation, diaryId }) => {
         <Text style={style.text}>{'오늘 하루도 수고 많았어요'} </Text>
       </View>
       <View style={style.loadingContainer}>
-        <Image source={require('../../assets/img/Loading.gif')} style={style.loadingImage} />
+        <Image source={require('../../assets/img/loading.gif')} style={style.loadingImage} />
       </View>
       {isLoading ? (
         <View style={style.loadingCommentContainer}>
