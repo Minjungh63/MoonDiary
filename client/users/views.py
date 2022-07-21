@@ -39,7 +39,7 @@ class loginView(View):
                     "commentYN": user.commentYN,
                     "font": user.font
                 }
-            return JsonResponse(sdata, status = 200)
+            return JsonResponse(sdata, status = 201)
         
         return JsonResponse({'message':'id error'},status=400)
     
