@@ -49,7 +49,7 @@ class writeView(View):
 
 
 class checkView(View):  # 일기 확인 페이지
-    def get(self, diaryId):  # 일단 diary 테이블 데이터만 넘겨줌
+    def get(self, request, diaryId):  # 일단 diary 테이블 데이터만 넘겨줌
         data = Diary.objects.get(diaryId=diaryId)
         sdata = {
             "diaryId": data.diaryId,
