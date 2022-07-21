@@ -1,4 +1,3 @@
-import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';

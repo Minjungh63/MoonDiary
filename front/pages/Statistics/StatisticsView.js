@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { basic_theme } from '../../theme';
 import { getEmotionRequire } from '../../service/SelectImage';
@@ -7,17 +6,16 @@ import WritingRate from '../../components/WritingRate';
 import EmotionRate from '../../components/EmotionRate';
 import EmotionTable from '../../components/EmotionTable';
 import { axios_get } from '../../api/api';
+import UserContext from '../../service/UserContext';
 
 const StatisticsView = () => {
+  const userId = useContext(UserContext).userId;
   const [emotion_day, setEmotion_day] = useState([]);
-  const [userId, setUserId] = useState();
   const attend_day = emotion_day.map((emotion) => emotion.day).reduce((prev, curr) => prev + curr, 0); // 작성 일 수
   const getDay = (id) => {
     return emotion_day.filter((list) => list.emotion === id).map((emotion) => emotion.day);
   }; // emotion이 나온 일 수
-  AsyncStorage.getItem('userId') //로그인확인
-    .then((value) => setUserId(value))
-    .catch((e) => navigation.replace('LoginView'));
+
   useEffect(() => {
     (async () => {
       const response = await axios_get('statistics', { userId });

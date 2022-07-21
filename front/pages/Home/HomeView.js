@@ -8,12 +8,12 @@ import AppLoading from 'expo-app-loading';
 import UserContext from '../../service/UserContext';
 
 const HomeView = ({ navigation }) => {
+  const userContext = useContext(UserContext);
   const [isLoading, setLoading] = useState(false);
   const [diaryData, setDiaryData] = useState([]);
-  const userContext = useContext(UserContext);
   const getDiaryData = async () => {
     try {
-      const userId = userContext.userId.replace('"', '').replace('"', '');
+      const userId = userContext.userId;
       const response = await axios_post('diary', { userId });
       if (response.status === 200) {
         var data = response.data;
@@ -34,7 +34,7 @@ const HomeView = ({ navigation }) => {
   return isLoading ? (
     <View style={styles.container}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ ...styles.text, marginTop: 40 }}>안녕하세요, {userContext.userName}님</Text>
+        <Text style={{ ...styles.text, marginTop: 40 }}>안녕하세요, {userContext.userName + '님'}</Text>
         <Text style={styles.text}>오늘 하루는 어떠셨나요?</Text>
       </View>
       <Calendar diaryData={diaryData} />

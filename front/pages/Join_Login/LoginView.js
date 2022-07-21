@@ -18,20 +18,34 @@ const LoginView = ({ navigation }) => {
       alert('비밀번호를 입력해주세요');
     }
     const response = await axios_post('login', { userId, password });
-    if (response.status == 200) {
+    if (response.status === 200) {
       //로그인 성공시
-      AsyncStorage.setItem('userId', JSON.stringify(userId));
+      AsyncStorage.setItem('userId', userId);
       // AsyncStorage는 자동로그인을 위함.
       // userContext.setUserName(userName); 사용자 이름 받아오기
-      userContext.setUserId(JSON.stringify(userId));
+      userContext.setUserId(userId);
       navigation.replace('BottomTabHome');
+    }
+  };
+  const autoLogin = async () => {
+    //자동로그인
+    const response = await axios_post('login', { userId });
+    if (response.status === 200) {
+      userContext.setUserId(response.data.userId);
+      userContext.setUserName(response.data.userName);
+      userContext.setImageYN(response.data.imageYN);
+      userContext.setCommentYN(response.data.commentYN);
     }
   };
 
   useEffect(() => {
-    if (userContext.userId !== '') {
-      navigation.replace('BottomTabHome');
-    }
+    AsyncStorage.getItem('userId').then((value) => {
+      if (value !== null) {
+        // autoLogin(); 백엔드와 협업 필요
+        userContext.setUserId(value); //autoLogin 사용시 지울 것
+        navigation.replace('BottomTabHome');
+      }
+    });
   }, []);
 
   return (
@@ -44,13 +58,13 @@ const LoginView = ({ navigation }) => {
       <View style={style.inputContainer}>
         <Text style={style.text}>아이디를 입력해주세요.</Text>
         <View style={style.inputBox}>
-          <TextInput placeholder="TeamI_IT23" onChangeText={setUserId}></TextInput>
+          <TextInput placeholder="ID" onChangeText={setUserId}></TextInput>
         </View>
       </View>
       <View style={style.inputContainer}>
         <Text style={style.text}>비밀번호를 입력해주세요.</Text>
         <View style={style.inputBox}>
-          <TextInput placeholder="SiliconValleyInternship2022" onChangeText={setPassword}></TextInput>
+          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={setPassword}></TextInput>
         </View>
       </View>
       <View style={style.buttonContainer}>

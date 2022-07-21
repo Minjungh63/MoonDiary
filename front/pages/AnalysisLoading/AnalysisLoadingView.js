@@ -1,11 +1,14 @@
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme } from '../../theme';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { axios_get, axios_post } from '../../api/api';
 import { getEmotionRequire } from '../../service/SelectImage';
-const AnalysisLoadingView = ({ navigation, route }) => {
+import UserContext from '../../service/UserContext';
+
+const AnalysisLoadingView = ({ navigation, diaryId }) => {
+  const userId = useContext(UserContext).userId;
   const [isLoading, setIsLoading] = useState(true);
   const [emotions, setEmotions] = useState(['angry', 'joy', 'love']);
   const [selectedEmotion, setSelectedEmotion] = useState();

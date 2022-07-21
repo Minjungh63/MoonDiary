@@ -50,7 +50,6 @@ const WriteDiaryView = ({ navigation }) => {
     const TITLE = title.trim();
     const CONTENTS = contents.trim();
     setGoAnalysisModal(false);
-
     const response = await axios_post('write', {
       userId: userId,
       date: DATE,
