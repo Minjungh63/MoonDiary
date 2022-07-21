@@ -28,6 +28,21 @@ class joinView(View):
             return JsonResponse({"message":"INVALID_KEYS"}, status=400)
 
 class loginView(View):
+    def get(self, request):
+        id = request.GET['userId']
+        if User.objects.filter(userId = id).exists():
+            user = User.objects.get(userId = id)
+            sdata = {
+                    "userId": id,
+                    "name": user.name,
+                    "imageYN": user.imageYN,
+                    "commentYN": user.commentYN,
+                    "font": user.font
+                }
+            return JsonResponse(sdata, status = 200)
+        
+        return JsonResponse({'message':'id error'},status=400)
+    
     def post(self, request):
         data = json.loads(request.body)
         id = data['userId']
