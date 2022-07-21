@@ -10,7 +10,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from transformers import pipeline
 from googletrans import Translator
-from textrank import KeysentenceSummarizer
+from .textrank import KeysentenceSummarizer
 from pytorch_lightning.core.lightning import LightningModule
 from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel
 

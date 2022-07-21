@@ -1,5 +1,5 @@
 import os
-from time import time
+import time
 from celery import Celery
  
 # `celery` 프로그램을 작동시키기 위한 기본 장고 세팅 값을 정한다. 
@@ -19,8 +19,24 @@ def add(x, y):
 @app.task(bind=True)
 def hello(self, a, b):
     time.sleep(1)
-    self.update_state(state="PROGRESS", meta= {'progress':50})
+    self.update_state(state="PROGRESS", meta={'progress': 50})
     time.sleep(1)
-    self.update_state(state="PROGRESS", meta= {'progress':90})
+    self.update_state(state="PROGRESS", meta={'progress': 90})
     time.sleep(1)
-    return 'hello world: %i %' % (a+b)
+    return '결과값 리턴 : %i' % (a+b)
+
+@app.task(bind=True)
+def oneSeconds(self, a, b):
+    time.sleep(1)
+    self.update_state(state="PROGRESS", meta={'progress': 50})
+    time.sleep(1)
+    self.update_state(state="PROGRESS", meta={'progress': 90})
+    return '1초씩 2번 : %i' % (a+b)
+
+@app.task(bind=True)
+def twoSeconds(self, a, b):
+    time.sleep(2)
+    self.update_state(state="PROGRESS", meta={'progress': 50})
+    time.sleep(2)
+    self.update_state(state="PROGRESS", meta={'progress': 90})
+    return '2초씩 두번 : %i' % (a+b)
