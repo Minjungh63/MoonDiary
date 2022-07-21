@@ -1,21 +1,17 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, TextInput, Keyboard } from 'react-native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { basic_theme } from '../../theme';
 import { axios_post } from '../../api/api';
 import { getWeatherRequire } from '../../service/SelectImage';
 import { MaterialIcons } from '@expo/vector-icons';
+import UserContext from '../../service/UserContext';
 
 const WriteDiaryView = ({ navigation, date }) => {
-  const [userId, setUserId] = useState('');
+  const userId = useContext(UserContext).userId;
   const [weather, setWeather] = useState('sunny');
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
-  AsyncStorage.getItem('userId') //로그인확인
-    .then((value) => setUserId(value))
-    .catch((e) => navigation.replace('LoginView'));
 
   const submitDiaryData = async () => {
     //입력 안했을 시 예외처리 코드 날씨는 default sunny이므로 필요X
