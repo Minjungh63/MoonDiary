@@ -31,9 +31,9 @@ class mainView(View):
 
 
 class writeView(View):
-    async def post(self, request):
+    def post(self, request):
         temp = json.loads(request.body)
-        uId = temp.userId
+        uId = temp['userId']
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])        
         did = Diary.objects.filter(userId=uId).last()
@@ -44,12 +44,11 @@ class writeView(View):
             "emotion": emo
         }
         
-        AI(doc,did,emo)
         return JsonResponse(sdata, status=201)
 
 
 class checkView(View):  # 일기 확인 페이지
-    def get(self, diaryId):  # 일단 diary 테이블 데이터만 넘겨줌
+    def get(self, request, diaryId):  # 일단 diary 테이블 데이터만 넘겨줌
         data = Diary.objects.get(diaryId=diaryId)
         sdata = {
             "diaryId": data.diaryId,
