@@ -9,21 +9,20 @@ import { axios_get } from '../../api/api';
 import UserContext from '../../service/UserContext';
 
 const StatisticsView = () => {
+  useEffect(() => {
+    (async () => {
+      const response = await axios_get('statistics', { userId });
+      if (response.status == 200) {
+        setEmotion_day(response.data);
+      }
+    })();
+  }, []);
   const userId = useContext(UserContext).userId;
   const [emotion_day, setEmotion_day] = useState([]);
   const attend_day = emotion_day.map((emotion) => emotion.day).reduce((prev, curr) => prev + curr, 0); // 작성 일 수
   const getDay = (id) => {
     return emotion_day.filter((list) => list.emotion === id).map((emotion) => emotion.day);
   }; // emotion이 나온 일 수
-
-  useEffect(() => {
-    (async () => {
-      const response = await axios_get('statistics', { userId });
-      if (response.status == 200) {
-        setEmotion_day(response.data.statisticsList);
-      }
-    })();
-  }, []);
   const emotion_list = [
     {
       text: '기쁨',
@@ -75,7 +74,6 @@ const StatisticsView = () => {
     },
   ];
   emotion_list.sort((a, b) => b.day - a.day); // emotion이 나온 일수를 기준으로 내림차순 정렬
-
   return (
     <View style={styles.container}>
       <View style={styles.WritingRate}>

@@ -27,7 +27,7 @@ const WriteDiaryView = ({ navigation }) => {
   const YEAR = new Date().getFullYear(); // 현재 연도
   const MONTH = new Date().getMonth(); // 현재 월
   const DAY = new Date().getDate(); // 현재 일
-  const DATE = YEAR + '-' + MONTH + '-' + DAY;
+  const date = YEAR + '-' + (MONTH + 1) + '-' + DAY;
   const confirmText = '네';
   const deniedText = '아니오';
   const backText = '돌아가기';
@@ -47,15 +47,19 @@ const WriteDiaryView = ({ navigation }) => {
   const goAnalysis = async () => {
     const userId = userContext.userId;
     const userName = userContext.userName;
-    const TITLE = title.trim();
-    const CONTENTS = contents.trim();
+    const imageYN = userContext.imageYN;
+    const commentYN = userContext.commentYN;
+    setTitle(title.trim());
+    setContents(contents.trim());
     setGoAnalysisModal(false);
     const response = await axios_post('write', {
-      userId: userId,
-      date: DATE,
-      weather: weather,
-      title: TITLE,
-      contents: CONTENTS,
+      userId,
+      date,
+      weather,
+      title,
+      contents,
+      imageYN,
+      commentYN,
     });
     if (response.status == 201) {
       navigation.navigate('AnalysisLoadingView', {
@@ -64,6 +68,8 @@ const WriteDiaryView = ({ navigation }) => {
         month: month[MONTH],
         day: DAY,
         name: userName,
+        imageYN: imageYN,
+        commentYN: commentYN,
       });
     }
   };
@@ -110,9 +116,15 @@ const WriteDiaryView = ({ navigation }) => {
       </View>
       <View style={style.titleContainer}>
         <Text style={style.text}>제목</Text>
-        <TextInput placeholder="제목을 입력해주세요" onChangeText={setTitle} style={style.titleInputBox}></TextInput>
+        <TextInput
+          value={title}
+          placeholder="제목을 입력해주세요"
+          onChangeText={setTitle}
+          style={style.titleInputBox}
+        ></TextInput>
       </View>
       <TextInput
+        value={contents}
         multiline={true}
         placeholder={'내용을 작성해주세요'}
         onChangeText={setContents}

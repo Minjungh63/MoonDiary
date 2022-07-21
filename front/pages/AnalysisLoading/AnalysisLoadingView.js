@@ -1,16 +1,14 @@
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme } from '../../theme';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { axios_get, axios_post } from '../../api/api';
 import { getEmotionRequire } from '../../service/SelectImage';
-import UserContext from '../../service/UserContext';
 
 const AnalysisLoadingView = ({ navigation, route }) => {
-  const userId = useContext(UserContext).userId;
   const [isLoading, setIsLoading] = useState(true);
-  const [emotions, setEmotions] = useState(['angry', 'joy', 'love']);
+  const [emotions, setEmotions] = useState([]);
   const [selectedEmotion, setSelectedEmotion] = useState();
 
   useEffect(() => {
@@ -75,7 +73,7 @@ const AnalysisLoadingView = ({ navigation, route }) => {
         <Text style={style.text}>{'오늘 하루도 수고 많았어요'} </Text>
       </View>
       <View style={style.loadingContainer}>
-        <Image source={require('../../assets/img/loading.gif')} style={style.loadingImage} />
+        <Image source={require('../../assets/img/Loading.gif')} style={style.loadingImage} />
       </View>
       {isLoading ? (
         <View style={style.loadingCommentContainer}>

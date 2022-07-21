@@ -15,7 +15,7 @@ class EmotionTable extends Component {
           emotion_list.map(
             (emotion, index) =>
               index < 3 &&
-              emotion.day !== 0 && (
+              emotion.day.length !== 0 && (
                 <View style={styles.row} key={index}>
                   {/*emotion의 rank*/}
                   <Text style={styles.EmotionRank}>{index + 1}</Text>
