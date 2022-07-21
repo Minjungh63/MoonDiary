@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
-import { basic_theme } from '../../theme';
+import { basic_theme, text } from '../../theme';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Calendar from '../../components/Calendar';
 import { axios_post } from '../../api/api';
@@ -34,7 +34,9 @@ const HomeView = ({ navigation }) => {
   return isLoading ? (
     <View style={styles.container}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ ...styles.text, marginTop: 40 }}>안녕하세요, {userContext.userName + '님'}</Text>
+        <Text style={{ ...styles.text, marginTop: 40 }}>
+          {text.intro}, {userContext.userName + '님'}
+        </Text>
         <Text style={styles.text}>오늘 하루는 어떠셨나요?</Text>
       </View>
       <Calendar diaryData={diaryData} />

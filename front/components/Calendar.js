@@ -2,22 +2,9 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { getEmotionRequire } from '../service/SelectImage';
+import { month } from '../theme';
 
 const dayOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-const month = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
 const date = new Date();
 const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
 const kstGap = 9 * 60 * 60 * 1000;

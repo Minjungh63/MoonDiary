@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { basic_theme } from '../../theme';
+import { basic_theme, month, weather_list, text } from '../../theme';
 import { axios_post } from '../../api/api';
 import { getWeatherRequire } from '../../service/SelectImage';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -10,28 +10,10 @@ import UserContext from '../../service/UserContext';
 import { ModalWindow } from '../../components/ModalWindow';
 const WriteDiaryView = ({ navigation }) => {
   const userContext = useContext(UserContext);
-  const month = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
   const YEAR = new Date().getFullYear(); // 현재 연도
   const MONTH = new Date().getMonth(); // 현재 월
   const DAY = new Date().getDate(); // 현재 일
   const date = YEAR + '-' + (MONTH + 1) + '-' + DAY;
-  const confirmText = '네';
-  const deniedText = '아니오';
-  const backText = '돌아가기';
-  const weather_list = ['sunny', 'cloudy', 'rainy', 'stormy', 'little_cloudy', 'snowy'];
   const [weather, setWeather] = useState('sunny');
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
@@ -143,7 +125,7 @@ const WriteDiaryView = ({ navigation }) => {
         okPress={() => setTitleModal(false)}
         text1="앗! 아직 제목이 작성되지 않았네요."
         text2="제목을 작성해주세요."
-        confirmText={backText}
+        confirmText={text.backText}
       />
       <ModalWindow
         open={contentModal}
@@ -154,7 +136,7 @@ const WriteDiaryView = ({ navigation }) => {
         }}
         text1="앗! 3문장 이상 작성해주셔야"
         text2="제가 일기를 분석할 수 있어요."
-        confirmText={backText}
+        confirmText={text.backText}
         cancelText="Tip"
       />
       <ModalWindow
@@ -163,16 +145,16 @@ const WriteDiaryView = ({ navigation }) => {
         cancelPress={() => setCancelModal(false)}
         text1="작성하신 일기가 모두 사라집니다."
         text2="작성을 취소하시겠습니까?"
-        confirmText={confirmText}
-        cancelText={deniedText}
+        confirmText={text.confirmText}
+        cancelText={text.deniedText}
       />
       <ModalWindow
         open={goAnalysisModal}
         okPress={goAnalysis}
         cancelPress={() => setGoAnalysisModal(false)}
         text2="일기를 모두 작성하셨나요?"
-        confirmText={confirmText}
-        cancelText={deniedText}
+        confirmText={text.confirmText}
+        cancelText={text.deniedText}
       />
       <ModalWindow
         open={tipModal}
@@ -180,7 +162,7 @@ const WriteDiaryView = ({ navigation }) => {
         title=" ✨ TIP ✨"
         text1="문장의 끝에 . 또는 ! 또는 ?을 적으면"
         text2="문장으로 인식됩니다."
-        confirmText={backText}
+        confirmText={text.backText}
       />
     </KeyboardAwareScrollView>
   );
