@@ -1,5 +1,4 @@
 import os
-from time import time
 from celery import Celery
  
 # `celery` 프로그램을 작동시키기 위한 기본 장고 세팅 값을 정한다. 
@@ -10,17 +9,3 @@ app = Celery('config')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 # 장고 app config에 등록된 모든 taks 모듈을 불러온다. 
 app.autodiscover_tasks()
-
-@app.task
-def add(x, y):
-    print(x+y)
-    return x + y
-
-@app.task(bind=True)
-def hello(self, a, b):
-    time.sleep(1)
-    self.update_state(state="PROGRESS", meta= {'progress':50})
-    time.sleep(1)
-    self.update_state(state="PROGRESS", meta= {'progress':90})
-    time.sleep(1)
-    return 'hello world: %i %' % (a+b)

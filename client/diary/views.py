@@ -2,13 +2,14 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views import View
 from django.http import HttpResponse, JsonResponse
+from AI.tasks import run_emotion
+from AI.tasks import run_comment
 from users.models import User
 from AI.models import AI
 from diary.models import Diary
 from django.core import serializers
 from AI import ai
 
-# Create your views here.
 class mainView(View):
     def post(self, request):
         data = json.loads(request.body)
@@ -37,11 +38,11 @@ class writeView(View):
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])        
         did = Diary.objects.filter(userId=uId).last()
-        doc = temp['contents']
-        emo, commemo = ai.run_emotion(doc)
+        doc =temp['contents']
+        run_emotion.apply_async([doc, did])
+        run_comment.apply_async([doc, did])
         sdata = {
             "diaryId": did.diaryId,
-            "emotion": emo
         }
         
         return JsonResponse(sdata, status=201)

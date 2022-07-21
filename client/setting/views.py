@@ -2,9 +2,7 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
-from config.celery import add
 from users.models import User
-# Create your views here.
 class SettingView(View):
     def get(self, request):
         userId = request.GET['userId']
@@ -24,15 +22,5 @@ class SettingView(View):
         imageYN = temp['imageYN']
         commentYN = temp['commentYN']
         User.objects.filter(userId=userId).update(imageYN = imageYN, commentYN = commentYN)
-
-        # r = add.apply_async((2, 2), link=add.s(16))
-        # a = add.apply_async((2, 2), link=add.s(16))
-        # b = add.apply_async((2, 2), link=add.s(16))
-        # c = add.apply_async((2, 2), link=add.s(16))
-        result = add.delay(4, 4)
-        print(result.ready())
-        print(result.get())
-
-
 
         return HttpResponse(status=201)
