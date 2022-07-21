@@ -3,14 +3,11 @@ import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import { ModalWindow } from '../../components/ModalWindow';
-import { basic_theme } from '../../theme';
+import { basic_theme, text, fonts } from '../../theme';
 import UserContext from '../../service/UserContext';
 
 const SettingsView = () => {
   const userContext = useContext(UserContext);
-  const confirmText = '네';
-  const cancelText = '아니오';
-  const fonts = ['고운바탕', '나눔고딕', '나눔명조', 'Sans-Serif'];
   const [font, setFont] = useState(fonts[0]);
   const [isDrawingEnabled, setIsDrawingEnabled] = useState(true);
   const [isCommentEnabled, setIsCommentEnabled] = useState(true);
@@ -137,7 +134,7 @@ const SettingsView = () => {
   return (
     <View style={styles.Setting}>
       <View style={styles.SettingTitle}>
-        <Text style={styles.title}>{userContext.userName} 설정</Text>
+        <Text style={styles.title}>{userContext.userName}님, 설정</Text>
       </View>
       <AISetting />
       <DiarySetting />
@@ -149,16 +146,16 @@ const SettingsView = () => {
         cancelPress={() => setdeleteDiaryModalVisible(false)}
         text1="작성하신 모든 일기가 삭제됩니다."
         text2="모든 일기를 삭제하시겠습니까?"
-        confirmText={confirmText}
-        cancelText={cancelText}
+        confirmText={text.confirmText}
+        cancelText={text.deniedText}
       />
       <ModalWindow
         open={logoutModalVisible}
         okPress={logout}
         cancelPress={() => setlogoutModalVisible(false)}
         text2="로그아웃 하시겠습니까?"
-        confirmText={confirmText}
-        cancelText={cancelText}
+        confirmText={text.confirmText}
+        cancelText={text.deniedText}
       />
       <ModalWindow
         open={deleteAccountModalVisible}
@@ -166,8 +163,8 @@ const SettingsView = () => {
         cancelPress={() => setdeleteAccountModalVisible(false)}
         text1="회원님에 대한 모든 정보가 삭제됩니다."
         text2="계정을 삭제하시겠습니까?"
-        confirmText={confirmText}
-        cancelText={cancelText}
+        confirmText={text.confirmText}
+        cancelText={text.deniedText}
       />
     </View>
   );
