@@ -83,18 +83,7 @@ def get_emotion(doc):
         emotion.append(out['labels'][0])
         emotion.append(out['labels'][1])
 
-    if(len(emotion) > 1):
-        # 창을 띄워서 사용자가 감정을 선택하는 코드로 바꾸기
-        print(emotion)
-        emotion_idx = int(
-            input('여러 개의 감정이 느껴지네요! 오늘을 대표하는 감정 1개를 선택해주세요(0, 1, 2, ...의 index로 입력):'))
-    else:
-        emotion_idx = 0
-
-    emo = emotion[emotion_idx]
-    # print(EMOTION)
-
-    return emo
+    return emotion
 
 
 def comment_emo(emotion):
@@ -216,13 +205,6 @@ def comment_moon(keysents):
 
 
 ########### 수정 필요한 코드 ##########
-
-# doc = """
-#     인공지능 중간고사를 친 다음날, 할게 없어서 북한산에 등산을 하러 갔다.
-#     등산은 정말 오랜만이었는데, 가는 길은 험난했지만 백운대에 도착하니 너무 뿌듯하고 개운했다.
-#     방안에 틀어박히기 보다 나와서 운동을 했더니 기분이 너무 좋았다.
-#     앞으로 시간이 날 때마다 자주 산에 와야겠다.
-# """
 
 def run_emotion(doc):
     emotion = get_emotion(doc)
