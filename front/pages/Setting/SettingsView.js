@@ -5,8 +5,9 @@ import SelectDropdown from 'react-native-select-dropdown';
 import { ModalWindow } from '../../components/ModalWindow';
 import { basic_theme, text, fonts } from '../../theme';
 import UserContext from '../../service/UserContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SettingsView = () => {
+const SettingsView = ({ navigation }) => {
   const userContext = useContext(UserContext);
   const [font, setFont] = useState(fonts[0]);
   const [isDrawingEnabled, setIsDrawingEnabled] = useState(true);
@@ -30,8 +31,9 @@ const SettingsView = () => {
     setdeleteDiaryModalVisible(false);
   };
   const logout = () => {
-    //로그아웃 코드 여기에 넣기
+    AsyncStorage.clear();
     setlogoutModalVisible(false);
+    navigation.navigate('LoginView');
   };
   const deleteAccount = () => {
     //회원탈퇴 코드 여기에 넣기
