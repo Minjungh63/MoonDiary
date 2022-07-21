@@ -33,6 +33,8 @@ export default function App() {
   };
   let myFont = {
     Gowun_Batang: require('./assets/fonts/GowunBatang-Regular.ttf'),
+    Nanum_Gothic: 'https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Nanum+Gothic&display=swap',
+    Nanum_Myeongjo: 'https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Nanum+Myeongjo&display=swap',
   };
   useEffect(() => {
     async function prepare() {

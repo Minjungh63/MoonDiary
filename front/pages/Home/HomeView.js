@@ -14,7 +14,6 @@ const HomeView = ({ navigation }) => {
   const getDiaryData = async () => {
     try {
       const userId = userContext.userId;
-      console.log(userId);
       const response = await axios_post('diary', { userId });
       if (response.status === 200) {
         var data = response.data;
