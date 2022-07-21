@@ -27,7 +27,7 @@ const HomeView = ({ navigation }) => {
   };
   useEffect(() => {
     getDiaryData();
-  }, []);
+  }, [userContext.userId]);
   const goWrite = () => {
     navigation.navigate('WriteDiaryView');
   };
@@ -39,7 +39,7 @@ const HomeView = ({ navigation }) => {
         </Text>
         <Text style={styles.text}>오늘 하루는 어떠셨나요?</Text>
       </View>
-      <Calendar diaryData={diaryData} />
+      <Calendar diaryData={diaryData} navigation={navigation} />
       <View style={{ flex: 1, backgroundColor: basic_theme.bgColor, justifyContent: 'flex-end', flexDirection: 'row' }}>
         <Pressable style={styles.button} onPress={goWrite}>
           <FontAwesome5 name="pen" size={24} color="white" />

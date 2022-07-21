@@ -29,10 +29,9 @@ const JoinView = ({ navigation }) => {
       const response = await axios_post('join', { userId, name, password });
       console.log(response);
       if (response.status == 201) {
-        await AsyncStorage.setItem('userId', JSON.stringify(userId)); //로그인 정보 저장
+        AsyncStorage.setItem('userId', userId); //로그인 정보 저장
         userContext.setName(name);
         userContext.setUserId(userId);
-        //로그인와 마찬가지로 Context 세팅필요
         navigation.navigate('BottomTabHome');
       } else if (response.status == 409) {
         //이미 있는아이디일때
@@ -54,7 +53,13 @@ const JoinView = ({ navigation }) => {
       <View style={style.inputContainer}>
         <InputBox text="당신의 이름은 무엇인가요?" value={name} placeholder="이름" onChangeText={setName} />
         <InputBox text="아이디를 설정해주세요." value={userId} placeholder="ID" onChangeText={setUserId} />
-        <InputBox text="비밀번호를 설정해주세요." value={password} placeholder="Password" onChangeText={setPassword} />
+        <InputBox
+          secureTextEntry={true}
+          text="비밀번호를 설정해주세요."
+          value={password}
+          placeholder="Password"
+          onChangeText={setPassword}
+        />
       </View>
       <View style={style.buttonContainer}>
         <TouchableOpacity onPress={submitJoinData} activeOpacity={0.7} style={style.buttonBox}>

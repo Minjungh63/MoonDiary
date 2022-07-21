@@ -48,6 +48,7 @@ const FavoriteView = ({ navigation }) => {
               weather={obj.weather}
               emotion={obj.emotion}
               comment={obj.comment}
+              navigation={navigation}
             />
           );
         })}

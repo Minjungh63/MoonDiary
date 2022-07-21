@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from './styles';
 import UserContext from '../../service/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { axios_post } from '../../api/api';
+import { axios_post, axios_get } from '../../api/api';
 import { InputBox } from '../../components/InputBox';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ModalWindow } from '../../components/ModalWindow';
@@ -29,9 +29,11 @@ const LoginView = ({ navigation }) => {
         if (response.status === 200) {
           //로그인 성공시
           AsyncStorage.setItem('userId', userId);
-          // AsyncStorage는 자동로그인을 위함.
-          // userContext.setUserName(userName); 사용자 이름 받아오기
-          userContext.setUserId(userId);
+          userContext.setUserId(response.data.userId);
+          userContext.setUserName(response.data.name);
+          userContext.setUserFont(response.data.font);
+          userContext.setImageYN(response.data.imageYN);
+          userContext.setCommentYN(response.data.commentYN);
           navigation.replace('BottomTabHome');
         }
       } catch {
@@ -39,12 +41,13 @@ const LoginView = ({ navigation }) => {
       }
     }
   };
-  const autoLogin = async () => {
+  const autoLogin = async (userId) => {
     //자동로그인
-    const response = await axios_post('login', { userId });
-    if (response.status === 200) {
+    const response = await axios_get('login', { userId });
+    if (response.status === 201) {
       userContext.setUserId(response.data.userId);
-      userContext.setUserName(response.data.userName);
+      userContext.setUserName(response.data.name);
+      userContext.setUserFont(response.data.font);
       userContext.setImageYN(response.data.imageYN);
       userContext.setCommentYN(response.data.commentYN);
     }
@@ -53,8 +56,7 @@ const LoginView = ({ navigation }) => {
   useEffect(() => {
     AsyncStorage.getItem('userId').then((value) => {
       if (value !== null) {
-        // autoLogin(); 백엔드와 협업 필요
-        userContext.setUserId(value); //autoLogin 사용시 지울 것
+        autoLogin(value);
         navigation.replace('BottomTabHome');
       }
     });
@@ -73,7 +75,13 @@ const LoginView = ({ navigation }) => {
       </View>
       <View style={style.inputContainer}>
         <InputBox text={text.id} value={userId} placeholder="ID" onChangeText={setUserId} />
-        <InputBox text={text.pwd} value={password} placeholder="Password" onChangeText={setPassword} />
+        <InputBox
+          secureTextEntry={true}
+          text={text.pwd}
+          value={password}
+          placeholder="Password"
+          onChangeText={setPassword}
+        />
       </View>
       <View style={style.buttonContainer}>
         <TouchableOpacity onPress={submitLoginData} activeOpacity={0.7} style={style.buttonBox}>

@@ -122,6 +122,7 @@ const style = StyleSheet.create({
     width: Dimensions.get('window').width / 1.1,
     alignItems: 'center',
     height: Dimensions.get('window').height / 3.15,
+    position: 'relative',
   },
   speechBubbleBox: {
     alignItems: 'center',
