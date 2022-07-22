@@ -22,7 +22,7 @@ class SettingView(View):
           
         if 'font' in temp:
             font = temp['font']
-            User.objects.filter(userId=userId).update(imageYN = imageYN)
+            User.objects.filter(userId=userId).update(font = font)
             return HttpResponse(status=201)
         
         if 'imageYN' in temp:
@@ -33,7 +33,7 @@ class SettingView(View):
         if 'commentYN' in temp:
             print('comm update')
             commentYN = temp['commentYN']
-            User.objects.filter(userId=userId).update(imageYN = imageYN, commentYN = commentYN)
+            User.objects.filter(userId=userId).update(commentYN = commentYN)
             return HttpResponse(status=201)
         
         if 'deleteDiary' in temp:
