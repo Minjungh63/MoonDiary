@@ -73,7 +73,7 @@ const AnalysisLoadingView = ({ navigation, route }) => {
         <Text style={style.text}>{'오늘 하루도 수고 많았어요'} </Text>
       </View>
       <View style={style.loadingContainer}>
-        <Image source={require('../../assets/img/Loading.gif')} style={style.loadingImage} />
+        <Image source={require('../../assets/img/loading.gif')} style={style.loadingImage} />
       </View>
       {isLoading ? (
         <View style={style.loadingCommentContainer}>
