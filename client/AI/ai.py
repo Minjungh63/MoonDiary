@@ -202,4 +202,3 @@ def comment_moon(keysents):
         moon_comment = max_comment
 
     return moon_comment  # database에 moon_comment 저장하는 코드 추가하기
-
