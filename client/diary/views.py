@@ -54,12 +54,9 @@ class writeView(View):
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
         did = Diary.objects.filter(userId=uId).last()
-<<<<<<< HEAD
+
         print(did.diaryId)
-        doc =temp['contents']
-=======
         doc = temp['contents']
->>>>>>> e766a6c49d1ddf9ef23e11eb9dbc6441751a02cd
         emotion = run_emotion.delay(doc, did.diaryId)
         comment = run_comment.delay(doc, did.diaryId)
         picture = run_pixray.delay(doc, did.diaryId)
@@ -69,15 +66,9 @@ class writeView(View):
             "comment": comment.get(),
             "emotion": emotion.get(),
         }
-<<<<<<< HEAD
-        
-        # js
-        return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False},status=201)
-=======
 
         # js
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
->>>>>>> e766a6c49d1ddf9ef23e11eb9dbc6441751a02cd
 
 
 class moodView(View):
