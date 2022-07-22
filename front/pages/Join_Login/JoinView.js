@@ -27,12 +27,11 @@ const JoinView = ({ navigation }) => {
       setPasswordModal(true);
     } else {
       const response = await axios_post('join', { userId, name, password });
-      console.log(response);
-      if (response.status == 201) {
+      if (response.status === 201) {
         AsyncStorage.setItem('userId', userId); //로그인 정보 저장
-        userContext.setName(name);
+        userContext.setUserName(name);
         userContext.setUserId(userId);
-        navigation.navigate('BottomTabHome');
+        navigation.replace('BottomTabHome');
       } else if (response.status == 409) {
         //이미 있는아이디일때
         setCheckIdModal(true);

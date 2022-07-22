@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, Text, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
-import { axios_get } from '../../api/api';
+import { axios_get, axios_post } from '../../api/api';
 import UserContext from '../../service/UserContext';
 import { basic_theme } from '../../theme';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -31,12 +31,22 @@ const ReadDiary = ({ route, navigation }) => {
       // setEmotion(response.data.emotion);
     }
   };
-  const setFavorite = () => {
+  const setFavorite = async () => {
+    await axios_post('favorite', { diaryId: route.params.diaryId, liked: !liked });
     setLiked((liked) => !liked);
-    //데이터 베이스에도 넘겨주기
   };
   const goBack = () => {
     navigation.pop();
+  };
+  const reviseDiary = () => {
+    navigation.navigate('WriteDiaryView', {
+      navigation,
+      date,
+      title,
+      contents,
+      weather,
+      diaryId: route.params.diaryId,
+    });
   };
   useEffect(() => {
     getDiaryData(route.params.diaryId);
@@ -96,7 +106,7 @@ const ReadDiary = ({ route, navigation }) => {
           style={{ width: deviceW / 5, height: deviceH / 10 }}
           source={require('../../assets/img/moon.png')}
         ></Image>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={reviseDiary}>
           <Text>수정하기</Text>
         </TouchableOpacity>
       </View>

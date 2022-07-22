@@ -6,7 +6,7 @@ const subUrl = {
   join: '/user/join',
   selectEmotion: '/diary/write/mood',
   result: '/diary/write/result',
-  favorite: '/diary/like',
+  favorite: '/diary/like/',
   diary: '/diary/',
   write: '/diary/write',
   statistics: '/statistics',
