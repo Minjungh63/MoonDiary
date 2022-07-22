@@ -29,4 +29,9 @@ export const text = {
   pwd: '비밀번호를 입력해주세요.',
   moon_intro: '저는 당신의 이야기를 좋아하는 달입니다.',
 };
-export const fonts = ['고운바탕', '나눔고딕', '나눔명조', 'Sans-Serif'];
+export const fonts = {
+  Gowun_Batang: '고운바탕',
+  Nanum_Gothic: '나눔고딕',
+  Nanum_Myeongjo: '나눔명조',
+  'sans-serif': 'sans-serif',
+};

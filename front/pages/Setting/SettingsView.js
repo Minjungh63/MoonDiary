@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import { ModalWindow } from '../../components/ModalWindow';
 import { basic_theme, text, fonts } from '../../theme';
@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingsView = ({ navigation }) => {
   const userContext = useContext(UserContext);
-  const [font, setFont] = useState(fonts[0]);
   const [isDrawingEnabled, setIsDrawingEnabled] = useState(true);
   const [isCommentEnabled, setIsCommentEnabled] = useState(true);
   const [deleteDiaryModalVisible, setdeleteDiaryModalVisible] = useState(false);
@@ -18,6 +17,7 @@ const SettingsView = ({ navigation }) => {
   const deleteDiaryWindow = () => setdeleteDiaryModalVisible((previousState) => !previousState);
   const logoutWindow = () => setlogoutModalVisible((previousState) => !previousState);
   const deleteAccountWindow = () => setdeleteAccountModalVisible((previousState) => !previousState);
+  const font = userContext.userFont;
   const drawingtoggleSwitch = () => {
     // 그림일기 기능 on off 코드 여기에 넣기
     setIsDrawingEnabled((previousState) => !previousState);
@@ -31,6 +31,7 @@ const SettingsView = ({ navigation }) => {
     setdeleteDiaryModalVisible(false);
   };
   const logout = () => {
+    //  로그아웃 기능
     AsyncStorage.clear();
     setlogoutModalVisible(false);
     navigation.navigate('LoginView');
@@ -41,16 +42,16 @@ const SettingsView = ({ navigation }) => {
   };
   const changeFont = (selectedItem, index) => {
     // 폰트 변경하는 코드 여기에 넣기
-    setFont(selectedItem);
+    userContext.setUserFont(Object.keys(fonts)[index]);
   };
   const AISetting = () => {
     return (
-      <View style={styles.twoContainer}>
-        <Text style={styles.subtitle}>AI</Text>
-        <View style={styles.severalSettings}>
+      <View style={[styles().twoContainer, styles().container]}>
+        <Text style={[styles(font).text, styles().subtitle]}>AI</Text>
+        <View style={[styles().severalSettingBox, styles().settingBox]}>
           {/*그림일기 기능 on off 설정*/}
-          <View style={styles.FirstSetting}>
-            <Text style={styles.rowText}>그림일기 기능</Text>
+          <View style={[styles().first_TwoSettingBox, styles().twoSettingBox]}>
+            <Text style={[styles(font).text, styles().rowText]}>그림일기 기능</Text>
             <Pressable onPress={drawingtoggleSwitch}>
               <MaterialCommunityIcons
                 name={isDrawingEnabled ? 'toggle-switch' : 'toggle-switch-off'}
@@ -60,8 +61,8 @@ const SettingsView = ({ navigation }) => {
             </Pressable>
           </View>
           {/*감상평 기능 on off 설정*/}
-          <View style={styles.row}>
-            <Text style={styles.rowText}>감상평 기능</Text>
+          <View style={styles().row}>
+            <Text style={[styles(font).text, styles().rowText]}>감상평 기능</Text>
             <Pressable onPress={commenttoggleSwitch}>
               <MaterialCommunityIcons
                 name={isCommentEnabled ? 'toggle-switch' : 'toggle-switch-off'}
@@ -76,15 +77,15 @@ const SettingsView = ({ navigation }) => {
   };
   const DiarySetting = () => {
     return (
-      <View style={styles.twoContainer}>
-        <Text style={styles.subtitle}>ALL</Text>
-        <View style={styles.severalSettings}>
+      <View style={[styles().twoContainer, styles().container]}>
+        <Text style={[styles(font).text, styles().subtitle]}>ALL</Text>
+        <View style={[styles().severalSettingBox, styles().settingBox]}>
           {/*기본 폰트 설정*/}
-          <View style={styles.FirstSetting}>
-            <Text style={styles.rowText}>기본 폰트 선택</Text>
+          <View style={[styles().first_TwoSettingBox, styles().twoSettingBox]}>
+            <Text style={[styles(font).text, styles().rowText]}>기본 폰트 선택</Text>
             <SelectDropdown
-              data={fonts}
-              defaultValue={font}
+              data={Object.values(fonts)}
+              defaultValue={fonts[userContext.userFont]}
               onSelect={changeFont}
               buttonTextAfterSelection={(selectedItem, index) => {
                 return selectedItem;
@@ -92,15 +93,15 @@ const SettingsView = ({ navigation }) => {
               rowTextForSelection={(item, index) => {
                 return item;
               }}
-              buttonStyle={styles.dropdown}
-              buttonTextStyle={styles.dropText}
-              rowStyle={styles.dropList}
-              rowTextStyle={styles.dropText}
+              buttonStyle={styles().dropdown}
+              buttonTextStyle={styles(font).text}
+              rowStyle={styles().dropList}
+              rowTextStyle={styles(font).text}
             />
           </View>
           {/*모든 일기 삭제 설정*/}
-          <View style={styles.LastSetting}>
-            <Text style={styles.rowText}>모든 일기 삭제</Text>
+          <View style={styles().twoSettingBox}>
+            <Text style={[styles(font).text, styles().rowText]}>모든 일기 삭제</Text>
             <Pressable onPress={deleteDiaryWindow}>
               <Entypo name="chevron-small-right" size={24} color="white" />
             </Pressable>
@@ -111,20 +112,20 @@ const SettingsView = ({ navigation }) => {
   };
   const AccountSetting = () => {
     return (
-      <View style={styles.twoContainer}>
-        <View style={styles.LogoutSetting}>
+      <View style={[styles().twoContainer, styles().container]}>
+        <View style={[styles().oneSettingBox, styles().settingBox, styles().first_oneSettingBox]}>
           {/*로그아웃 설정*/}
-          <View style={styles.LastSetting}>
-            <Text style={styles.rowText}>로그아웃</Text>
+          <View style={styles().twoSettingBox}>
+            <Text style={[styles(font).text, styles().rowText]}>로그아웃</Text>
             <Pressable onPress={logoutWindow}>
               <Entypo name="chevron-small-right" size={24} color="white" />
             </Pressable>
           </View>
         </View>
-        <View style={styles.AccountSetting}>
+        <View style={[styles().oneSettingBox, styles().settingBox]}>
           {/*회원탈퇴 설정*/}
-          <View style={styles.LastSetting}>
-            <Text style={styles.rowText}>회원탈퇴</Text>
+          <View style={styles().twoSettingBox}>
+            <Text style={[styles(font).text, styles().rowText]}>회원탈퇴</Text>
             <Pressable onPress={deleteAccountWindow}>
               <Entypo name="chevron-small-right" size={24} color="white" />
             </Pressable>
@@ -134,9 +135,9 @@ const SettingsView = ({ navigation }) => {
     );
   };
   return (
-    <View style={styles.Setting}>
-      <View style={styles.SettingTitle}>
-        <Text style={styles.title}>{userContext.userName}님, 설정</Text>
+    <View style={styles().Setting}>
+      <View style={[styles().titleContainer, styles().container]}>
+        <Text style={[styles(font).text, styles().title]}>{userContext.userName}님, 설정</Text>
       </View>
       <AISetting />
       <DiarySetting />
@@ -171,115 +172,87 @@ const SettingsView = ({ navigation }) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  Setting: {
-    backgroundColor: basic_theme.bgColor,
-    flex: 1,
-    paddingVertical: '10%',
-  },
-  SettingTitle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: '5%',
-    flex: 0.1,
-  },
-  twoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: '5%',
-    flex: 0.3,
-  },
-  severalSettings: {
-    flex: 0.7,
-    justifyContent: 'space-evenly',
-    borderRadius: 12,
-    width: '100%',
-    borderColor: basic_theme.fgColor,
-    borderWidth: 2,
-    backgroundColor: 'rgba(222,232,255,0.25)',
-    alignItems: 'stretch',
-  },
-  row: {
-    paddingHorizontal: 20,
-    flex: 0.5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  FirstSetting: {
-    paddingHorizontal: 20,
-    flex: 0.5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomWidth: 2,
-    borderColor: '#DEE8FF',
-  },
-  LastSetting: {
-    paddingHorizontal: 20,
-    flex: 0.5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  LogoutSetting: {
-    justifyContent: 'space-evenly',
-    borderRadius: 12,
-    width: '100%',
-    borderColor: basic_theme.fgColor,
-    borderWidth: 2,
-    backgroundColor: 'rgba(222,232,255,0.25)',
-    alignItems: 'stretch',
-    flex: 0.35,
-    marginBottom: 15,
-  },
-  AccountSetting: {
-    justifyContent: 'space-evenly',
-    borderRadius: 12,
-    width: '100%',
-    borderColor: basic_theme.fgColor,
-    borderWidth: 2,
-    backgroundColor: 'rgba(222,232,255,0.25)',
-    alignItems: 'stretch',
-    flex: 0.35,
-  },
-  dropdown: {
-    backgroundColor: 'rgba(222,232,255,0.2)',
-    flex: 0.4,
-    borderRadius: 12,
-  },
-  dropText: {
-    fontSize: 18,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    textAlign: 'center',
-  },
-  dropList: {
-    backgroundColor: basic_theme.bgColor,
-  },
-  rowText: {
-    fontSize: 20,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    flex: 0.5,
-    textAlign: 'left',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-  },
-  subtitle: {
-    flex: 0.15,
-    fontSize: 20,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    alignSelf: 'flex-start',
-    paddingLeft: '3%',
-  },
-});
+
+const styles = (font) =>
+  StyleSheet.create({
+    Setting: {
+      backgroundColor: basic_theme.bgColor,
+      flex: 1,
+      paddingVertical: '10%',
+    },
+    text: {
+      fontFamily: font,
+      fontWeight: 'normal',
+      color: 'white',
+    },
+    container: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: '5%',
+    },
+    titleContainer: {
+      flex: 0.1,
+    },
+    twoContainer: {
+      flex: 0.3,
+    },
+    settingBox: {
+      justifyContent: 'space-evenly',
+      borderRadius: 12,
+      width: '100%',
+      borderColor: basic_theme.fgColor,
+      borderWidth: 2,
+      backgroundColor: 'rgba(222,232,255,0.25)',
+      alignItems: 'stretch',
+    },
+    severalSettingBox: {
+      flex: 0.7,
+    },
+    twoSettingBox: {
+      paddingHorizontal: 20,
+      flex: 0.5,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    first_TwoSettingBox: {
+      borderBottomWidth: 2,
+      borderColor: '#DEE8FF',
+    },
+    oneSettingBox: {
+      flex: 0.35,
+    },
+    first_oneSettingBox: {
+      marginBottom: 15,
+    },
+    row: {
+      paddingHorizontal: 20,
+      flex: 0.5,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    dropdown: {
+      backgroundColor: 'rgba(222,232,255,0.2)',
+      flex: 0.4,
+      borderRadius: 12,
+    },
+    dropList: {
+      backgroundColor: basic_theme.bgColor,
+    },
+    rowText: {
+      fontSize: 20,
+      flex: 0.5,
+      textAlign: 'left',
+    },
+    title: {
+      fontSize: 20,
+    },
+    subtitle: {
+      flex: 0.15,
+      fontSize: 20,
+      alignSelf: 'flex-start',
+      paddingLeft: '3%',
+    },
+  });
 export default SettingsView;
