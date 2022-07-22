@@ -29,18 +29,6 @@ def run_comment(doc, dId):
     return comm_moon
 
 
-<<<<<<< HEAD
-# @app.task
-# def run_picture(doc):
-#     emotion = get_emotion(doc)
-#     comm_emo = comment_emo(emotion)
-#     keyW = keyword_extract(doc)
-#     keyS = keySentence(doc)
-#     comm_moon = comment_moon(keyS)
-#     comm = comm_emo + comm_moon
-
-#     return emotion, keyW, comm
-=======
 @app.task
 def run_pixray(doc):
     keyW = keyword_extract(doc)
@@ -52,4 +40,4 @@ def run_pixray(doc):
         ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
     PATH = 'drawing_diary/output/output.png'
     return keyW, PATH
->>>>>>> e766a6c49d1ddf9ef23e11eb9dbc6441751a02cd
+
