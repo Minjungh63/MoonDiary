@@ -1,22 +1,34 @@
 import numpy as np
-from AI.ai import comment_moon, get_emotion, keySentence
+from AI.ai import comment_moon, get_emotion, keySentence, keyword_extract
 from AI.models import AI
+from diary.models import Diary
 from config.celery import app
 
 
 @app.task
-def run_emotion(doc, diaryId):
+def run_emotion(doc, dId):
     emotion = get_emotion(doc)
-    AI.objects.create(diaryId=diaryId, emotion = emotion.get())
+    print(emotion,"emotion")
+    AI.objects.create(diaryId=Diary.objects.get(diaryId=dId), emotion = emotion)
+    
     return emotion
+    
 
 @app.task
-def run_comment(doc,diaryId):
+def run_comment(doc,dId):
     keyS = keySentence(doc)
+    print(keyS,"keyS")
     comm_moon = comment_moon(keyS)
-    data = AI.objects.get(diaryId=diaryId)
-    data.comment = comm_moon
+    print(comm_moon,"comm_moon")
+
+    data = AI.objects.get(diaryId = dId)
+    print(data)
+    data.comment= comm_moon
     data.save()
+
+    return comm_moon
+
+
 
 # @app.task
 # def run_picture(doc):

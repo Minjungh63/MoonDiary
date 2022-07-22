@@ -54,13 +54,16 @@ class writeView(View):
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])        
         did = Diary.objects.filter(userId=uId).last()
         doc =temp['contents']
-        run_emotion.apply_async([doc, did])
-        run_comment.apply_async([doc, did])
+        emotion = run_emotion.delay(doc, did.diaryId)
+        comment = run_comment.delay(doc, did.diaryId)
+
         sdata = {
             "diaryId": did.diaryId,
+            "comment": comment.get(),
+            "emotion": emotion.get(),
         }
         
-        return JsonResponse(sdata, status=201)
+        return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False},status=201) #js
 
 class moodView(View):
     def get(self, request):
