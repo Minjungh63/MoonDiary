@@ -9,7 +9,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState, useCallback } from 'react';
 import AnalysisResultView from './pages/AnalysisResult/AnalysisResultView';
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import UserContext from './service/UserContext';
 
 export default function App() {
@@ -33,8 +32,8 @@ export default function App() {
   };
   let myFont = {
     Gowun_Batang: require('./assets/fonts/GowunBatang-Regular.ttf'),
-    Nanum_Gothic: 'https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Nanum+Gothic&display=swap',
-    Nanum_Myeongjo: 'https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Nanum+Myeongjo&display=swap',
+    // Nanum_Gothic: 'https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Nanum+Gothic&display=swap',
+    // Nanum_Myeongjo: 'https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Nanum+Myeongjo&display=swap',
   };
   useEffect(() => {
     async function prepare() {
@@ -57,12 +56,12 @@ export default function App() {
   }, [appIsReady]);
 
   if (!appIsReady) {
-    return <AppLoading />;
+    return null;
   }
   const Stack = createStackNavigator();
   return (
     <UserContext.Provider value={user}>
-      <NavigationContainer>
+      <NavigationContainer onReady={onLayoutRootView}>
         <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
           {/* initialRouteName: 이 Stack의 초기 view설정 */}
           <Stack.Screen name="LoginView" component={LoginView} />

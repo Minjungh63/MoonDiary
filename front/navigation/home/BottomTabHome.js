@@ -11,8 +11,11 @@ export default function BottomTabHome() {
   return (
     <Tab.Navigator
       initialRouteName="StackHome"
-      screenOptions={{ headerShown: false, tabBarStyle: { backgroundColor: basic_theme.darkBlue, height: 60 } }}
-      tabBarOptions={{ showLabel: false }}
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: { backgroundColor: basic_theme.darkBlue, height: 60 },
+        tabBarShowLabel: false,
+      }}
     >
       <Tab.Screen
         name="StackHome"

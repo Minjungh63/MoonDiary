@@ -9,6 +9,7 @@ import { InputBox } from '../../components/InputBox';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ModalWindow } from '../../components/ModalWindow';
 import { text } from '../../theme';
+import InitView from '../InitView';
 
 const LoginView = ({ navigation }) => {
   const [userId, setUserId] = useState('');
@@ -17,6 +18,7 @@ const LoginView = ({ navigation }) => {
   const [loginModal, setLoginModal] = useState(false);
   const [passwordModal, setPasswordModal] = useState(false);
   const [invalidLoginModal, setInvalidLoginModal] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const submitLoginData = async () => {
     //유저 로그인 시도
     if (!userId) {
@@ -58,11 +60,13 @@ const LoginView = ({ navigation }) => {
       if (value !== null) {
         autoLogin(value);
         navigation.replace('BottomTabHome');
+      } else {
+        setIsReady(true);
       }
     });
   }, []);
 
-  return (
+  return isReady ? (
     <KeyboardAwareScrollView contentContainerStyle={style.container} scrollEnabled={false}>
       <View style={style.moonContainer}>
         <Image source={require('../../assets/img/moon.png')} style={style.moon}></Image>
@@ -106,6 +110,8 @@ const LoginView = ({ navigation }) => {
         confirmText={text.backText}
       />
     </KeyboardAwareScrollView>
+  ) : (
+    <InitView />
   );
 };
 
