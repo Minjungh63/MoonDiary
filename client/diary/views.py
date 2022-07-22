@@ -56,6 +56,7 @@ class writeView(View):
         doc =temp['contents']
         emotion = run_emotion.delay(doc, did.diaryId)
         comment = run_comment.delay(doc, did.diaryId)
+        picture = run_pixray.delay(doc, did.diaryId)
 
         sdata = {
             "diaryId": did.diaryId,
@@ -63,7 +64,9 @@ class writeView(View):
             "emotion": emotion.get(),
         }
         
-        return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False},status=201) #json_dump_params : encoding error 해결
+        # js
+        return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False},status=201)
+
 
 class moodView(View):
     def get(self, request):
