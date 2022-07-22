@@ -13,7 +13,6 @@ def run_emotion(doc, dId):
     
     return emotion
     
-    
 
 @app.task
 def run_comment(doc,dId):
@@ -29,6 +28,11 @@ def run_comment(doc,dId):
 
     return comm_moon
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 448f283f25a252eb88d1d4b8058f174defe98ca5
 # @app.task
 # def run_picture(doc):
 #     emotion = get_emotion(doc)
