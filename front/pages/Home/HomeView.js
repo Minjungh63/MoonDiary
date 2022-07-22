@@ -28,7 +28,7 @@ const HomeView = ({ navigation }) => {
     getDiaryData();
   }, [userContext.userId]);
   const goWrite = () => {
-    navigation.navigate('WriteDiaryView');
+    navigation.navigate('WriteDiaryView', { diaryId: null });
   };
   return isLoading ? (
     <View style={styles.container}>

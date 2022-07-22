@@ -8,12 +8,12 @@ import { getWeatherRequire } from '../../service/SelectImage';
 import { MaterialIcons } from '@expo/vector-icons';
 import UserContext from '../../service/UserContext';
 import { ModalWindow } from '../../components/ModalWindow';
-const WriteDiaryView = ({ navigation }) => {
+const WriteDiaryView = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
-  const YEAR = new Date().getFullYear(); // 현재 연도
-  const MONTH = new Date().getMonth(); // 현재 월
-  const DAY = new Date().getDate(); // 현재 일
-  const date = YEAR + '-' + (MONTH + 1) + '-' + DAY;
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [mon, setMon] = useState(new Date().getMonth());
+  const [day, setDay] = useState(new Date().getDate());
+  const [date, setDate] = useState(year + '-' + (mon + 1) + '-' + day);
   const [weather, setWeather] = useState('sunny');
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
@@ -23,8 +23,15 @@ const WriteDiaryView = ({ navigation }) => {
   const [goAnalysisModal, setGoAnalysisModal] = useState(false);
   const [tipModal, setTipModal] = useState(false);
   useEffect(() => {
-    setTitle('');
-    setContents('');
+    if (route.params.diaryId !== null) {
+      setTitle(route.params.title);
+      setContents(route.params.contents);
+      setWeather(route.params.weather);
+      setDate(route.params.date);
+      setYear(route.params.date.slice(0, 4));
+      setMon(Number(route.params.date.slice(5, 7)) - 1);
+      setDay(route.params.date.slice(8, 10));
+    }
   }, []);
   const goAnalysis = async () => {
     const userId = userContext.userId;
@@ -47,8 +54,8 @@ const WriteDiaryView = ({ navigation }) => {
       navigation.navigate('AnalysisLoadingView', {
         userId: userId,
         diaryId: response.data.diaryId,
-        month: month[MONTH],
-        day: DAY,
+        month: month[mon],
+        day: day,
         name: userName,
         imageYN: imageYN,
         commentYN: commentYN,
@@ -75,11 +82,11 @@ const WriteDiaryView = ({ navigation }) => {
           <MaterialIcons name="home" size={35} color="white" />
         </TouchableOpacity>
         <Text style={style.date}>
-          {month[MONTH]} {DAY}
+          {month[mon]} {day}
         </Text>
       </View>
       <View style={style.weatherConatiner}>
-        <Text style={style.text}>오늘의 날씨 </Text>
+        <Text style={style.text}>{route.params.diaryId === null ? '오늘의 ' : null}날씨</Text>
         {weather_list.map((weather_txt, index) => (
           <TouchableOpacity onPress={() => setWeather(weather_txt)} style={style.weatherIMG} key={index}>
             <Image
@@ -93,7 +100,9 @@ const WriteDiaryView = ({ navigation }) => {
         <Image source={require('../../assets/img/moon.png')} style={style.smallMoon}></Image>
         <View style={style.questionBox}>
           <Text style={style.text}>{userContext.userName}님,</Text>
-          <Text style={style.text}>오늘의 하루는 어땠는지 알려주세요.</Text>
+          <Text style={style.text}>
+            {route.params.diaryId === null ? '오늘의 하루는 어땠는지 알려주세요.' : '수정할 내용을 입력하세요.'}
+          </Text>
         </View>
       </View>
       <View style={style.titleContainer}>

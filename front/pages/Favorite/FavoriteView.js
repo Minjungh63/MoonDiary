@@ -29,7 +29,7 @@ const FavoriteView = ({ navigation }) => {
   };
   useEffect(() => {
     getFavorData();
-  }, []);
+  }, [favData]);
   return (
     <View style={styles.container}>
       <View style={styles.filterView}>
