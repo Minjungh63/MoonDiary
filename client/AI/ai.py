@@ -225,6 +225,6 @@ def run_pixray(doc):
     os.chdir("drawing_diary/pixray")
     sys.path.append("drawing_diary/pixray")
     subprocess.run(
-        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=keyW", "--outdir=../output"])
+        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
     PATH = 'drawing_diary/output/output.png'
     return keyW, PATH
