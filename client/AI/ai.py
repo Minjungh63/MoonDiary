@@ -10,7 +10,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from transformers import pipeline
 from googletrans import Translator
-from textrank import KeysentenceSummarizer
+from .textrank import KeysentenceSummarizer
 from pytorch_lightning.core.lightning import LightningModule
 from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel
 
@@ -202,29 +202,3 @@ def comment_moon(keysents):
         moon_comment = max_comment
 
     return moon_comment  # database에 moon_comment 저장하는 코드 추가하기
-
-
-########### 수정 필요한 코드 ##########
-
-def run_emotion(doc):
-    emotion = get_emotion(doc)
-    comm_emo = comment_emo(emotion)
-    return emotion, comm_emo
-
-
-def run_comment(doc):
-    keyS = keySentence(doc)
-    comm_moon = comment_moon(keyS)
-    return comm_moon
-
-
-def run_pixray(doc):
-    #keyW = keyword_extract(doc)
-    #keyW = keyW.replace(' ','_')
-    keyW = 'mountain_climbing'
-    os.chdir("drawing_diary/pixray")
-    sys.path.append("drawing_diary/pixray")
-    subprocess.run(
-        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
-    PATH = 'drawing_diary/output/output.png'
-    return keyW, PATH

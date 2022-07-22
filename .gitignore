@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+client/AI/model_chp/comment_model.pth
+client/db.sqlite3
