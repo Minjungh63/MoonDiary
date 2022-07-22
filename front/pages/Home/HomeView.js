@@ -4,7 +4,6 @@ import { basic_theme, text } from '../../theme';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Calendar from '../../components/Calendar';
 import { axios_post } from '../../api/api';
-import AppLoading from 'expo-app-loading';
 import UserContext from '../../service/UserContext';
 
 const HomeView = ({ navigation }) => {
@@ -46,9 +45,7 @@ const HomeView = ({ navigation }) => {
         </Pressable>
       </View>
     </View>
-  ) : (
-    <AppLoading />
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({
