@@ -1,14 +1,11 @@
 from django.views.decorators.csrf import csrf_exempt
-import json
 from django.views import View
 from django.http import HttpResponse, JsonResponse
-from AI.tasks import run_emotion
-from AI.tasks import run_comment
-from users.models import User
+from AI.tasks import run_emotion, run_comment
 from AI.models import AI
 from diary.models import Diary
-from django.core import serializers
-from AI import ai
+from users.models import User
+import json
 
 
 class mainView(View):
@@ -31,18 +28,23 @@ class mainView(View):
         sdata = json.loads(jsonObj)
         return JsonResponse(sdata, status=200, safe=False)
 
-    def get(self, request):  # 일단 diary 테이블 데이터만 넘겨줌
+    def get(self, request):
         dId = request.GET['diaryId']
-        data = Diary.objects.get(diaryId=dId)
+        dataD = Diary.objects.get(diaryId=dId)
+        dataAI = AI.objects.get(diaryId=dId)
         sdata = {
-            "date": data.date,
-            "weather": data.weather,
-            "title": data.title,
-            "contents": data.contents,
-            "liked": data.liked
+            "diaryId": dataD.diaryId,
+            "date": dataD.date,
+            "weather": dataD.weather,
+            "title": dataD.title,
+            "contents": dataD.contents,
+            "liked": dataD.liked,
+            "image": dataAI.image,
+            "comment": dataAI.comment,
+            "emotion": dataAI.emotion
         }
         return JsonResponse(sdata, status=200)
-
+    
     def put(self, request):
         return JsonResponse()
 
