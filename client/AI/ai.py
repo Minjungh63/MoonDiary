@@ -183,7 +183,7 @@ def keySentence(doc):
 def comment_moon(keysents):
     # KoGPT2에서 제공하는 토큰나이저 사용
     model = KoGPT2Comment()
-    model.load_state_dict(torch.load("model_chp/comment_model.pth"))
+    model.load_state_dict(torch.load("AI/model_chp/comment_model.pth"))
     model.eval()
 
     moon_comment = ''
@@ -202,4 +202,3 @@ def comment_moon(keysents):
         moon_comment = max_comment
 
     return moon_comment  # database에 moon_comment 저장하는 코드 추가하기
-
