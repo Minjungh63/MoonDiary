@@ -23,7 +23,6 @@ def run_comment(doc, dId):
     print(keyS, "keyS")
     comm_moon = comment_moon(keyS)
     print(comm_moon, "comm_moon")
-
     data = AI.objects.get(diaryId=dId)
     print(data)
     data.comment = comm_moon
@@ -40,6 +39,6 @@ def run_pixray(doc):
     os.chdir("drawing_diary/pixray")
     sys.path.append("drawing_diary/pixray")
     subprocess.run(
-        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
+        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=keyW", "--outdir=../output"])
     PATH = 'drawing_diary/output/output.png'
     return keyW, PATH
