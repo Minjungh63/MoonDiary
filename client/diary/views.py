@@ -2,7 +2,7 @@ from django.views import View
 from django.http import HttpResponse, JsonResponse
 from AI.tasks import run_emotion, run_comment
 from AI.models import AI
-from client.AI.tasks import run_pixray
+from AI.tasks import run_pixray
 from diary.models import Diary
 from users.models import User
 import json
@@ -95,9 +95,10 @@ class moodView(View):
             aiModel.comment = sdata['comment']
 
         if(commentYN == 1):
-            image = run_pixray.delay(doc, dId.diaryId)
-            sdata['image'] = image.get()
+            keyW, path = run_pixray.delay(doc, dId.diaryId)
+            sdata['image'] = path.get()
             aiModel.image = sdata['image']
+            print(keyW, path)
 
         aiModel.save()
         
