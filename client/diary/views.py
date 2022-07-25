@@ -1,14 +1,11 @@
 from django.views.decorators.csrf import csrf_exempt
-import json
 from django.views import View
 from django.http import HttpResponse, JsonResponse
-from AI.tasks import run_emotion
-from AI.tasks import run_comment
-from users.models import User
+from AI.tasks import run_emotion, run_comment
 from AI.models import AI
 from diary.models import Diary
-from django.core import serializers
-from AI import ai
+from users.models import User
+import json
 
 
 class mainView(View):
