@@ -1,4 +1,7 @@
 import numpy as np
+import os
+import sys
+import subprocess
 from AI.ai import comment_moon, get_emotion, keySentence, keyword_extract
 from AI.models import AI
 from diary.models import Diary
@@ -40,4 +43,3 @@ def run_pixray(doc):
         ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
     PATH = 'drawing_diary/output/output.png'
     return keyW, PATH
-
