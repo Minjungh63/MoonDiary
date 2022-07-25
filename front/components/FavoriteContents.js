@@ -4,9 +4,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import { getEmotionRequire, getWeatherRequire } from '../service/SelectImage';
 import { axios_post } from '../api/api';
 
-export default function FavoriteContents({ diaryId, date, title, weather, emotion, comment, navigation }) {
+export default function FavoriteContents({ diaryId, date, title, weather, emotion, comment, navigation, func }) {
   const cancle = async (id) => {
     await axios_post('favorite', { diaryId: id, liked: false });
+    func();
   };
   const cancleFav = (id) => {
     Alert.alert('즐겨찾기 해제', '즐겨찾기 해제하시겠습니까?', [

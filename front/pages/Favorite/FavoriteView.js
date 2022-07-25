@@ -6,11 +6,13 @@ import { axios_get } from '../../api/api';
 import styles from './styles';
 import FilterModal from './FilterModal';
 import UserContext from '../../service/UserContext';
+import { useIsFocused } from '@react-navigation/native';
 
 const FavoriteView = ({ navigation }) => {
   const userId = useContext(UserContext).userId;
   const [modalVisible, setModalVisible] = useState(false);
   const [favData, setFavData] = useState([]);
+  const isFocused = useIsFocused();
   const openFilter = () => {
     setModalVisible(true);
   };
@@ -28,8 +30,10 @@ const FavoriteView = ({ navigation }) => {
     }
   };
   useEffect(() => {
-    getFavorData();
-  }, [favData]);
+    if (isFocused) {
+      getFavorData();
+    }
+  }, [isFocused]);
   return (
     <View style={styles.container}>
       <View style={styles.filterView}>
@@ -49,6 +53,7 @@ const FavoriteView = ({ navigation }) => {
               emotion={obj.emotion}
               comment={obj.comment}
               navigation={navigation}
+              func={getFavorData}
             />
           );
         })}
