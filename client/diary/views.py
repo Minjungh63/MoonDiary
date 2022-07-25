@@ -2,6 +2,7 @@ from django.views import View
 from django.http import HttpResponse, JsonResponse
 from AI.tasks import run_emotion, run_comment
 from AI.models import AI
+from client.AI.tasks import run_pixray
 from diary.models import Diary
 from users.models import User
 import json
@@ -54,17 +55,13 @@ class writeView(View):
         uId = temp['userId']
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
-        did = Diary.objects.filter(userId=uId).last()
-
-        print(did.diaryId)
+        dId = Diary.objects.filter(userId=uId).last()
         doc = temp['contents']
-        emotion = run_emotion.delay(doc, did.diaryId)
-        comment = run_comment.delay(doc, did.diaryId)
-        picture = run_pixray.delay(doc, did.diaryId)
+        
+        emotion = run_emotion.delay(doc, dId.diaryId)
 
         sdata = {
-            "diaryId": did.diaryId,
-            "comment": comment.get(),
+            "diaryId": dId.diaryId,
             "emotion": emotion.get(),
         }
 
@@ -73,15 +70,40 @@ class writeView(View):
 
 
 class moodView(View):
-
     def post(self, request):
         data = json.loads(request.body)
         dId = data['diaryId']
         semo = data['emotion']
-        newemo = AI.objects.get(diaryId=dId)
-        newemo.emotion = semo
-        newemo.save()
-        return HttpResponse(status=201)
+        uId = data['userId']
+        aiModel = AI.objects.get(diaryId=dId)
+        aiModel.emotion = semo
+
+        doc = Diary.objects.get(diaryId=dId).contents
+        userModel = User.objects.get(userId=uId)
+
+        emotion = aiModel.emotion
+        imageYN = userModel.imageYN
+        commentYN = userModel.commentYN
+
+        sdata = {
+            "emotion": emotion,
+        }
+
+        if(imageYN == 1):
+            comment = run_comment.delay(doc, dId.diaryId)
+            sdata['comment'] = comment.get()
+            aiModel.comment = sdata['comment']
+
+        if(commentYN == 1):
+            image = run_pixray.delay(doc, dId.diaryId)
+            sdata['image'] = image.get()
+            aiModel.image = sdata['image']
+
+        aiModel.save()
+        
+        print(sdata['emotion'], sdata['comment'], sdata['image'])
+        
+        return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
 
 
 class likeView(View):  # 즐겨찾기 페이지
