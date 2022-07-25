@@ -1,4 +1,3 @@
-from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from AI.tasks import run_emotion, run_comment
@@ -74,13 +73,6 @@ class writeView(View):
 
 
 class moodView(View):
-    def get(self, request):
-        dId = request.GET['diaryId']
-        emotion = AI.objects.get(diaryId=dId)
-        sdata = {
-            "emotions": emotion.emotion
-        }
-        return JsonResponse(sdata, status=200)
 
     def post(self, request):
         data = json.loads(request.body)
@@ -121,15 +113,3 @@ class likeView(View):  # 즐겨찾기 페이지
         adata.liked = dlike
         adata.save()
         return JsonResponse({"message": "update success"}, status=201)
-
-
-class resultView(View):
-    def get(self, request):
-        dId = request.GET['diaryId']
-        if AI.objects.only('image').get(diaryId=dId) == NULL:
-            return JsonResponse({"message: not yet"}, status=200)
-
-        else:
-            data = AI.objects.get(diaryId=dId)
-            jsonObj = json.dumps(data)
-            return JsonResponse(jsonObj, status=200)
