@@ -6,9 +6,10 @@ import { axios_post } from '../api/api';
 import { useContext } from 'react';
 import UserContext from '../service/UserContext';
 import styled from 'styled-components/native';
-export default function FavoriteContents({ diaryId, date, title, weather, emotion, comment, navigation }) {
+export default function FavoriteContents({ diaryId, date, title, weather, emotion, comment, navigation, func }) {
   const cancle = async (id) => {
     await axios_post('favorite', { diaryId: id, liked: false });
+    func();
   };
   const cancleFav = (id) => {
     Alert.alert('즐겨찾기 해제', '즐겨찾기 해제하시겠습니까?', [
