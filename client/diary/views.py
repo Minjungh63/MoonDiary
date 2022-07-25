@@ -28,18 +28,23 @@ class mainView(View):
         sdata = json.loads(jsonObj)
         return JsonResponse(sdata, status=200, safe=False)
 
-    def get(self, request):  # 일단 diary 테이블 데이터만 넘겨줌
+    def get(self, request):
         dId = request.GET['diaryId']
-        data = Diary.objects.get(diaryId=dId)
+        dataD = Diary.objects.get(diaryId=dId)
+        dataAI = AI.objects.get(diaryId=dId)
         sdata = {
-            "date": data.date,
-            "weather": data.weather,
-            "title": data.title,
-            "contents": data.contents,
-            "liked": data.liked
+            "diaryId": dataD.diaryId,
+            "date": dataD.date,
+            "weather": dataD.weather,
+            "title": dataD.title,
+            "contents": dataD.contents,
+            "liked": dataD.liked,
+            "image": dataAI.image,
+            "comment": dataAI.comment,
+            "emotion": dataAI.emotion
         }
         return JsonResponse(sdata, status=200)
-
+    
     def put(self, request):
         return JsonResponse()
 
