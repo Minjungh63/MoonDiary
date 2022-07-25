@@ -77,6 +77,7 @@ class moodView(View):
         uId = data['userId']
         aiModel = AI.objects.get(diaryId=dId)
         aiModel.emotion = semo
+        aiModel.save()
 
         doc = Diary.objects.get(diaryId=dId).contents
         userModel = User.objects.get(userId=uId)
@@ -89,18 +90,21 @@ class moodView(View):
             "emotion": emotion,
         }
 
-        if(imageYN == 1):
-            comment = run_comment.delay(doc, dId.diaryId)
-            sdata['comment'] = comment.get()
-            aiModel.comment = sdata['comment']
-
-        if(commentYN == 1):
-            keyW, path = run_pixray.delay(doc, dId.diaryId)
+        if(imageYN == 1 and commentYN == 1):
+            keyW, path = run_pixray.delay(doc, dId)
+            comment = run_comment.delay(doc, dId)
             sdata['image'] = path.get()
-            aiModel.image = sdata['image']
-            print(keyW, path)
+            sdata['comment'] = comment.get()
+            print(keyW, path, comment, 'test')
+        
+        elif(imageYN == 0 and commentYN == 1):
+            comment = run_comment.delay(doc, dId)
+            sdata['comment'] = comment.get()
 
-        aiModel.save()
+        elif(imageYN == 1 and commentYN == 0):
+            keyW, path = run_pixray.delay(doc, dId)
+            sdata['image'] = path.get()
+
         
         print(sdata['emotion'], sdata['comment'], sdata['image'])
         
