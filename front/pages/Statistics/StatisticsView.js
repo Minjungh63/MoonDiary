@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
 import { basic_theme } from '../../theme';
 import { getEmotionRequire } from '../../service/SelectImage';
 import WritingRate from '../../components/WritingRate';
@@ -7,6 +6,7 @@ import EmotionRate from '../../components/EmotionRate';
 import EmotionTable from '../../components/EmotionTable';
 import { axios_get } from '../../api/api';
 import UserContext from '../../service/UserContext';
+import styled from 'styled-components/native';
 
 const StatisticsView = () => {
   useEffect(() => {
@@ -17,7 +17,8 @@ const StatisticsView = () => {
       }
     })();
   }, []);
-  const userId = useContext(UserContext).userId;
+  const userContext = useContext(UserContext);
+  const userId = userContext.userId;
   const [emotion_day, setEmotion_day] = useState([]);
   const attend_day = emotion_day.map((emotion) => emotion.day).reduce((prev, curr) => prev + curr, 0); // 작성 일 수
   const getDay = (id) => {
@@ -75,59 +76,40 @@ const StatisticsView = () => {
   ];
   emotion_list.sort((a, b) => b.day - a.day); // emotion이 나온 일수를 기준으로 내림차순 정렬
   return (
-    <View style={styles.container}>
-      <View style={styles.WritingRate}>
-        <Text style={styles.text}>다이어리 작성 비율</Text>
-        <WritingRate attend_day={attend_day} />
-      </View>
-      <View style={styles.EmotionRate}>
-        <Text style={styles.text}>기분 비율</Text>
-        <EmotionRate attend_day={attend_day} emotion_list={emotion_list} />
-      </View>
-      <View style={styles.EmotionTable}>
-        <Text style={styles.text}>기분 순위</Text>
-        <Text style={styles.subtext}>이번 달에 자주 경험한 기분 순위를 볼 수 있어요.</Text>
-        <EmotionTable attend_day={attend_day} emotion_list={emotion_list} />
-      </View>
-    </View>
+    <Statistics>
+      <Component flex={0.55}>
+        <T font={userContext.userFont}>다이어리 작성 비율</T>
+        <WritingRate attend_day={attend_day} font={userContext.userFont} />
+      </Component>
+      <Component flex={0.15}>
+        <T font={userContext.userFont}>기분 비율</T>
+        <EmotionRate attend_day={attend_day} emotion_list={emotion_list} font={userContext.userFont} />
+      </Component>
+      <Component flex={0.3}>
+        <T font={userContext.userFont}>기분 순위</T>
+        <T font={userContext.userFont} subText={true}>
+          이번 달에 자주 경험한 기분 순위를 볼 수 있어요.
+        </T>
+        <EmotionTable attend_day={attend_day} emotion_list={emotion_list} font={userContext.userFont} />
+      </Component>
+    </Statistics>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: basic_theme.bgColor,
-    padding: 10,
-    flex: 1,
-  },
-  WritingRate: {
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 0.55,
-  },
-  EmotionRate: {
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 0.15,
-  },
-  EmotionTable: {
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 0.3,
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-  },
-  subtext: {
-    fontSize: 13,
-    paddingBottom: 15,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-  },
-});
+const T = styled.Text`
+  font-family: ${(props) => props.font};
+  color: white;
+  font-size: ${(props) => (props.subText && 13) || 20}px;
+  padding-bottom: ${(props) => (props.subText && 15) || 5}px;
+`;
+const Component = styled.View`
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  flex: ${(props) => props.flex};
+`;
+const Statistics = styled.View`
+  background-color: ${basic_theme.bgColor};
+  padding: 10px;
+  flex: 1;
+`;
 export default StatisticsView;

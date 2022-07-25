@@ -1,103 +1,148 @@
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme } from '../../theme';
-import { useEffect, useState } from 'react';
-import Modal from 'react-native-modal';
-import { axios_get, axios_post } from '../../api/api';
+import { useEffect, useState, useContext } from 'react';
+import { axios_post } from '../../api/api';
 import { getEmotionRequire } from '../../service/SelectImage';
+import UserContext from '../../service/UserContext';
+import styled from 'styled-components/native';
+import { ModalWindow } from '../../components/ModalWindow';
 
 const AnalysisLoadingView = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [emotions, setEmotions] = useState([]);
   const [selectedEmotion, setSelectedEmotion] = useState();
-
+  const [severalEmotionModal, setSeveralEmotionModal] = useState(false);
+  const userContext = useContext(UserContext);
   useEffect(() => {
     (async () => {
-      const diaryId = route.params.diaryId;
-      const response = await axios_get('selectEmotion', { diaryId });
-      if (response.status == 200) {
-        if (response.data.emotions.length == 1) {
-          submitEmotionData(emotions[0]);
-          return;
+      try {
+        const response = await axios_post('write', {
+          userId: route.params.userId,
+          date: route.params.date,
+          weather: route.params.weather,
+          title: route.params.title,
+          contents: route.params.contents,
+          imageYN: route.params.imageYN,
+          commentYN: route.params.commentYN,
+        });
+        if (response.status === 201) {
+          setIsLoading(false);
+          if (response.data.emotion.length === 1) {
+            // 감정 분석이 완료됨
+            setSelectedEmotion(response.data.emotion[0]);
+            getResult();
+          } else {
+            // 감정 선택 모달창 띄우기
+            setEmotions([...response.data.emotion]);
+            setSeveralEmotionModal(true);
+          }
         }
-        //감정이 여러개일때
+      } catch (e) {
         setIsLoading(false);
-        setEmotions([...response.data.emotions]); //감정 받아오기
+        setError(true);
       }
     })();
   }, []);
-
-  const submitEmotionData = async (emotion) => {
-    setSelectedEmotion(emotion);
-    const response = await axios_post('selectEmotion', {
-      userId: route.params.userId,
-      diaryId: route.params.diaryId,
-      emotion: emotion,
-    });
-    if (response.status == 201) {
-      navigation.replace('AnalysisResultView', {
-        diaryId: route.paramsdiaryId,
-        userId: route.params.userId,
+  const getResult = async () => {
+    if (!route.params.imageYN && !route.params.commentYN) {
+      // imageYN, commentYN이 모두 false => 결과 분석 페이지로 이동
+      navigation.navigate('AnalysisResultView', {
+        emotion: selectedEmotion,
+        comment: null,
+        drawingDiary: null,
       });
+    } else {
+      const responseResult = await axios_post('selectEmotion', {
+        userId: route.params.userId,
+        diaryId: response.data.diaryId,
+        emotion: response.data.emotion[0],
+      });
+      if (responseResult.status === 201) {
+        // 성공 toast 띄우기
+        // toast를 누르면 AnalysisResultView 페이지로 이동하기
+        // AnalysisResultView 페이지로 이동시, props로 emotion, comment, drawingDiary 넘겨주기
+      } else {
+        // 실패 toast 띄우기
+      }
     }
   };
 
   return (
     <View style={style.container}>
-      <Modal backdropOpacity={0} isVisible={!isLoading} style={style.modalContainer}>
-        <View style={style.modalBox}>
-          <Text style={style.text}>여러개의 감정이 느껴지시네요!</Text>
-          <Text style={style.text}>오늘을 대표하는 감정 1개를 선택해주세요.</Text>
+      <ModalWindow
+        open={severalEmotionModal}
+        okPress={getResult}
+        text1="여러개의 감정이 느껴지시네요!"
+        text2="오늘을 대표하는 감정 1개를 선택해주세요."
+        imageList={
           <View style={style.emotionContainer}>
             {emotions.map((emotion) => (
               <TouchableOpacity onPress={() => setSelectedEmotion(emotion)} style={style.emotionBox}>
-                <Image
-                  source={getEmotionRequire(emotion)}
-                  style={selectedEmotion === emotion ? null : style.emotion}
-                ></Image>
+                <Image source={getEmotionRequire(emotion)} style={selectedEmotion === emotion && style.emotion}></Image>
               </TouchableOpacity>
             ))}
           </View>
-        </View>
-        <TouchableOpacity onPress={() => submitEmotionData(selectedEmotion)}>
-          <Text style={style.text}>OK</Text>
-        </TouchableOpacity>
-      </Modal>
+        }
+        confirmText="선택"
+        font={userContext.userFont}
+      />
       <View style={style.dateBox}>
-        <Text style={dateStyle}>
+        <T font={userContext.userFont} size={22}>
           {route.params.month} {route.params.day}
-        </Text>
+        </T>
       </View>
       <View style={style.commentContainer}>
-        <Text style={style.text}>{route.params.name}님,</Text>
-        <Text style={style.text}>{'오늘 하루도 수고 많았어요'} </Text>
+        <T font={userContext.userFont} size={20}>
+          {route.params.name}님,
+        </T>
+        <T font={userContext.userFont} size={20} paddingTop={3}>
+          {'오늘 하루도 수고 많았어요'}{' '}
+        </T>
       </View>
       <View style={style.loadingContainer}>
-        <Image source={require('../../assets/img/loading.gif')} style={style.loadingImage} />
+        <Image
+          source={isLoading ? require('../../assets/img/loading.gif') : require('../../assets/img/loadingEnd.png')}
+          style={style.loadingImage}
+        />
       </View>
       {isLoading ? (
         <View style={style.loadingCommentContainer}>
-          <Text style={style.text}>{'AI가 일기를 분석중입니다.'}</Text>
+          <T font={userContext.userFont} size={20}>
+            {'AI가 일기를 분석중입니다.'}
+          </T>
         </View>
       ) : (
-        <View style={style.loadingCommentContainer}>
-          <Text style={style.text}>{'분석이 완료되었습니다'}</Text>
-        </View>
+        <>
+          <View style={style.loadingCommentContainer}>
+            <T font={userContext.userFont} size={20}>
+              {error ? '에러가 발생하였습니다.' : '분석이 완료되었습니다'}
+            </T>
+          </View>
+          <View style={style.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => (error ? navigation.goBack() : navigation.navigate('BottomTabHome'))}
+              activeOpacity={0.7}
+              style={style.buttonBox}
+            >
+              <T font={userContext.userFont} size={14}>
+                {error ? '작성 페이지로 돌아가기' : '홈에서 결과 기다리기'}
+              </T>
+            </TouchableOpacity>
+          </View>
+        </>
       )}
-
-      <View style={style.buttonContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('BottomTabHome')}
-          activeOpacity={0.7}
-          style={style.buttonBox}
-        >
-          <Text style={style.smallText}>{'홈에서 결과 기다리기'}</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
-
+const T = styled.Text`
+  font-size: ${(props) => props.size}px;
+  font-family: ${(props) => props.font};
+  color: white;
+  padding-top: ${(props) => props.paddingTop || 0}px;
+  margin-vertical: 2px;
+`;
 const style = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
@@ -184,7 +229,7 @@ const style = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: 15,
   },
-  emotion: { opacity: 0.5 },
+  emotion: { opacity: 0.5, resizeMode: 'contains' },
   selectedEmotion: {},
 
   emotionButtonBox: {},

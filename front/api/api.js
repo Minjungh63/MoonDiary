@@ -10,6 +10,11 @@ const subUrl = {
   diary: '/diary/',
   write: '/diary/write',
   statistics: '/statistics',
+  font: '/setting/font',
+  drawingDiary: '/setting/imageYN',
+  comment: '/setting/commentYN',
+  deleteDiary: '/setting/deleteAllDiary',
+  deleteAccount: '/setting/deleteAccount',
 };
 
 //url은 string 타입 sendData는 json 형식으로 받음

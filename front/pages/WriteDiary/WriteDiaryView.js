@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TextInput } from 'react-native';
+import { View, StyleSheet, Image, Dimensions, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { basic_theme, month, weather_list, text } from '../../theme';
-import { axios_post } from '../../api/api';
 import { getWeatherRequire } from '../../service/SelectImage';
 import { MaterialIcons } from '@expo/vector-icons';
 import UserContext from '../../service/UserContext';
 import { ModalWindow } from '../../components/ModalWindow';
+import styled, { css } from 'styled-components/native';
+
 const WriteDiaryView = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -21,6 +22,7 @@ const WriteDiaryView = ({ navigation, route }) => {
   const [contentModal, setContentModal] = useState(false);
   const [cancelModal, setCancelModal] = useState(false);
   const [goAnalysisModal, setGoAnalysisModal] = useState(false);
+  const [correctionModal, setCorrectionModal] = useState(false);
   const [tipModal, setTipModal] = useState(false);
   useEffect(() => {
     if (route.params.diaryId !== null) {
@@ -29,8 +31,8 @@ const WriteDiaryView = ({ navigation, route }) => {
       setWeather(route.params.weather);
       setDate(route.params.date);
       setYear(route.params.date.slice(0, 4));
-      setMon(Number(route.params.date.slice(5, 7)) - 1);
-      setDay(route.params.date.slice(8, 10));
+      setMon(Number(route.params.date.slice(6, 8)) - 1);
+      setDay(route.params.date.slice(10, 12));
     }
   }, []);
   const goAnalysis = async () => {
@@ -41,7 +43,7 @@ const WriteDiaryView = ({ navigation, route }) => {
     setTitle(title.trim());
     setContents(contents.trim());
     setGoAnalysisModal(false);
-    const response = await axios_post('write', {
+    navigation.navigate('AnalysisLoadingView', {
       userId,
       date,
       weather,
@@ -49,18 +51,14 @@ const WriteDiaryView = ({ navigation, route }) => {
       contents,
       imageYN,
       commentYN,
+      name: userName,
+      month: month[mon],
+      day,
     });
-    if (response.status == 201) {
-      navigation.navigate('AnalysisLoadingView', {
-        userId: userId,
-        diaryId: response.data.diaryId,
-        month: month[mon],
-        day: day,
-        name: userName,
-        imageYN: imageYN,
-        commentYN: commentYN,
-      });
-    }
+  };
+  const correctDiary = () => {
+    setCorrectionModal(false);
+    navigation.goBack();
   };
   const submitDiaryData = () => {
     //제목을 작성하지 않은 경우
@@ -71,7 +69,7 @@ const WriteDiaryView = ({ navigation, route }) => {
     else if (contents.split('.' || '?' || '!').filter((sents) => sents.trim() !== '').length < 3) {
       setContentModal(true);
     } else {
-      setGoAnalysisModal(true);
+      route.params.diaryId ? setCorrectionModal(true) : setGoAnalysisModal(true);
     }
   };
 
@@ -81,12 +79,14 @@ const WriteDiaryView = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="home" size={35} color="white" />
         </TouchableOpacity>
-        <Text style={style.date}>
+        <T font={userContext.userFont} size={22} date={true}>
           {month[mon]} {day}
-        </Text>
+        </T>
       </View>
       <View style={style.weatherConatiner}>
-        <Text style={style.text}>{route.params.diaryId === null ? '오늘의 ' : null}날씨</Text>
+        <T font={userContext.userFont} size={17}>
+          {route.params.diaryId === null ? '오늘의 ' : null}날씨
+        </T>
         {weather_list.map((weather_txt, index) => (
           <TouchableOpacity onPress={() => setWeather(weather_txt)} style={style.weatherIMG} key={index}>
             <Image
@@ -99,19 +99,23 @@ const WriteDiaryView = ({ navigation, route }) => {
       <View style={style.questionContainer}>
         <Image source={require('../../assets/img/moon.png')} style={style.smallMoon}></Image>
         <View style={style.questionBox}>
-          <Text style={style.text}>{userContext.userName}님,</Text>
-          <Text style={style.text}>
+          <T font={userContext.userFont} size={17}>
+            {userContext.userName}님,
+          </T>
+          <T font={userContext.userFont} size={17} paddingTop={2}>
             {route.params.diaryId === null ? '오늘의 하루는 어땠는지 알려주세요.' : '수정할 내용을 입력하세요.'}
-          </Text>
+          </T>
         </View>
       </View>
       <View style={style.titleContainer}>
-        <Text style={style.text}>제목</Text>
+        <T font={userContext.userFont} size={17}>
+          제목
+        </T>
         <TextInput
           value={title}
           placeholder="제목을 입력해주세요"
           onChangeText={setTitle}
-          style={style.titleInputBox}
+          style={[style.titleInputBox, { fontFamily: userContext.userFont }]}
         ></TextInput>
       </View>
       <TextInput
@@ -119,14 +123,18 @@ const WriteDiaryView = ({ navigation, route }) => {
         multiline={true}
         placeholder={'내용을 작성해주세요'}
         onChangeText={setContents}
-        style={style.contentContainer}
+        style={[style.contentContainer, { fontFamily: userContext.userFont }]}
       ></TextInput>
       <View style={style.buttonContainer}>
         <TouchableOpacity onPress={() => setCancelModal(true)} activeOpacity={0.7} style={style.button1}>
-          <Text style={style.buttonText}>{'작성 취소'}</Text>
+          <T font={userContext.userFont} size={14}>
+            {route.params.diaryId ? '수정 취소' : '작성 취소'}
+          </T>
         </TouchableOpacity>
         <TouchableOpacity onPress={submitDiaryData} activeOpacity={0.7} style={style.button2}>
-          <Text style={style.buttonText}>{'작성 완료'}</Text>
+          <T font={userContext.userFont} size={14}>
+            {route.params.diaryId ? '수정 완료' : '작성 완료'}
+          </T>
         </TouchableOpacity>
       </View>
       <ModalWindow
@@ -135,6 +143,7 @@ const WriteDiaryView = ({ navigation, route }) => {
         text1="앗! 아직 제목이 작성되지 않았네요."
         text2="제목을 작성해주세요."
         confirmText={text.backText}
+        font={userContext.userFont}
       />
       <ModalWindow
         open={contentModal}
@@ -147,15 +156,17 @@ const WriteDiaryView = ({ navigation, route }) => {
         text2="제가 일기를 분석할 수 있어요."
         confirmText={text.backText}
         cancelText="Tip"
+        font={userContext.userFont}
       />
       <ModalWindow
         open={cancelModal}
         okPress={() => navigation.goBack()}
         cancelPress={() => setCancelModal(false)}
-        text1="작성하신 일기가 모두 사라집니다."
+        text1="변경사항이 저장되지 않습니다."
         text2="작성을 취소하시겠습니까?"
         confirmText={text.confirmText}
         cancelText={text.deniedText}
+        font={userContext.userFont}
       />
       <ModalWindow
         open={goAnalysisModal}
@@ -164,6 +175,7 @@ const WriteDiaryView = ({ navigation, route }) => {
         text2="일기를 모두 작성하셨나요?"
         confirmText={text.confirmText}
         cancelText={text.deniedText}
+        font={userContext.userFont}
       />
       <ModalWindow
         open={tipModal}
@@ -172,10 +184,31 @@ const WriteDiaryView = ({ navigation, route }) => {
         text1="문장의 끝에 . 또는 ! 또는 ?을 적으면"
         text2="문장으로 인식됩니다."
         confirmText={text.backText}
+        font={userContext.userFont}
+      />
+      <ModalWindow
+        open={correctionModal}
+        okPress={correctDiary}
+        text2="일기가 수정되었습니다."
+        confirmText={text.backText}
+        font={userContext.userFont}
       />
     </KeyboardAwareScrollView>
   );
 };
+const T = styled.Text`
+  font-size: ${(props) => props.size};
+  font-family: ${(props) => props.font};
+  color: white;
+  padding-top: ${(props) => props.paddingTop || 0};
+  ${(props) =>
+    props.date &&
+    css`
+      align-self: center;
+      border-bottom-width: 1;
+      border-bottom-color: #fff;
+    `};
+`;
 const style = StyleSheet.create({
   container: {
     flex: 1,
@@ -212,7 +245,6 @@ const style = StyleSheet.create({
     width: Dimensions.get('window').width - 50,
     textAlignVertical: 'top',
     color: basic_theme.darkBlue,
-    fontFamily: 'Gowun_Batang',
     fontSize: 17,
     borderWidth: 1,
     borderColor: basic_theme.blue,
@@ -254,11 +286,8 @@ const style = StyleSheet.create({
   },
   date: {
     alignSelf: 'center',
-    fontSize: 22,
     borderBottomWidth: 1,
     borderBottomColor: '#fff',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
   },
   weatherIMG: {
     width: 40,
@@ -290,7 +319,6 @@ const style = StyleSheet.create({
     color: '#fff',
     borderBottomColor: '#fff',
     borderBottomWidth: 1,
-    fontFamily: 'Gowun_Batang',
     flex: 1,
   },
 });

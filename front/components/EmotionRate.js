@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import styled from 'styled-components/native';
+
 class EmotionRate extends Component {
   render() {
     {
       /*attend_day: 작성 일 수, emotion_list: emotion별 정보가 담긴 list*/
     }
-    const { attend_day, emotion_list } = this.props;
+    const { attend_day, emotion_list, font } = this.props;
     return (
       <View>
         {/*barChart*/}
@@ -35,7 +37,7 @@ class EmotionRate extends Component {
                   {/*barChart에서 해당 emotion에 해당하는 색*/}
                   <View style={[styles.RateColor, { backgroundColor: emotion.color }]}></View>
                   {/*emotion의 이름*/}
-                  <Text style={styles.RateText}>{emotion.text}</Text>
+                  <T font={font}>{emotion.text}</T>
                 </View>
               )
           )}
@@ -44,6 +46,10 @@ class EmotionRate extends Component {
     );
   }
 }
+const T = styled.Text`
+  font-family: ${(props) => props.font};
+  padding-right: 5px;
+`;
 const styles = StyleSheet.create({
   EmotionRate: {
     paddingTop: 15,
@@ -53,7 +59,6 @@ const styles = StyleSheet.create({
   },
   emptyRate: {
     alignSelf: 'center',
-    fontFamily: 'Gowun_Batang',
     fontSize: 15,
     color: 'black',
     textAlign: 'center',
@@ -63,7 +68,6 @@ const styles = StyleSheet.create({
   },
   Rate: {
     alignSelf: 'center',
-    fontFamily: 'Gowun_Batang',
     fontSize: 15,
     color: 'black',
     textAlign: 'center',
@@ -81,10 +85,6 @@ const styles = StyleSheet.create({
   RateColor: {
     height: 10,
     width: 10,
-  },
-  RateText: {
-    paddingRight: 5,
-    fontFamily: 'Gowun_Batang',
   },
 });
 export default EmotionRate;
