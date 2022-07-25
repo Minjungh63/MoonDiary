@@ -247,7 +247,7 @@ const SettingBox = styled.View`
   border-radius: 12;
   width: 100%;
   border-color: ${basic_theme.fgColor};
-  border-width: 2;
+  border-width: 2px;
   background-color: rgba(222, 232, 255, 0.25);
   align-items: stretch;
   flex: ${(props) => props.flex || 1};
@@ -267,7 +267,7 @@ const SettingItem = styled.View`
   ${(props) =>
     props.first &&
     css`
-      border-bottom-width: 2;
+      border-bottom-width: 2px;
       border-color: #dee8ff;
     `}
 `;

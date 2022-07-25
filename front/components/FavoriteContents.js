@@ -62,17 +62,15 @@ const styles = StyleSheet.create({
     backgroundColor: basic_theme.fgColor,
     margin: 8,
   },
-  text: {
-    fontFamily: 'Gowun_Batang',
-    fontSize: 16,
-  },
   line: {
     flexDirection: 'row',
     margin: 6,
+    alignItems: 'center',
   },
   image: {
     width: 25,
     height: 25,
     marginHorizontal: 6,
+    resizeMode: 'stretch',
   },
 });
