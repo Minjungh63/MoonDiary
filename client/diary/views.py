@@ -90,12 +90,12 @@ class moodView(View):
         }
 
         if(imageYN == 1):
-            comment = run_comment.delay(doc, dId.diaryId)
+            comment = run_comment.delay(doc, dId)
             sdata['comment'] = comment.get()
             aiModel.comment = sdata['comment']
 
         if(commentYN == 1):
-            keyW, path = run_pixray.delay(doc, dId.diaryId)
+            keyW, path = run_pixray.delay(doc, dId)
             sdata['image'] = path.get()
             aiModel.image = sdata['image']
             print(keyW, path)
