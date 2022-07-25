@@ -90,11 +90,13 @@ class moodView(View):
             "emotion": emotion,
         }
 
+        print(imageYN, commentYN)
+
         if(imageYN == 1 and commentYN == 1):
-            keyW, path = run_pixray.delay(doc, dId)
             comment = run_comment.delay(doc, dId)
-            sdata['image'] = path.get()
+            keyW, path = run_pixray.delay(doc, dId)
             sdata['comment'] = comment.get()
+            sdata['image'] = path.get()
             print(keyW, path, comment, 'test')
         
         elif(imageYN == 0 and commentYN == 1):
