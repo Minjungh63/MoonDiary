@@ -35,11 +35,10 @@ def run_comment(doc, dId):
 def run_pixray(doc, dId):
     keyW = keyword_extract(doc)
     keyW = keyW.replace(' ', '_')
-    # keyW = 'mountain_climbing'
     os.chdir("drawing_diary/pixray")
     sys.path.append("drawing_diary/pixray")
     subprocess.run(
-        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=keyW", "--outdir=../output"])
+        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
     PATH = 'drawing_diary/output/output.png'
     data = AI.objects.get(diaryId=dId)
     data.image = PATH
