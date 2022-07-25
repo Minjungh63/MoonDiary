@@ -197,10 +197,10 @@ const WriteDiaryView = ({ navigation, route }) => {
   );
 };
 const T = styled.Text`
-  font-size: ${(props) => props.size};
+  font-size: ${(props) => props.size}px;
   font-family: ${(props) => props.font};
   color: white;
-  padding-top: ${(props) => props.paddingTop || 0};
+  padding-top: ${(props) => props.paddingTop || 0}px;
   ${(props) =>
     props.date &&
     css`
