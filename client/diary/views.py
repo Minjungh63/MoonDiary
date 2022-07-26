@@ -1,9 +1,8 @@
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from AI.ai import get_emotion
-from AI.tasks import run_emotion, run_comment
+from AI.tasks import run_comment, run_pixray
 from AI.models import AI
-from AI.tasks import run_pixray
 from diary.models import Diary
 from users.models import User
 import json
@@ -67,10 +66,7 @@ class writeView(View):
             "diaryId": dId,
             "emotion": emotion
         }
-        # 비동기처리 X
 
-
-        # js
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
 
 

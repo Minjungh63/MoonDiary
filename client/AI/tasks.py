@@ -2,7 +2,7 @@ import numpy as np
 import os
 import sys
 import subprocess
-from AI.ai import comment_moon, get_emotion, keySentence, keyword_extract
+from AI.ai import comment_moon, keySentence, keyword_extract
 from AI.models import AI
 from diary.models import Diary
 from config.celery import app
