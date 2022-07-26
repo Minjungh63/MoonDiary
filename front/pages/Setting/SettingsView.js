@@ -25,7 +25,7 @@ const SettingsView = ({ navigation }) => {
     setIsDrawingEnabled((previousState) => !previousState);
     userContext.setImageYN(isDrawingEnabled);
     async () => {
-      await axios_post('drawingDiary', { userId, imageYN: isDrawingEnabled });
+      await axios_post('setting', { userId, imageYN: isDrawingEnabled });
     };
   };
   const commenttoggleSwitch = () => {
@@ -33,14 +33,14 @@ const SettingsView = ({ navigation }) => {
     setIsCommentEnabled((previousState) => !previousState);
     userContext.setCommentYN(isCommentEnabled);
     async () => {
-      await axios_post('comment', { userId, commentYN: isCommentEnabled });
+      await axios_post('setting', { userId, commentYN: isCommentEnabled });
     };
   };
   const deleteDiary = () => {
     //다이어리 삭제 코드 여기에 넣기
     setdeleteDiaryModalVisible(false);
     async () => {
-      await axios_post('deleteDiary', { userId });
+      await axios_post('setting', { userId, deleteDiary: true });
     };
     setdeleteFinModalVisible(true);
   };
@@ -54,7 +54,7 @@ const SettingsView = ({ navigation }) => {
     //회원탈퇴 코드 여기에 넣기
     setdeleteAccountModalVisible(false);
     async () => {
-      await axios_post('deleteAccount', { userId });
+      await axios_post('setting', { userId, deleteAll: true });
     };
     navigation.navigate('LoginView');
   };
@@ -62,7 +62,7 @@ const SettingsView = ({ navigation }) => {
     // 폰트 변경하는 코드 여기에 넣기
     userContext.setUserFont(Object.keys(fonts)[index]);
     async () => {
-      await axios_post('font', { userId, font: userContext.userFont });
+      await axios_post('setting', { userId, font: userContext.userFont });
     };
   };
   const AISetting = () => {
