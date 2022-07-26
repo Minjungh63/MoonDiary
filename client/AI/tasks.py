@@ -27,6 +27,7 @@ def run_comment(doc, dId):
 def run_pixray(doc, dId):
     keyW = keyword_extract(doc)
     keyW = keyW.replace(' ', '_')
+    print(keyW)
     os.chdir("/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/pixray")
     sys.path.append("/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/pixray")
     subprocess.run(
@@ -35,5 +36,5 @@ def run_pixray(doc, dId):
     data = AI.objects.get(diaryId=dId)
     data.image = PATH
     data.save()
-    
-    return keyW, PATH
+
+    return PATH
