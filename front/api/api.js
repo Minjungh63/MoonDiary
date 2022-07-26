@@ -4,7 +4,7 @@ const baseUrl = 'http://168.188.123.158';
 const subUrl = {
   login: '/user/login',
   join: '/user/join',
-  selectEmotion: '/diary/write/mood',
+  selectEmotion: '/diary/mood',
   result: '/diary/write/result',
   favorite: '/diary/like/',
   diary: '/diary/',
