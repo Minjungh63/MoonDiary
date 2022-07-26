@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { basic_theme } from '../theme';
 import { FontAwesome } from '@expo/vector-icons';
 import { getEmotionRequire, getWeatherRequire } from '../service/SelectImage';
 import { axios_post } from '../api/api';
-
+import { useContext } from 'react';
+import UserContext from '../service/UserContext';
+import styled from 'styled-components/native';
 export default function FavoriteContents({ diaryId, date, title, weather, emotion, comment, navigation, func }) {
   const cancle = async (id) => {
     await axios_post('favorite', { diaryId: id, liked: false });
@@ -29,24 +31,29 @@ export default function FavoriteContents({ diaryId, date, title, weather, emotio
     <View style={styles.container}>
       <TouchableOpacity onPress={goRead}>
         <View style={styles.line}>
-          <Text style={styles.text}>{date.toString().replace('-', '년 ').replace('-', '월 ') + '일 '}</Text>
+          <T font={useContext(UserContext).userFont}>
+            {date.toString().replace('-', '년 ').replace('-', '월 ') + '일 '}
+          </T>
           <Image source={getEmotionRequire(emotion)} style={styles.image}></Image>
           <Image source={getWeatherRequire(weather)} style={styles.image}></Image>
         </View>
         <View style={{ ...styles.line, justifyContent: 'space-between' }}>
-          <Text style={styles.text}>일기 제목 - {title}</Text>
+          <T font={useContext(UserContext).userFont}>일기 제목 - {title}</T>
           <TouchableOpacity onPress={() => cancleFav(diaryId)} style={{ marginRight: 5 }}>
             <FontAwesome name="star" size={24} color="yellow" />
           </TouchableOpacity>
         </View>
         <View style={styles.line}>
-          <Text style={styles.text}>AI 평가 - {comment}</Text>
+          <T font={useContext(UserContext).userFont}>감상평 - {comment}</T>
         </View>
       </TouchableOpacity>
     </View>
   );
 }
-
+const T = styled.Text`
+  font-size: 16px;
+  font-family: ${(props) => props.font};
+`;
 const styles = StyleSheet.create({
   container: {
     borderRadius: 6,
@@ -55,17 +62,15 @@ const styles = StyleSheet.create({
     backgroundColor: basic_theme.fgColor,
     margin: 8,
   },
-  text: {
-    fontFamily: 'Gowun_Batang',
-    fontSize: 16,
-  },
   line: {
     flexDirection: 'row',
     margin: 6,
+    alignItems: 'center',
   },
   image: {
     width: 25,
     height: 25,
     marginHorizontal: 6,
+    resizeMode: 'stretch',
   },
 });

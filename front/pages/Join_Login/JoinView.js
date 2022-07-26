@@ -73,6 +73,7 @@ const JoinView = ({ navigation }) => {
         text2="이름을 입력해주세요."
         okPress={() => setNameModal(false)}
         confirmText={text.backText}
+        font={userContext.userFont}
       />
       <ModalWindow open={idModal} text2={text.id} okPress={() => setIdModal(false)} confirmText={text.backText} />
       <ModalWindow
@@ -80,6 +81,7 @@ const JoinView = ({ navigation }) => {
         text2={text.pwd}
         okPress={() => setPasswordModal(false)}
         confirmText={text.backText}
+        font={userContext.userFont}
       />
       <ModalWindow
         open={checkIdModal}
@@ -87,6 +89,7 @@ const JoinView = ({ navigation }) => {
         text2={'다른 ' + text.id}
         okPress={() => setCheckIdModal(false)}
         confirmText={text.backText}
+        font={userContext.userFont}
       />
     </View>
   );

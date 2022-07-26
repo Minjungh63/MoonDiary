@@ -1,39 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { basic_theme } from '../../theme';
-import { axios_get } from '../../api/api';
+import { basic_theme, getEmotionText } from '../../theme';
 import { getEmtionRequire } from '../../service/SelectImage';
-
-const getEmotionText = {
-  joy: '오늘은 행복한 하루였군요!',
-  love: '당신의 하루에서 사랑이 느껴지네요.',
-  surprise: '오늘은 놀라운 일이 있었군요.',
-  anger: '오늘은 화가 많이 났던 하루였군요.',
-  sadness: '오늘은 조금 슬픈 하루였군요.',
-  fear: '오늘은 조금 무서웠던 일이 있었군요.',
-  neutral: '당신의 하루에서 평온함이 느껴지네요.',
-  tired: '오늘은 조금 지치는 하루였군요.',
-};
+import UserContext from '../../service/UserContext';
 
 const AnalysisResultView = ({ navigation, route }) => {
-  const [emotion, setEmotion] = useState('joy'); //테스트 하려고 joy 넣어둠
-  const [imagePath, setImagePath] = useState('');
-  const [comment, setComment] = useState('');
   const [isLikeIt, setIsLikeIt] = useState('');
 
-  useEffect(() => {
-    (async () => {
-      const userId = route.params.userId;
-      const diaryId = route.params.diaryId;
-      const response = await axios_get('result', { userId, diaryId });
-      if (response.status == 200) {
-        setEmotion(response.data.emotion);
-        setImagePath(response.data.image);
-        setComment(response.data.comment);
-      }
-    })();
-  }, []);
+  const emotion = route.params.emotion;
+  const comment = route.params.comment;
+  const drawingDiary = route.params.drawingDiary;
+  const userName = useContext(UserContext).userName;
 
   return (
     <View style={style.container}>
@@ -44,7 +22,7 @@ const AnalysisResultView = ({ navigation, route }) => {
         <Image source={require('../../assets/img/speech-bubble.png')} style={style.speechBubbleImage}></Image>
         <View style={style.speechBubbleBox}>
           <View style={style.textBox}>
-            <Text style={style.blackText}>{'홍길동 ' /**name */}님,</Text>
+            <Text style={style.blackText}>{username}님,</Text>
             <Text style={style.blackText}>{getEmotionText[emotion]}</Text>
           </View>
           <Image source={getEmtionRequire(emotion)} style={style.emotion}></Image>
@@ -52,8 +30,8 @@ const AnalysisResultView = ({ navigation, route }) => {
             <Text style={style.blackText}>{comment}</Text>
           </View>
           <View style={style.textBox}>
-            <Text style={style.blackText}>제가 {/*name*/}님의 하루를</Text>
-            <Text style={style.blackText}>{'그림일기로 표현해봤어요.'}</Text>
+            <Text style={style.blackText}>제가 {userName}님의 하루를</Text>
+            <Text style={style.blackText}>'그림일기로 표현해봤어요.'</Text>
           </View>
         </View>
       </View>
@@ -61,7 +39,7 @@ const AnalysisResultView = ({ navigation, route }) => {
         <Image source={require(`../../assets/img/moon.png`)} style={style.moon}></Image>
       </View>
       <View style={style.paintingDiaryContainer}>
-        <Image source={imagePath} style={style.paintingDiaryImage}></Image>
+        <Image source={drawingDiary} style={style.paintingDiaryImage}></Image>
       </View>
       <View style={style.resultContainer}>
         <View style={style.resultBox}>

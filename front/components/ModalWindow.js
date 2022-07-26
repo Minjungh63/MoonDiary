@@ -1,25 +1,42 @@
-import { View, StyleSheet, Text, Pressable, Dimensions } from 'react-native';
+import { View, StyleSheet, Pressable, Dimensions } from 'react-native';
 import Modal from 'react-native-simple-modal';
 import { basic_theme } from '../theme';
+import styled from 'styled-components/native';
 
-export const ModalWindow = ({ open, okPress, cancelPress, title, text1, text2, confirmText, cancelText }) => {
+export const ModalWindow = ({
+  open,
+  okPress,
+  cancelPress,
+  title,
+  text1,
+  text2,
+  confirmText,
+  cancelText,
+  font,
+  imageList,
+}) => {
   return (
     <Modal open={open} modalStyle={styles.modal}>
       <View style={styles.textContainer}>
-        {title && <Text style={styles.modalTitle}>{title}</Text>}
-        {text1 && <Text style={styles.modalText}>{text1}</Text>}
-        <Text style={styles.modalText}>{text2}</Text>
+        {title && (
+          <T font={font} title={true}>
+            {title}
+          </T>
+        )}
+        {text1 && <T font={font}>{text1}</T>}
+        <T font={font}>{text2}</T>
       </View>
+      {imageList && <imageList />}
       <View style={styles.modalButtons}>
         <Pressable onPress={okPress}>
           <View style={styles.modalButton}>
-            <Text style={styles.modalText}>{confirmText}</Text>
+            <T font={font}>{confirmText}</T>
           </View>
         </Pressable>
         {cancelText && (
           <Pressable onPress={cancelPress}>
             <View style={styles.modalButton}>
-              <Text style={styles.modalText}>{cancelText}</Text>
+              <T font={font}>{cancelText}</T>
             </View>
           </Pressable>
         )}
@@ -27,6 +44,13 @@ export const ModalWindow = ({ open, okPress, cancelPress, title, text1, text2, c
     </Modal>
   );
 };
+const T = styled.Text`
+  font-family: ${(props) => props.font};
+  color: white;
+  text-align: center;
+  font-size: ${(props) => (props.title && 25) || 18}px;
+  margin-bottom: ${(props) => (props.title && 20) || 5}px;
+`;
 const styles = StyleSheet.create({
   modal: {
     backgroundColor: basic_theme.blue,
@@ -47,21 +71,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     flex: 0.4,
-  },
-  modalTitle: {
-    fontSize: 25,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  modalText: {
-    fontSize: 18,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-    textAlign: 'center',
   },
   modalButton: {
     borderRadius: 100,

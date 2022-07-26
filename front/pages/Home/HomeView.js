@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import { basic_theme, text } from '../../theme';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Calendar from '../../components/Calendar';
 import { axios_post } from '../../api/api';
 import UserContext from '../../service/UserContext';
+import styled from 'styled-components/native';
 
 const HomeView = ({ navigation }) => {
   const userContext = useContext(UserContext);
@@ -33,10 +34,12 @@ const HomeView = ({ navigation }) => {
   return isLoading ? (
     <View style={styles.container}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ ...styles.text, marginTop: 40 }}>
+        <T font={userContext.userFont} marginTop={40}>
           {text.intro}, {userContext.userName + '님'}
-        </Text>
-        <Text style={styles.text}>오늘 하루는 어떠셨나요?</Text>
+        </T>
+        <T font={userContext.userFont} paddingTop={3}>
+          오늘 하루는 어떠셨나요?
+        </T>
       </View>
       <Calendar diaryData={diaryData} navigation={navigation} />
       <View style={{ flex: 1, backgroundColor: basic_theme.bgColor, justifyContent: 'flex-end', flexDirection: 'row' }}>
@@ -47,17 +50,17 @@ const HomeView = ({ navigation }) => {
     </View>
   ) : null;
 };
-
+const T = styled.Text`
+  font-size: 17px;
+  font-family: ${(props) => props.font};
+  color: white;
+  padding-top: ${(props) => props.paddingTop || 0}px;
+  margin-top: ${(props) => props.marginTop || 0}px;
+`;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: basic_theme.bgColor,
-  },
-  text: {
-    fontSize: 17,
-    fontWeight: '500',
-    color: 'white',
-    fontFamily: 'Gowun_Batang',
   },
   button: {
     margin: 20,

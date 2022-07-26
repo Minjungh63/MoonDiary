@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import ProgressCircle from 'react-native-progress-circle';
+import styled from 'styled-components/native';
 
 class WritingRate extends Component {
   render() {
-    const { attend_day } = this.props;
+    const { attend_day, font } = this.props;
     const YEAR = new Date().getFullYear(); // 현재 연도
     const MONTH = new Date().getMonth() + 1; // 현재 월
     const number_day = new Date(YEAR, MONTH, 0).getDate(); // 현재 월의 일 수 (ex 7월->31)
@@ -22,9 +23,9 @@ class WritingRate extends Component {
             bgColor="#A6AEDE"
           >
             <ProgressCircle percent={100} radius={55} borderWidth={15} color="#D8DFF2" bgColor="#A6AEDE">
-              <Text style={styles.text}>
+              <T font={font}>
                 {attend_day}/{number_day}
-              </Text>
+              </T>
             </ProgressCircle>
           </ProgressCircle>
         </ProgressCircle>
@@ -32,15 +33,14 @@ class WritingRate extends Component {
     );
   }
 }
+const T = styled.Text`
+  font-family: ${(props) => props.font};
+  font-size: 28px;
+  color: white;
+`;
 const styles = StyleSheet.create({
   WritingRate: {
     paddingTop: 11,
-  },
-  text: {
-    fontSize: 28,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
   },
 });
 export default WritingRate;

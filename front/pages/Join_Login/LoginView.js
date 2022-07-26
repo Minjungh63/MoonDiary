@@ -95,12 +95,19 @@ const LoginView = ({ navigation }) => {
           <Text style={style.smallText}>{'회원가입'}</Text>
         </TouchableOpacity>
       </View>
-      <ModalWindow open={loginModal} okPress={() => setLoginModal(false)} text2={text.id} confirmText={text.backText} />
+      <ModalWindow
+        open={loginModal}
+        okPress={() => setLoginModal(false)}
+        text2={text.id}
+        confirmText={text.backText}
+        font={userContext.userFont}
+      />
       <ModalWindow
         open={passwordModal}
         okPress={() => setPasswordModal(false)}
         text2={text.pwd}
         confirmText={text.backText}
+        font={userContext.userFont}
       />
       <ModalWindow
         open={invalidLoginModal}
@@ -108,6 +115,7 @@ const LoginView = ({ navigation }) => {
         text1="잘못된 로그인 정보입니다."
         text2="다시 입력해주세요."
         confirmText={text.backText}
+        font={userContext.userFont}
       />
     </KeyboardAwareScrollView>
   ) : (
