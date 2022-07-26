@@ -8,14 +8,6 @@ from diary.models import Diary
 from config.celery import app
 
 
-# 비동기처리 X
-def run_emotion(doc, dId):
-    emotion = get_emotion(doc)
-    print(emotion, "emotion")
-    AI.objects.create(diaryId=Diary.objects.get(diaryId=dId), emotion=emotion)
-
-    return emotion
-
 
 @app.task
 def run_comment(doc, dId):

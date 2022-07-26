@@ -1,5 +1,6 @@
 from django.views import View
 from django.http import HttpResponse, JsonResponse
+from AI.ai import get_emotion
 from AI.tasks import run_emotion, run_comment
 from AI.models import AI
 from AI.tasks import run_pixray
@@ -55,15 +56,19 @@ class writeView(View):
         uId = temp['userId']
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
-        dId = Diary.objects.filter(userId=uId).last()
+        dId = Diary.objects.filter(userId=uId).last().diaryId
         doc = temp['contents']
         
-        emotion = run_emotion(doc, dId.diaryId)
+        emotion = get_emotion(doc)
+        print(emotion, "emotion")
+        AI.objects.create(diaryId=Diary.objects.get(diaryId=dId), emotion=emotion)
 
         sdata = {
-            "diaryId": dId.diaryId,
+            "diaryId": dId,
             "emotion": emotion
         }
+        # 비동기처리 X
+
 
         # js
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
@@ -142,3 +147,5 @@ class likeView(View):  # 즐겨찾기 페이지
         adata.liked = dlike
         adata.save()
         return JsonResponse({"message": "update success"}, status=201)
+
+
