@@ -8,7 +8,7 @@ from diary.models import Diary
 from config.celery import app
 
 
-@app.task
+# 비동기처리 X
 def run_emotion(doc, dId):
     emotion = get_emotion(doc)
     print(emotion, "emotion")

@@ -58,11 +58,11 @@ class writeView(View):
         dId = Diary.objects.filter(userId=uId).last()
         doc = temp['contents']
         
-        emotion = run_emotion.delay(doc, dId.diaryId)
+        emotion = run_emotion(doc, dId.diaryId)
 
         sdata = {
             "diaryId": dId.diaryId,
-            "emotion": emotion.get(),
+            "emotion": emotion
         }
 
         # js
