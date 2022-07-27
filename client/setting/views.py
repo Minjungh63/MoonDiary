@@ -31,7 +31,7 @@ class SettingView(View):
         if 'imageYN' in temp:
             imageYN = temp['imageYN']
             User.objects.filter(userId=userId).update(imageYN = imageYN)
-            return JsonResponse(sdata, status=201)
+            return JsonResponse(status=201)
         
         if 'commentYN' in temp:
             print('comm update')

@@ -35,7 +35,7 @@ def run_pixray(doc, dId):
         ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
     image_path = './AI/drawing_diary/output/image'+'01'+'.png'
     with open(image_path, "rb") as image_file:
-        image_data = base64.b64encode(image_file.read()).decode('utf-8')
+        image_data = "http://168.188.123.158:8000", base64.b64encode(image_file.read()).decode('utf-8')
 
     data = AI.objects.get(diaryId=dId)
     data.image = image_data
