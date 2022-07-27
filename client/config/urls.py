@@ -24,4 +24,4 @@ urlpatterns = [
     path('diary/', include('diary.urls')),
     path('statistics/', include('statistic.urls')),
     path('setting/', include('setting.urls'))
-] +static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
