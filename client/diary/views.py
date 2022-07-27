@@ -92,25 +92,28 @@ class moodView(View):
         }
 
         print(imageYN, commentYN)
+        try:
+            if(imageYN == 1 and commentYN == 1):
+                comment = run_comment.delay(doc, dId)
+                path = run_pixray.delay(doc, dId)
+                sdata['comment'] = comment.get()
+                sdata['image'] = path.get()
+                print(sdata['image'], sdata['comment'], 'test')
+            
+            elif(imageYN == 0 and commentYN == 1):
+                comment = run_comment.delay(doc, dId)
+                sdata['comment'] = comment.get()
 
-        if(imageYN == 1 and commentYN == 1):
-            comment = run_comment.delay(doc, dId)
-            path = run_pixray.delay(doc, dId)
-            sdata['comment'] = comment.get()
-            sdata['image'] = path.get()
-            print(sdata['image'], sdata['comment'], 'test')
-        
-        elif(imageYN == 0 and commentYN == 1):
-            comment = run_comment.delay(doc, dId)
-            sdata['comment'] = comment.get()
+            elif(imageYN == 1 and commentYN == 0):
+                path = run_pixray.delay(doc, dId)
+                sdata['image'] = path.get()
 
-        elif(imageYN == 1 and commentYN == 0):
-            path = run_pixray.delay(doc, dId)
-            sdata['image'] = path.get()
+            
+            print(sdata['emotion'], sdata['comment'], sdata['image'])
+        except:
+            Diary.objects.delete(diaryId = dId)
+            return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=403)
 
-        
-        print(sdata['emotion'], sdata['comment'], sdata['image'])
-        
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
 
 
