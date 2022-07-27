@@ -118,7 +118,7 @@ class moodView(View):
             
             print(sdata['emotion'], sdata['comment'], sdata['image'])
         except:
-            Diary.objects.delete(diaryId = dId)
+            Diary.objects.filter(diaryId = dId).delete()
             return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=403)
 
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
