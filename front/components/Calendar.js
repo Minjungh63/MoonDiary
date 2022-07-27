@@ -109,7 +109,7 @@ export default function Calendar({ diaryData, navigation }) {
               <Image style={styles.img} source={getEmotionRequire(final_data.emotion)}></Image>
             </TouchableOpacity>
           ) : (
-            <Text style={styles.img}> </Text>
+            <Text style={styles.empty}> </Text>
           )}
         </View>
       </View>
@@ -197,6 +197,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   img: {
+    marginTop: 5,
+    width: 25,
+    height: 25,
+    resizeMode: 'contain',
+  },
+  empty: {
     marginTop: 5,
     width: 25,
     height: 25,

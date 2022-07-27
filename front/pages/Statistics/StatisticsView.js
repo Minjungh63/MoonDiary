@@ -7,16 +7,20 @@ import EmotionTable from '../../components/EmotionTable';
 import { axios_get } from '../../api/api';
 import UserContext from '../../service/UserContext';
 import styled from 'styled-components/native';
+import { useIsFocused } from '@react-navigation/native';
 
 const StatisticsView = () => {
   useEffect(() => {
-    (async () => {
-      const response = await axios_get('statistics', { userId });
-      if (response.status == 200) {
-        setEmotion_day(response.data);
-      }
-    })();
-  }, []);
+    if (isFocused) {
+      (async () => {
+        const response = await axios_get('statistics', { userId });
+        if (response.status == 200) {
+          setEmotion_day(response.data);
+        }
+      })();
+    }
+  }, [isFocused]);
+  const isFocused = useIsFocused();
   const userContext = useContext(UserContext);
   const userId = userContext.userId;
   const [emotion_day, setEmotion_day] = useState([]);

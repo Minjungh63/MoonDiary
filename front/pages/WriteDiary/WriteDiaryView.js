@@ -205,7 +205,7 @@ const T = styled.Text`
     props.date &&
     css`
       align-self: center;
-      border-bottom-width: 1;
+      border-bottom-width: 1px;
       border-bottom-color: #fff;
     `};
 `;

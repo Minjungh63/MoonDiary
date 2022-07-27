@@ -1,8 +1,10 @@
-import { View, StyleSheet, Pressable, Dimensions } from 'react-native';
+import { View, StyleSheet, Pressable, Dimensions, Image } from 'react-native';
 import Modal from 'react-native-simple-modal';
 import { basic_theme } from '../theme';
+import { useState } from 'react';
 import styled from 'styled-components/native';
-
+import { getEmotionRequire } from '../service/SelectImage';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 export const ModalWindow = ({
   open,
   okPress,
@@ -13,8 +15,10 @@ export const ModalWindow = ({
   confirmText,
   cancelText,
   font,
-  imageList,
+  emotions,
+  setEmotion,
 }) => {
+  const [isFocus, setIsFocus] = useState('');
   return (
     <Modal open={open} modalStyle={styles.modal}>
       <View style={styles.textContainer}>
@@ -24,9 +28,26 @@ export const ModalWindow = ({
           </T>
         )}
         {text1 && <T font={font}>{text1}</T>}
-        <T font={font}>{text2}</T>
+        <T font={font} emotions={emotions}>
+          {text2}
+        </T>
       </View>
-      {imageList && <imageList />}
+      {emotions && (
+        <View style={styles.emotionContainer}>
+          {emotions.map((emotion, index) => (
+            <TouchableOpacity
+              onPress={() => {
+                setEmotion(emotion);
+                setIsFocus(emotion);
+              }}
+              style={styles.emotionBox}
+              key={index}
+            >
+              <Image source={getEmotionRequire(emotion)} style={isFocus !== emotion && styles.emotion}></Image>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
       <View style={styles.modalButtons}>
         <Pressable onPress={okPress}>
           <View style={styles.modalButton}>
@@ -49,7 +70,7 @@ const T = styled.Text`
   color: white;
   text-align: center;
   font-size: ${(props) => (props.title && 25) || 18}px;
-  margin-bottom: ${(props) => (props.title && 20) || 5}px;
+  margin-bottom: ${(props) => (props.title && 20) || (props.emotions && 0) || 5}px;
 `;
 const styles = StyleSheet.create({
   modal: {
@@ -80,4 +101,17 @@ const styles = StyleSheet.create({
     backgroundColor: basic_theme.bgColor,
     width: 90,
   },
+  emotionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  emotionBox: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    resizeMode: 'contains',
+  },
+  emotion: { opacity: 0.5 },
 });
