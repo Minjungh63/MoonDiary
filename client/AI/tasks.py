@@ -37,10 +37,10 @@ def run_pixray(doc, dId):
     # image_path = './AI/drawing_diary/output/image'+'01'+'.png'
     # with open(image_path, "rb") as image_file:
     #     image_data = base64.b64encode(image_file.read()).decode('utf-8')
-    image = Image.open('/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/output/output.png')
+    print(image)
     data = AI.objects.get(diaryId=dId)
+    image = Image.open('/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/output/output.png')
     data.image = image
     data.save()
-    print(image)
 
     return data.image
