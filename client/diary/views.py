@@ -1,3 +1,5 @@
+from datetime import date
+from time import timezone
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from AI.ai import get_emotion
@@ -51,8 +53,13 @@ class mainView(View):
 
 class writeView(View):
     def post(self, request):
+
         temp = json.loads(request.body)
         uId = temp['userId']
+
+        if(Diary.objects.filter(userId = uId).get(date = timezone.now).exists()):
+            return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=405)
+
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
         dId = Diary.objects.filter(userId=uId).last().diaryId
