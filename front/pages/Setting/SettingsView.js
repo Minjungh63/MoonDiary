@@ -16,33 +16,41 @@ const SettingsView = ({ navigation }) => {
   const [deleteDiaryModalVisible, setdeleteDiaryModalVisible] = useState(false);
   const [deleteFinModalVisible, setdeleteFinModalVisible] = useState(false);
   const [logoutModalVisible, setlogoutModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [deleteAccountModalVisible, setdeleteAccountModalVisible] = useState(false);
   const deleteDiaryWindow = () => setdeleteDiaryModalVisible((previousState) => !previousState);
   const logoutWindow = () => setlogoutModalVisible((previousState) => !previousState);
   const deleteAccountWindow = () => setdeleteAccountModalVisible((previousState) => !previousState);
-  const drawingtoggleSwitch = () => {
+  const drawingtoggleSwitch = async () => {
     // 그림일기 기능 on off 코드 여기에 넣기
-    setIsDrawingEnabled((previousState) => !previousState);
-    userContext.setImageYN(isDrawingEnabled);
-    async () => {
-      await axios_post('setting', { userId, imageYN: isDrawingEnabled });
-    };
+    try {
+      setIsDrawingEnabled((previousState) => !previousState);
+      await axios_post('setting', { userId: userContext.userId, imageYN: isDrawingEnabled });
+      userContext.setImageYN(isDrawingEnabled);
+    } catch (e) {
+      setErrorModalVisible(true);
+    }
   };
-  const commenttoggleSwitch = () => {
+  const commenttoggleSwitch = async () => {
     // 감상평 기능 on off 코드 여기에 넣기
-    setIsCommentEnabled((previousState) => !previousState);
-    userContext.setCommentYN(isCommentEnabled);
-    async () => {
-      await axios_post('setting', { userId, commentYN: isCommentEnabled });
-    };
+    try {
+      setIsCommentEnabled((previousState) => !previousState);
+      await axios_post('setting', { userId: userContext.userId, commentYN: isCommentEnabled });
+      userContext.setCommentYN(isCommentEnabled);
+    } catch (e) {
+      setErrorModalVisible(true);
+    }
   };
-  const deleteDiary = () => {
+  const deleteDiary = async () => {
     //다이어리 삭제 코드 여기에 넣기
-    setdeleteDiaryModalVisible(false);
-    async () => {
-      await axios_post('setting', { userId, deleteDiary: true });
-    };
-    setdeleteFinModalVisible(true);
+    try {
+      await axios_post('setting', { userId: userContext.userId, deleteDiary: true });
+      setdeleteFinModalVisible(true);
+    } catch (e) {
+      setErrorModalVisible(true);
+    } finally {
+      setdeleteDiaryModalVisible(false);
+    }
   };
   const logout = () => {
     //  로그아웃 기능
@@ -50,20 +58,25 @@ const SettingsView = ({ navigation }) => {
     setlogoutModalVisible(false);
     navigation.navigate('LoginView');
   };
-  const deleteAccount = () => {
+  const deleteAccount = async () => {
     //회원탈퇴 코드 여기에 넣기
-    setdeleteAccountModalVisible(false);
-    async () => {
-      await axios_post('setting', { userId, deleteAll: true });
-    };
-    navigation.navigate('LoginView');
+    try {
+      await axios_post('setting', { userId: userContext.userId, deleteAll: true });
+      navigation.navigate('LoginView');
+    } catch (e) {
+      setErrorModalVisible(true);
+    } finally {
+      setdeleteAccountModalVisible(false);
+    }
   };
-  const changeFont = (selectedItem, index) => {
+  const changeFont = async (selectedItem, index) => {
     // 폰트 변경하는 코드 여기에 넣기
-    userContext.setUserFont(Object.keys(fonts)[index]);
-    async () => {
-      await axios_post('setting', { userId, font: userContext.userFont });
-    };
+    try {
+      userContext.setUserFont(Object.keys(fonts)[index]);
+      await axios_post('setting', { userId: userContext.userId, font: Object.keys(fonts)[index] });
+    } catch (e) {
+      setErrorModalVisible(true);
+    }
   };
   const AISetting = () => {
     return (
@@ -198,6 +211,14 @@ const SettingsView = ({ navigation }) => {
         font={userContext.userFont}
       />
       <ModalWindow
+        open={errorModalVisible}
+        okPress={() => setErrorModalVisible(false)}
+        text1="에러가 발생하였습니다."
+        text2="다시 시도해주세요."
+        confirmText={text.backText}
+        font={userContext.userFont}
+      />
+      <ModalWindow
         open={logoutModalVisible}
         okPress={logout}
         cancelPress={() => setlogoutModalVisible(false)}
@@ -244,7 +265,7 @@ const SettingContainer = styled.View`
 `;
 const SettingBox = styled.View`
   justify-content: space-evenly;
-  border-radius: 12;
+  border-radius: 12px;
   width: 100%;
   border-color: ${basic_theme.fgColor};
   border-width: 2px;

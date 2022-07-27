@@ -10,7 +10,30 @@ import { useEffect, useState, useCallback } from 'react';
 import AnalysisResultView from './pages/AnalysisResult/AnalysisResultView';
 import * as Font from 'expo-font';
 import UserContext from './service/UserContext';
-
+import Toast, { BaseToast } from 'react-native-toast-message';
+import { basic_theme } from './theme';
+const toastConfig = {
+  success: (props) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: basic_theme.fgColor }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 15,
+      }}
+    />
+  ),
+  error: (props) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: '#FF5E5E' }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 15,
+      }}
+    />
+  ),
+};
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [userId, setUserId] = useState('');
@@ -60,18 +83,21 @@ export default function App() {
   }
   const Stack = createStackNavigator();
   return (
-    <UserContext.Provider value={user}>
-      <NavigationContainer onReady={onLayoutRootView}>
-        <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
-          {/* initialRouteName: 이 Stack의 초기 view설정 */}
-          <Stack.Screen name="LoginView" component={LoginView} />
-          <Stack.Screen name="JoinView" component={JoinView} />
-          <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
-          <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
-          <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
-          <Stack.Screen name="AnalysisResultView" component={AnalysisResultView} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </UserContext.Provider>
+    <>
+      <UserContext.Provider value={user}>
+        <NavigationContainer onReady={onLayoutRootView}>
+          <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
+            {/* initialRouteName: 이 Stack의 초기 view설정 */}
+            <Stack.Screen name="LoginView" component={LoginView} />
+            <Stack.Screen name="JoinView" component={JoinView} />
+            <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
+            <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
+            <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
+            <Stack.Screen name="AnalysisResultView" component={AnalysisResultView} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserContext.Provider>
+      <Toast config={toastConfig} />
+    </>
   );
 }

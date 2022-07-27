@@ -81,13 +81,13 @@ const ReadDiary = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
         {/*imageYN이 false여서 그림일기 이미지가 생성되지 않은 경우, 그림일기 이미지가 보이지 않음.*/}
-        {img && (
+        {{ img } && (
           <View style={{ alignItems: 'center', margin: 4 }}>
             {/*이미지를 스토리지에서 가져오는 코드로 수정하기. (source={img}부분 수정해야 함.)*/}
             <Image
               // pixray 그림일기 사진 비율 => 16:9
               style={{ width: (deviceH * 4) / 9, height: deviceH / 4 }}
-              source={img}
+              source={{ uri: img }}
             ></Image>
           </View>
         )}
@@ -109,12 +109,12 @@ const ReadDiary = ({ route, navigation }) => {
             justifyContent: 'center',
           }}
         >
-          <T font={userContext.userFont} size={16} align="center" color="black">
+          <T font={userContext.userFont} size={16} align="center" color="black" paddingBottom={{ comment } ? 1 : 0}>
             {emoComment}
           </T>
           {/*commentYN이 false여서 감상평이 생성되지 않은 경우, 감상평이 출력되지 않음.*/}
           {{ comment } && (
-            <T font={userContext.userFont} size={16} align="center" color="black" paddingTop={2}>
+            <T font={userContext.userFont} size={16} align="center" color="black" paddingTop={1}>
               {comment}
             </T>
           )}
@@ -148,6 +148,7 @@ const T = styled.Text`
   color: ${(props) => props.color};
   font-size: ${(props) => props.size}px;
   padding-top: ${(props) => props.paddingTop || 0}px;
+  padding-bottom: ${(props) => props.paddingBottom || 0}px;
   text-align: ${(props) => props.align};
 `;
 const styles = StyleSheet.create({
