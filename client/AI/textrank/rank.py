@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import normalize
 
-def pagerank(x, df=0.85, max_iter=30, bias=None)
+def pagerank(x, df=0.85, max_iter=30, bias=None):
     """
     Arguments
     ---------

@@ -20,6 +20,8 @@ class SettingView(View):
     def post(self, request):
         temp = json.loads(request.body)
         userId = temp['userId']
+
+        print(temp)
           
         if 'font' in temp:
             font = temp['font']

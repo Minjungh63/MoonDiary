@@ -130,3 +130,6 @@ dmypy.json
 
 client/AI/model_chp/comment_model.pth
 client/db.sqlite3
+client/AI/drawing_diary/diffvg
+client/AI/drawing_diary/output
+client/AI/drawing_diary/pixray
