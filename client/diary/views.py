@@ -57,8 +57,8 @@ class writeView(View):
         temp = json.loads(request.body)
         uId = temp['userId']
 
-        if(Diary.objects.filter(userId = uId).get(date = timezone.now).exists()):
-            return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=405)
+        # if(Diary.objects.filter(userId = uId).get(date = timezone.now).exists()):
+        #     return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=405)
 
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
@@ -99,27 +99,27 @@ class moodView(View):
         }
 
         print(imageYN, commentYN)
-        try:
-            if(imageYN == 1 and commentYN == 1):
-                comment = run_comment.delay(doc, dId)
-                path = run_pixray.delay(doc, dId)
-                sdata['comment'] = comment.get()
-                sdata['image'] = path.get()
-                print(sdata['image'], sdata['comment'], 'test')
-            
-            elif(imageYN == 0 and commentYN == 1):
-                comment = run_comment.delay(doc, dId)
-                sdata['comment'] = comment.get()
+        # try:
+        if(imageYN == 1 and commentYN == 1):
+            path = run_pixray.delay(doc, dId)
+            comment = run_comment.delay(doc, dId)
+            sdata['comment'] = comment.get()
+            sdata['image'] = path.get()
+            print(sdata['image'], sdata['comment'], 'test')
+        
+        elif(imageYN == 0 and commentYN == 1):
+            comment = run_comment.delay(doc, dId)
+            sdata['comment'] = comment.get()
 
-            elif(imageYN == 1 and commentYN == 0):
-                path = run_pixray.delay(doc, dId)
-                sdata['image'] = path.get()
+        elif(imageYN == 1 and commentYN == 0):
+            path = run_pixray.delay(doc, dId)
+            sdata['image'] = path.get()
 
-            
-            print(sdata['emotion'], sdata['comment'], sdata['image'])
-        except:
-            Diary.objects.delete(diaryId = dId)
-            return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=403)
+        
+        print(sdata['emotion'], sdata['comment'], sdata['image'])
+        # except:
+        #     Diary.objects.filter(diaryId = dId).delete()
+        #     return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=403)
 
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
 
