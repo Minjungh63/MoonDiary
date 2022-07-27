@@ -1,5 +1,5 @@
 from datetime import date
-from time import timezone
+from django.utils import timezone
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from AI.ai import get_emotion
