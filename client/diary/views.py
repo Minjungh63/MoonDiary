@@ -57,8 +57,8 @@ class writeView(View):
         temp = json.loads(request.body)
         uId = temp['userId']
 
-        if(Diary.objects.filter(userId = uId).get(date = timezone.now).exists()):
-            return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=405)
+        # if(Diary.objects.filter(userId = uId).get(date = timezone.now).exists()):
+        #     return JsonResponse({"message": "error!"}, json_dumps_params={'ensure_ascii': False}, status=405)
 
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
