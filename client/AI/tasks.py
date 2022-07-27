@@ -41,5 +41,6 @@ def run_pixray(doc, dId):
     data = AI.objects.get(diaryId=dId)
     data.image = image
     data.save()
+    print(image)
 
     return data.image
