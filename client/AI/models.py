@@ -6,6 +6,6 @@ class AI(models.Model):
         db_table = "AI"
         
     diaryId = models.ForeignKey('diary.Diary', related_name="diary", on_delete=models.CASCADE, db_column='diaryId', unique=True, primary_key=True)
-    image = models.ImageField(blank = True, upload_to='images/')
+    image = models.TextField(null = True)
     comment = models.CharField(max_length=200, null = True)
     emotion = models.CharField(max_length=10, null = True)

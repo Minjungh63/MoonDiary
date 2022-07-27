@@ -7,7 +7,6 @@ from AI.ai import comment_moon, keySentence, keyword_extract
 from AI.models import AI
 from diary.models import Diary
 from config.celery import app
-from PIL import Image
 
 
 
@@ -34,13 +33,12 @@ def run_pixray(doc, dId):
     sys.path.append("/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/pixray")
     subprocess.run(
         ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
-    # image_path = './AI/drawing_diary/output/image'+'01'+'.png'
-    # with open(image_path, "rb") as image_file:
-    #     image_data = base64.b64encode(image_file.read()).decode('utf-8')
-    image = Image.open('/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/output/output.png')
+    image_path = './AI/drawing_diary/output/image'+'01'+'.png'
+    with open(image_path, "rb") as image_file:
+        image_data = base64.b64encode(image_file.read()).decode('utf-8')
+
     data = AI.objects.get(diaryId=dId)
-    print(image)
-    data.image = image
+    data.image = image_data
     data.save()
 
     return data.image
