@@ -31,12 +31,6 @@ class SettingView(View):
         if 'imageYN' in temp:
             imageYN = temp['imageYN']
             User.objects.filter(userId=userId).update(imageYN = imageYN)
-            image_path = './AI/drawing_diary/output/image'+'01'+'.png'
-            with open(image_path, "rb") as image_file:
-                image_data = base64.b64encode(image_file.read()).decode('utf-8')
-            sdata = {
-                "image": image_data
-            }
             return JsonResponse(sdata, status=201)
         
         if 'commentYN' in temp:

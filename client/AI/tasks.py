@@ -1,3 +1,4 @@
+import base64
 import numpy as np
 import os
 import sys
@@ -32,9 +33,12 @@ def run_pixray(doc, dId):
     sys.path.append("/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/pixray")
     subprocess.run(
         ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
-    PATH = '/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/output/output.png'
+    image_path = './AI/drawing_diary/output/image'+'01'+'.png'
+    with open(image_path, "rb") as image_file:
+        image_data = base64.b64encode(image_file.read()).decode('utf-8')
+
     data = AI.objects.get(diaryId=dId)
-    data.image = PATH
+    data.image = image_data
     data.save()
 
-    return PATH
+    return data.image
