@@ -134,7 +134,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -149,5 +148,5 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Seoul'
 CELERYD_TASK_TIME_LIMIT = 600
-CELERYD_CONCURRENCY = 1
+CELERYD_CONCURRENCY = 10
 # BROKER_URL = 'redis://localhost:6379/0'
