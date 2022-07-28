@@ -2,15 +2,12 @@ from datetime import date
 from django.utils import timezone
 from django.views import View
 from django.http import HttpResponse, JsonResponse
+from AI.ai import get_emotion
 from AI.tasks import run_comment, run_pixray
 from AI.models import AI
-from AI.ai import get_emotion
 from diary.models import Diary
 from users.models import User
 import json
-
-global diary_id
-
 
 class mainView(View):
     def post(self, request):
@@ -82,10 +79,6 @@ class writeView(View):
         }
 
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
-
-
-def returnID():
-    return diary_id
 
 
 class moodView(View):
