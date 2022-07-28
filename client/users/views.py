@@ -28,15 +28,37 @@ class joinView(View):
             return JsonResponse({"message":"INVALID_KEYS"}, status=400)
 
 class loginView(View):
+    def get(self, request):
+        id = request.GET['userId']
+        if User.objects.filter(userId = id).exists():
+            user = User.objects.get(userId = id)
+            sdata = {
+                    "userId": id,
+                    "name": user.name,
+                    "imageYN": user.imageYN,
+                    "commentYN": user.commentYN,
+                    "font": user.font
+                }
+            return JsonResponse(sdata, status = 201)
+        
+        return JsonResponse({'message':'id error'},status=400)
+    
     def post(self, request):
         data = json.loads(request.body)
-        id = data['userId'].replace('"','')
-        pw = data['password'].replace('"','')
+        id = data['userId']
+        pw = data['password']
         
         if User.objects.filter(userId = id).exists():
             user = User.objects.get(userId = id)
             if user.password == pw:
-                return JsonResponse({'message':'success'},status = 200)
+                sdata = {
+                    "userId": id,
+                    "name": user.name,
+                    "imageYN": user.imageYN,
+                    "commentYN": user.commentYN,
+                    "font": user.font
+                }
+                return JsonResponse(sdata,status = 200)
             else :
                 return JsonResponse({'message':'pw error'},status = 401)
 

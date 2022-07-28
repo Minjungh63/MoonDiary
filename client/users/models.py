@@ -10,4 +10,5 @@ class User(models.Model):
     password = models.CharField(max_length=20)
     imageYN = models.BooleanField(default = True)
     commentYN = models.BooleanField(default = True)
+    font = models.TextField(default='Gowun_Batang')
     
