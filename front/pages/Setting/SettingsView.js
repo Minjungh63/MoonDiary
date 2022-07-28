@@ -60,6 +60,7 @@ const SettingsView = ({ navigation }) => {
   };
   const deleteAccount = async () => {
     //회원탈퇴 코드 여기에 넣기
+    AsyncStorage.clear();
     try {
       await axios_post('setting', { userId: userContext.userId, deleteAll: true });
       navigation.navigate('LoginView');
