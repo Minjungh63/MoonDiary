@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     marginEnd: 20,
   },
   mymodal: {
-    backgroundColor: basic_theme.btnColor,
+    backgroundColor: basic_theme.blue,
   },
   imgContainer: {
     flexDirection: 'row',

@@ -1,30 +1,17 @@
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { getEmtionRequire } from '../service/SelectImage';
+import { getEmotionRequire } from '../service/SelectImage';
+import { month } from '../theme';
 
 const dayOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-const month = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
 const date = new Date();
 const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
 const kstGap = 9 * 60 * 60 * 1000;
 const today = new Date(utc + kstGap);
 //한국시간 기준으로 날짜계산하기 위함
 
-export default function Calendar({ diaryData }) {
+export default function Calendar({ diaryData, navigation }) {
   //diaryData = [{}, { diaryId, date, emotion }, {}]
   const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
@@ -97,7 +84,7 @@ export default function Calendar({ diaryData }) {
     return false;
   };
   const readDiary = (diaryId) => {
-    //다이어리 아이디 바탕으로 읽기화면으로 이동
+    navigation.navigate('ReadDiaryView', { diaryId, navigation });
   };
   useEffect(() => {
     setDay();
@@ -109,7 +96,7 @@ export default function Calendar({ diaryData }) {
         }
       })
     );
-  }, [selectedMonth]);
+  }, [selectedMonth, diaryData]);
   const Items = ({ data }) => {
     //현재 월에 맞는 '일', 일기 정보있는 '일'에 Emotion image 넣기
     var final_data = dataCheck(data);
@@ -118,11 +105,11 @@ export default function Calendar({ diaryData }) {
         <Text style={styles.text}>{data}</Text>
         <View style={{ alignSelf: 'center' }}>
           {final_data ? (
-            <TouchableOpacity onPress={readDiary(final_data.diaryId)}>
-              <Image style={styles.img} source={getEmtionRequire(final_data.emotion)}></Image>
+            <TouchableOpacity onPress={() => readDiary(final_data.diaryId)}>
+              <Image style={styles.img} source={getEmotionRequire(final_data.emotion)}></Image>
             </TouchableOpacity>
           ) : (
-            <Text style={styles.img}> </Text>
+            <Text style={styles.empty}> </Text>
           )}
         </View>
       </View>
@@ -210,6 +197,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   img: {
+    marginTop: 5,
+    width: 25,
+    height: 25,
+    resizeMode: 'contain',
+  },
+  empty: {
     marginTop: 5,
     width: 25,
     height: 25,

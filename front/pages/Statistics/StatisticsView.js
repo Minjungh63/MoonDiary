@@ -1,114 +1,119 @@
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
 import { basic_theme } from '../../theme';
+import { getEmotionRequire } from '../../service/SelectImage';
 import WritingRate from '../../components/WritingRate';
 import EmotionRate from '../../components/EmotionRate';
 import EmotionTable from '../../components/EmotionTable';
-import joyImg from '../../assets/img/emotion/joy.png';
-import loveImg from '../../assets/img/emotion/love.png';
-import angryImg from '../../assets/img/emotion/angry.png';
-import sadImg from '../../assets/img/emotion/sad.png';
-import surprisedImg from '../../assets/img/emotion/surprised.png';
-import tiredImg from '../../assets/img/emotion/tired.png';
-import neutralImg from '../../assets/img/emotion/neutral.png';
-import fearImg from '../../assets/img/emotion/fear.png';
+import { axios_get } from '../../api/api';
+import UserContext from '../../service/UserContext';
+import styled from 'styled-components/native';
+import { useIsFocused } from '@react-navigation/native';
+
 const StatisticsView = () => {
-  const emotion_day = [
-    { emotion: 'joy', day: 3 },
-    { emotion: 'love', day: 1 },
-    { emotion: 'angry', day: 2 },
-    { emotion: 'tired', day: 1 },
-    { emotion: 'neutral', day: 10 },
-  ];
-  const attend_day = emotion_day.map((emotion) => emotion.day).reduce((prev, curr) => prev + curr, 0);
+  useEffect(() => {
+    if (isFocused) {
+      (async () => {
+        const response = await axios_get('statistics', { userId });
+        if (response.status == 200) {
+          setEmotion_day(response.data);
+        }
+      })();
+    }
+  }, [isFocused]);
+  const isFocused = useIsFocused();
+  const userContext = useContext(UserContext);
+  const userId = userContext.userId;
+  const [emotion_day, setEmotion_day] = useState([]);
+  const attend_day = emotion_day.map((emotion) => emotion.day).reduce((prev, curr) => prev + curr, 0); // 작성 일 수
+  const getDay = (id) => {
+    return emotion_day.filter((list) => list.emotion === id).map((emotion) => emotion.day);
+  }; // emotion이 나온 일 수
   const emotion_list = [
     {
-      id: '기쁨',
-      day: emotion_day.filter((list) => list.emotion == 'joy').map((emotion) => emotion.day),
+      text: '기쁨',
+      day: getDay('joy'),
       color: '#FBEC6B',
-      image: joyImg,
+      image: getEmotionRequire('joy'),
     },
     {
-      id: '사랑',
-      day: emotion_day.filter((list) => list.emotion == 'love').map((emotion) => emotion.day),
+      text: '사랑',
+      day: getDay('love'),
       color: '#FFCDE0',
-      image: loveImg,
+      image: getEmotionRequire('love'),
     },
     {
-      id: '화남',
-      day: emotion_day.filter((list) => list.emotion == 'angry').map((emotion) => emotion.day),
+      text: '화남',
+      day: getDay('anger'),
       color: '#F07C89',
-      image: angryImg,
+      image: getEmotionRequire('anger'),
     },
     {
-      id: '슬픔',
-      day: emotion_day.filter((list) => list.emotion == 'sad').map((emotion) => emotion.day),
+      text: '슬픔',
+      day: getDay('sadness'),
       color: '#969ECF',
-      image: sadImg,
+      image: getEmotionRequire('sadness'),
     },
     {
-      id: '놀람',
-      day: emotion_day.filter((list) => list.emotion == 'surprised').map((emotion) => emotion.day),
+      text: '놀람',
+      day: getDay('surprise'),
       color: '#AE98D6',
-      image: surprisedImg,
+      image: getEmotionRequire('surprise'),
     },
     {
-      id: '지침',
-      day: emotion_day.filter((list) => list.emotion == 'tired').map((emotion) => emotion.day),
+      text: '지침',
+      day: getDay('tired'),
       color: '#DADADA',
-      image: tiredImg,
+      image: getEmotionRequire('tired'),
     },
     {
-      id: '평온',
-      day: emotion_day.filter((list) => list.emotion == 'neutral').map((emotion) => emotion.day),
+      text: '평온',
+      day: getDay('neutral'),
       color: '#98D5A2',
-      image: neutralImg,
+      image: getEmotionRequire('neutral'),
     },
     {
-      id: '공포',
-      day: emotion_day.filter((list) => list.emotion == 'fear').map((emotion) => emotion.day),
+      text: '공포',
+      day: getDay('fear'),
       color: '#999999',
-      image: fearImg,
+      image: getEmotionRequire('fear'),
     },
   ];
-  emotion_list.sort((a, b) => b.day - a.day);
-
+  emotion_list.sort((a, b) => b.day - a.day); // emotion이 나온 일수를 기준으로 내림차순 정렬
   return (
-    <View style={styles.container}>
-      <View style={[styles.subContainer, { flex: 0.55 }]}>
-        <Text style={styles.text}>다이어리 작성 비율</Text>
-        <WritingRate attend_day={attend_day} />
-      </View>
-      <View style={[styles.subContainer, { flex: 0.15 }]}>
-        <Text style={styles.text}>기분 비율</Text>
-        <EmotionRate attend_day={attend_day} emotion_list={emotion_list} />
-      </View>
-      <View style={[styles.subContainer, { flex: 0.3 }]}>
-        <Text style={styles.text}>기분 순위</Text>
-        <Text style={[styles.text, { fontSize: 13, paddingBottom: 15 }]}>
+    <Statistics>
+      <Component flex={0.55}>
+        <T font={userContext.userFont}>다이어리 작성 비율</T>
+        <WritingRate attend_day={attend_day} font={userContext.userFont} />
+      </Component>
+      <Component flex={0.15}>
+        <T font={userContext.userFont}>기분 비율</T>
+        <EmotionRate attend_day={attend_day} emotion_list={emotion_list} font={userContext.userFont} />
+      </Component>
+      <Component flex={0.3}>
+        <T font={userContext.userFont}>기분 순위</T>
+        <T font={userContext.userFont} subText={true}>
           이번 달에 자주 경험한 기분 순위를 볼 수 있어요.
-        </Text>
-        <EmotionTable attend_day={attend_day} emotion_list={emotion_list} />
-      </View>
-    </View>
+        </T>
+        <EmotionTable attend_day={attend_day} emotion_list={emotion_list} font={userContext.userFont} />
+      </Component>
+    </Statistics>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: basic_theme.bgColor,
-    padding: 10,
-    flex: 1,
-  },
-  subContainer: {
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: 'normal',
-    fontFamily: 'Gowun_Batang',
-    color: 'white',
-  },
-});
+const T = styled.Text`
+  font-family: ${(props) => props.font};
+  color: white;
+  font-size: ${(props) => (props.subText && 13) || 20}px;
+  padding-bottom: ${(props) => (props.subText && 15) || 5}px;
+`;
+const Component = styled.View`
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  flex: ${(props) => props.flex};
+`;
+const Statistics = styled.View`
+  background-color: ${basic_theme.bgColor};
+  padding: 10px;
+  flex: 1;
+`;
 export default StatisticsView;

@@ -1,14 +1,15 @@
 import axios from 'axios';
 
-const baseUrl = 'http://152.67.193.252';
+const baseUrl = 'http://168.188.123.158:8000';
 const subUrl = {
   login: '/user/login',
   join: '/user/join',
-  selectEmotion: '/diary/write/mood',
-  result: '/diary/write/result',
+  selectEmotion: '/diary/mood',
   favorite: '/diary/like',
   diary: '/diary/',
   write: '/diary/write',
+  statistics: '/statistics',
+  setting: '/setting/',
 };
 
 //url은 string 타입 sendData는 json 형식으로 받음

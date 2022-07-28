@@ -9,12 +9,54 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState, useCallback } from 'react';
 import AnalysisResultView from './pages/AnalysisResult/AnalysisResultView';
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
-
+import UserContext from './service/UserContext';
+import Toast, { BaseToast } from 'react-native-toast-message';
+import { basic_theme } from './theme';
+const toastConfig = {
+  success: (props) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: basic_theme.fgColor }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 15,
+      }}
+    />
+  ),
+  error: (props) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: '#FF5E5E' }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 15,
+      }}
+    />
+  ),
+};
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('Anonymous');
+  const [userFont, setUserFont] = useState('Gowun_Batang'); //폰트선택
+  const [imageYN, setImageYN] = useState(true); //AI 그림일기 받는지 여부
+  const [commentYN, setCommentYN] = useState(true); //AI 코멘트 받는지 여부
+  const user = {
+    userId,
+    userName,
+    userFont,
+    imageYN,
+    commentYN,
+    setUserId,
+    setUserName,
+    setUserFont,
+    setImageYN,
+    setCommentYN,
+  };
   let myFont = {
     Gowun_Batang: require('./assets/fonts/GowunBatang-Regular.ttf'),
+    Nanum_Gothic: require('./assets/fonts/NanumGothic-Regular.ttf'),
+    Nanum_Myeongjo: require('./assets/fonts/NanumMyeongjo-Regular.ttf'),
   };
   useEffect(() => {
     async function prepare() {
@@ -37,20 +79,25 @@ export default function App() {
   }, [appIsReady]);
 
   if (!appIsReady) {
-    return <AppLoading />;
+    return null;
   }
   const Stack = createStackNavigator();
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
-        {/* initialRouteName: 이 Stack의 초기 view설정 */}
-        <Stack.Screen name="LoginView" component={LoginView} />
-        <Stack.Screen name="JoinView" component={JoinView} />
-        <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
-        <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
-        <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
-        <Stack.Screen name="AnalysisResultView" component={AnalysisResultView} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <UserContext.Provider value={user}>
+        <NavigationContainer onReady={onLayoutRootView}>
+          <Stack.Navigator initialRouteName="LoginView" screenOptions={{ headerShown: false }}>
+            {/* initialRouteName: 이 Stack의 초기 view설정 */}
+            <Stack.Screen name="LoginView" component={LoginView} />
+            <Stack.Screen name="JoinView" component={JoinView} />
+            <Stack.Screen name="BottomTabHome" component={BottomTabHome} />
+            <Stack.Screen name="WriteDiaryView" component={WriteDiaryView} />
+            <Stack.Screen name="AnalysisLoadingView" component={AnalysisLoadingView} />
+            <Stack.Screen name="AnalysisResultView" component={AnalysisResultView} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserContext.Provider>
+      <Toast config={toastConfig} />
+    </>
   );
 }
