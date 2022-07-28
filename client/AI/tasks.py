@@ -31,8 +31,8 @@ def run_pixray(doc, dId):
     os.chdir("/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/pixray")
     sys.path.append("/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/pixray")
     subprocess.run(
-        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
-    image_path = f'http://168.188.123.158:8000/media/output{dId}.png' #동적으로 변경해야함
+        ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output/image%s"%(dId)])
+    image_path = f'http://168.188.123.158:8000/media/image{dId}/output.png' #동적으로 변경해야함
     data = AI.objects.get(diaryId=dId)
     data.image = image_path
     data.save()
