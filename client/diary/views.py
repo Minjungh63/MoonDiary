@@ -2,9 +2,9 @@ from datetime import date
 from django.utils import timezone
 from django.views import View
 from django.http import HttpResponse, JsonResponse
-from AI.ai import get_emotion
 from AI.tasks import run_comment, run_pixray
 from AI.models import AI
+from AI.ai import get_emotion
 from diary.models import Diary
 from users.models import User
 import json
