@@ -10,7 +10,7 @@ from users.models import User
 import json
 
 global diary_id
-diary_id = 0
+
 
 class mainView(View):
     def post(self, request):
@@ -48,12 +48,14 @@ class mainView(View):
             "emotion": dataAI.emotion
         }
         return JsonResponse(sdata, status=200)
-    
+
     def put(self, request):
         return JsonResponse()
 
 
 class writeView(View):
+    diary_id = 0
+
     def post(self, request):
 
         temp = json.loads(request.body)
@@ -65,15 +67,14 @@ class writeView(View):
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
         dId = Diary.objects.filter(userId=uId).last().diaryId
-
-        global diary_id
+        # global diary_id
         diary_id = Diary.objects.filter(userId=uId).last().diaryId
-
         doc = temp['contents']
-        
+
         emotion = get_emotion(doc)
         print(emotion, "emotion")
-        AI.objects.create(diaryId=Diary.objects.get(diaryId=dId), emotion=emotion)
+        AI.objects.create(diaryId=Diary.objects.get(
+            diaryId=dId), emotion=emotion)
 
         sdata = {
             "diaryId": dId,
@@ -82,8 +83,10 @@ class writeView(View):
 
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
 
+
 def returnID():
     return diary_id
+
 
 class moodView(View):
     def post(self, request):
@@ -114,7 +117,7 @@ class moodView(View):
             sdata['comment'] = comment.get()
             sdata['image'] = path.get()
             print(sdata['image'], sdata['comment'], 'test')
-        
+
         elif(imageYN == 0 and commentYN == 1):
             comment = run_comment.delay(doc, dId)
             sdata['comment'] = comment.get()
@@ -123,7 +126,6 @@ class moodView(View):
             path = run_pixray.delay(doc, dId)
             sdata['image'] = path.get()
 
-        
         print(sdata['emotion'], sdata['comment'], sdata['image'])
         # except:
         #     Diary.objects.filter(diaryId = dId).delete()
@@ -161,5 +163,3 @@ class likeView(View):  # 즐겨찾기 페이지
         adata.liked = dlike
         adata.save()
         return JsonResponse({"message": "update success"}, status=201)
-
-
