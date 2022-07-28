@@ -3,6 +3,8 @@ from typing_extensions import Self
 import numpy as np
 import itertools
 import torch
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 from konlpy.tag import Okt, Komoran
 from sklearn.feature_extraction.text import CountVectorizer
