@@ -10,11 +10,11 @@
 # Index
 
 - MoonDiary
-  1. Intro
-  2. Technology stack & Core function
-  3. API
-  4. Function
-  5. About Us
+  1. [Intro](#intro)
+  2. [Architecture](#architecture)
+  3. [API](#api)
+  4. [Function](#function)
+  5. [About Us](#about-us)
 
 # Intro
 
@@ -24,7 +24,7 @@
 
 > To solve the problems we defined, our team IT23 came up with a diary app for adults who want to relive the emotions of keeping a diary when they were young.
 
-# Technology stack & Core function
+# Architecture
 
 ![image](https://user-images.githubusercontent.com/48540492/181504203-0ffd0760-a32b-451c-b831-d774472a1c18.png)
 
