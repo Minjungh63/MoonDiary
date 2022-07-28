@@ -84,6 +84,7 @@ class writeView(View):
 class moodView(View):
     def post(self, request):
         data = json.loads(request.body)
+        print(data)
         dId = data['diaryId']
         semo = data['emotion']
         uId = data['userId']
