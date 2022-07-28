@@ -67,8 +67,6 @@ class writeView(View):
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
         dId = Diary.objects.filter(userId=uId).last().diaryId
-        # global diary_id
-        diary_id = Diary.objects.filter(userId=uId).last().diaryId
         doc = temp['contents']
 
         emotion = get_emotion(doc)
