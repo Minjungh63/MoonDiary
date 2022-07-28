@@ -78,9 +78,10 @@ class writeView(View):
         }
 
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
+    def returnID():
+        return diary_id
 
-def returnID():
-    return diary_id
+
 
 class moodView(View):
     def post(self, request):
