@@ -1,3 +1,12 @@
+from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel
+from pytorch_lightning.core.lightning import LightningModule
+from .textrank import KeysentenceSummarizer
+from googletrans import Translator
+from transformers import pipeline
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
+from konlpy.tag import Okt, Komoran
 from typing_extensions import Self
 
 import numpy as np
@@ -6,15 +15,6 @@ import torch
 import os
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-from konlpy.tag import Okt, Komoran
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from sentence_transformers import SentenceTransformer
-from transformers import pipeline
-from googletrans import Translator
-from .textrank import KeysentenceSummarizer
-from pytorch_lightning.core.lightning import LightningModule
-from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel
 
 # Create your views here.
 

@@ -5,6 +5,7 @@ import sys
 import subprocess
 from AI.ai import comment_moon, keySentence, keyword_extract
 from AI.models import AI
+from diary.views import returnID
 from diary.models import Diary
 from config.celery import app
 
@@ -20,7 +21,7 @@ def run_comment(doc, dId):
     print(data)
     data.comment = comm_moon
     data.save()
-
+    
     return comm_moon
 
 
@@ -33,10 +34,8 @@ def run_pixray(doc, dId):
     sys.path.append("/home/lab/yugyeom/lab/MoonDiary/client/AI/drawing_diary/pixray")
     subprocess.run(
         ["python", "pixray.py", "--drawer=line_sketch", "--prompt=%s" % (keyW), "--outdir=../output"])
-    image_path = 'http://168.188.123.158:8000/media/output.png' #동적으로 변경해야함
-
+    image_path = f'http://168.188.123.158:8000/media/output{returnID()}.png' #동적으로 변경해야함
     data = AI.objects.get(diaryId=dId)
     data.image = image_path
     data.save()
-
     return data.image

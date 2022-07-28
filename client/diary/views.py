@@ -9,6 +9,7 @@ from diary.models import Diary
 from users.models import User
 import json
 
+global diary_id
 
 class mainView(View):
     def post(self, request):
@@ -63,6 +64,8 @@ class writeView(View):
         Diary.objects.create(userId=User.objects.get(
             userId=uId), contents=temp['contents'], weather=temp['weather'], title=temp['title'])
         dId = Diary.objects.filter(userId=uId).last().diaryId
+        global diary_id
+        diary_id = Diary.objects.filter(userId=uId).last().diaryId
         doc = temp['contents']
         
         emotion = get_emotion(doc)
@@ -76,6 +79,8 @@ class writeView(View):
 
         return JsonResponse(sdata, json_dumps_params={'ensure_ascii': False}, status=201)
 
+def returnID():
+    return diary_id
 
 class moodView(View):
     def post(self, request):
