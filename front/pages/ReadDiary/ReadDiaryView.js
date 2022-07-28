@@ -105,16 +105,16 @@ const ReadDiary = ({ route, navigation }) => {
         <View
           style={{
             width: Dimensions.get('window').width - 20,
-            height: Dimensions.get('window').height / 12,
+            height: Dimensions.get('window').height / 13,
             justifyContent: 'center',
           }}
         >
-          <T font={userContext.userFont} size={16} align="center" color="black" paddingBottom={{ comment } ? 1 : 0}>
+          <T font={userContext.userFont} size={16} align="center" color="black">
             {emoComment}
           </T>
           {/*commentYN이 false여서 감상평이 생성되지 않은 경우, 감상평이 출력되지 않음.*/}
           {{ comment } && (
-            <T font={userContext.userFont} size={16} align="center" color="black" paddingTop={1}>
+            <T font={userContext.userFont} size={16} align="center" color="black" paddingTop={2}>
               {comment}
             </T>
           )}
@@ -148,7 +148,6 @@ const T = styled.Text`
   color: ${(props) => props.color};
   font-size: ${(props) => props.size}px;
   padding-top: ${(props) => props.paddingTop || 0}px;
-  padding-bottom: ${(props) => props.paddingBottom || 0}px;
   text-align: ${(props) => props.align};
 `;
 const styles = StyleSheet.create({
