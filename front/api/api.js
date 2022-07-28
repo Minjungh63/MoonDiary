@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://168.188.123.158';
+const baseUrl = 'http://168.188.123.158:8000';
 const subUrl = {
   login: '/user/login',
   join: '/user/join',

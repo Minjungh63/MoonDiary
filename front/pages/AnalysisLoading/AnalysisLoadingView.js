@@ -35,8 +35,7 @@ const AnalysisLoadingView = ({ navigation, route }) => {
             setIsLoading(false);
             if (response.data.emotion.length === 1) {
               // 감정 분석이 완료됨
-              setSelectedEmotion(response.data.emotion[0]);
-              getResult();
+              getResult(response.data.emotion[0], response.data.diaryId);
             } else {
               // 감정 선택 모달창 띄우기
               setEmotions([...response.data.emotion]);
@@ -55,14 +54,14 @@ const AnalysisLoadingView = ({ navigation, route }) => {
       }
     })();
   }, []);
-  const getResult = async () => {
+  const getResult = async (oneemotion = null, onediary = null) => {
     {
       restart && setRestart(false);
     }
     if (!route.params.imageYN && !route.params.commentYN) {
       // imageYN, commentYN이 모두 false => 결과 분석 페이지로 이동
       navigation.navigate('AnalysisResultView', {
-        emotion: selectedEmotion,
+        emotion: oneemotion !== null ? oneemotion : selectedEmotion,
         comment: null,
         drawingDiary: null,
       });
@@ -71,8 +70,8 @@ const AnalysisLoadingView = ({ navigation, route }) => {
       try {
         const response = await axios_post('selectEmotion', {
           userId: route.params.userId,
-          diaryId,
-          emotion: selectedEmotion,
+          diaryId: onediary !== null ? onediary : diaryId,
+          emotion: oneemotion !== null ? oneemotion : selectedEmotion,
         });
         if (response.status === 201) {
           // 성공 toast 띄우기
@@ -84,7 +83,7 @@ const AnalysisLoadingView = ({ navigation, route }) => {
             text2: '분석 결과를 보러 가볼까요?',
             onPress: () =>
               navigation.navigate('AnalysisResultView', {
-                emotion: selectedEmotion,
+                emotion: oneemotion !== null ? oneemotion : selectedEmotion,
                 comment: response.data.comment,
                 drawingDiary: response.data.image,
               }),
@@ -98,6 +97,7 @@ const AnalysisLoadingView = ({ navigation, route }) => {
           text2: '여기를 눌러 다시 시도해주세요.',
           onPress: () => {
             navigation.navigate('AnalysisLoadingView', {
+              title: null,
               userId: route.params.userId,
               imageYN: route.params.imageYN,
               commentYN: route.params.commentYN,
@@ -149,7 +149,9 @@ const AnalysisLoadingView = ({ navigation, route }) => {
           <View style={style.buttonContainer}>
             <TouchableOpacity
               onPress={() => {
-                (error && navigation.goBack()) || (restart && getResult()) || navigation.navigate('BottomTabHome');
+                (error && navigation.goBack()) ||
+                  (restart && getResult(null, null)) ||
+                  navigation.navigate('BottomTabHome');
               }}
               activeOpacity={0.7}
               style={style.buttonBox}
@@ -163,7 +165,7 @@ const AnalysisLoadingView = ({ navigation, route }) => {
       )}
       <ModalWindow
         open={severalEmotionModal}
-        okPress={getResult}
+        okPress={() => getResult(null, null)}
         text1="여러개의 감정이 느껴지시네요!"
         text2="오늘을 대표하는 감정 1개를 선택해주세요."
         emotions={emotions}
