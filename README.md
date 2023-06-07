@@ -63,6 +63,6 @@ IT23 - [Flagly](http://www.learnflagly.com/course/courses/349/)
 - Dongyoun Yim - Chungnam National University Computer Science Engineering
   - [Github - @Dongyoun](https://github.com/DongYounYim)
 - Jung Min Jung - Ewha Womans University Computer Science Engineering
-  - [Github - @Minjung](https://github.com/Minjungh63)
+  - [Github - @Minjung](https://github.com/minjungJ)
 - SooHyeon Choi - Ewha Womans University Computer Science Engineering
   - [Github - @Soohyeon](https://github.com/Soohyeon-Choi)
