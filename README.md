@@ -50,7 +50,7 @@
 ![image](https://user-images.githubusercontent.com/48540492/181510187-17976eca-f1f7-4d5f-8dba-e31efc3d7b75.png)
 
 # Demo
-[Demo Video](https://www.notion.so/1584e0da473342beaf472fcabef1ed4a?pvs=4)
+[Demo Video](https://drive.google.com/file/d/1rVa384bkZhlIReSU-V-FBCjPssDzSeEh/view?usp=drive_link)
 
 # About Us
 
